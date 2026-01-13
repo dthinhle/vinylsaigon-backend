@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Handle for ruby 3.4.1
-gem 'openssl', '~> 3.3.2'
+gem 'openssl', '~> 4.0.0'
 gem 'bugsnag', '~> 6.28'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
