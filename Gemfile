@@ -85,7 +85,7 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem 'rubocop-rails-omakase', require: false
 
-  gem 'rubocop', '~> 1.81.7'
+  gem 'rubocop', '~> 1.82.1'
   gem 'dotenv-rails', '~> 3.2'
   gem 'capistrano', '~> 3.19.2', require: false
   gem 'capistrano-bundler', '~> 2.2', require: false
