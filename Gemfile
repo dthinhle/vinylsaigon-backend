@@ -87,7 +87,7 @@ group :development, :test do
 
   gem 'rubocop', '~> 1.81.7'
   gem 'dotenv-rails', '~> 3.2'
-  gem 'capistrano', '~> 3.19.2', require: false
+  gem 'capistrano', '~> 3.20.0', require: false
   gem 'capistrano-bundler', '~> 2.2', require: false
   gem 'capistrano-rails', '~> 1.7.0', require: false
   gem 'capistrano-rvm', '~> 0.1.2', require: false
