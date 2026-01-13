@@ -1,0 +1,65 @@
+<%= form_with model: [:admin, hero_banner], local: true, multipart: true, html: { class: "max-w-screen-2xl w-[min(var(--container-xl),100vw)] mx-auto rounded-lg border border-gray-200 bg-white overflow-y-hidden" } do |f| %>
+  <div class="title-wrapper gap-4 w-full flex flex-row items-center justify-between py-4 border-b border-gray-200 z-50 px-4">
+    <div class="left-section flex items-center gap-2">
+      <%= link_to admin_hero_banners_path, class: "btn btn-secondary bg-white border border-gray-200 hover:bg-gray-100 rounded-lg" do %>
+        <span class="material-icons px-2 py-1 text-gray-950 text-base!">chevron_left</span>
+      <% end %>
+      <h1 class="text-2xl font-bold">
+        <% if hero_banner.persisted? %>
+          Edit Hero Banner
+        <% else %>
+          Create Hero Banner
+        <% end %>
+      </h1>
+    </div>
+    <%= f.button class: "btn btn-primary text-sm px-4 py-2 rounded bg-gray-950 hover:bg-gray-700 flex items-center transition cursor-pointer", data: { turbo: false } do %>
+      <span class="material-icons text-white text-base! mr-2 -ml-1">check_circle</span>
+      <span class="text-white">Save</span>
+    <% end %>
+  </div>
+
+  <div class="bg-white p-4 space-y-4 overflow-y-auto">
+    <div>
+      <%= f.label :main_title, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :main_title, class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500" %>
+    </div>
+
+    <div>
+      <%= f.label :description, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_area :description, rows: 6, class: "textarea textarea-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" %>
+    </div>
+
+    <div>
+      <%= f.label :url, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :url, class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500" %>
+    </div>
+
+    <div>
+      <%= f.label :text_color, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.color_field :text_color, class: "input input-bordered text-sm h-10 p-1 rounded border border-gray-300 focus:ring-sky-500", value: hero_banner.text_color || HERO_BANNER_DEFAULT_TEXT_COLOR %>
+    </div>
+
+    <div>
+      <%= f.label :image, class: "block text-sm font-medium text-gray-700" %>
+      <div
+        data-controller="image-preview"
+        data-image-preview-existing-images-value='<%= j((hero_banner.image.attached? ? [{ id: hero_banner.image.id, url: rails_blob_path(hero_banner.image, only_path: true) }] : []).to_json) %>'
+        class="mt-2"
+      >
+        <%= f.file_field :image, class: "file-input file-input-bordered w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500", data: { image_preview_target: "input" } %>
+
+        <div class="mt-3 flex gap-3 items-center" data-image-preview-target="previews"></div>
+
+        <% if hero_banner.image.attached? %>
+          <div class="mt-2">
+            <%= image_tag hero_banner.image.variant(resize_to_limit: [400, 300]), class: "object-cover rounded border border-gray-200" %>
+            <label class="inline-flex items-center gap-2 text-sm text-gray-700 mt-2">
+              <input type="checkbox" name="images_to_remove[]" value="<%= hero_banner.image.id %>" class="checkbox checkbox-primary size-4 accent-gray-950">
+              <span>Remove current image</span>
+            </label>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

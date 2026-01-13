@@ -1,0 +1,5 @@
+# rails: rails s -p 9500
+jobs: bin/bundle exec sidekiq -C config/sidekiq.yml
+css: bin/rails tailwindcss:watch
+js: yarn build --watch
+search: docker compose up search_engine

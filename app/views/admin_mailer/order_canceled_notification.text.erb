@@ -1,0 +1,24 @@
+New Order Notification
+======================
+
+Hello <%= @admin.name.presence || @admin.email %>,
+
+A new order has been placed on 3kShop.
+
+Order Details:
+--------------
+Order Number: <%= @order.order_number %>
+Customer Name: <%= @order.name.presence || 'N/A' %>
+Customer Email: <%= @order.email.presence || 'N/A' %>
+Customer Phone: <%= @order.phone_number.presence || 'N/A' %>
+Total Amount: <%= number_to_currency(@order.total_vnd, unit: "₫", format: "%n %u", precision: 0) %>
+Payment Method: <%= @order.payment_method&.titleize || 'N/A' %>
+Payment Status: <%= @order.payment_status.titleize %>
+Shipping Method: <%= @order.shipping_method.titleize.gsub('_', ' ') %>
+Order Date: <%= @order.created_at.strftime('%B %d, %Y at %I:%M %p') %>
+
+View Order Details: <%= admin_order_url(@order) %>
+
+Note: This is an automated notification. You are receiving this email because you have enabled order notifications in your admin settings.
+
+© <%= Time.current.year %> 3kShop. All rights reserved.

@@ -1,0 +1,22 @@
+<div class="overflow-x-auto w-full border border-gray-200 rounded-lg">
+  <table class="w-full max-w-full divide-y divide-gray-200 table-auto text-sm">
+    <thead class="bg-gray-50">
+      <tr>
+        <%= render_admin_table_headers(params) %>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-100">
+      <% if admins.blank? %>
+        <%= render_empty_state(colspan: 5, icon: '👤', title: 'No admins found') %>
+      <% else %>
+        <% admins.each do |admin| %>
+          <%= render "admin/admins/admin_row", admin: admin %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="mb-2 flex justify-end-safe">
+  <%== pagy.series_nav if pagy %>
+</div>

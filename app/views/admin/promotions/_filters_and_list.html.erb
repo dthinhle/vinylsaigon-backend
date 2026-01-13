@@ -1,0 +1,40 @@
+<div class="w-full max-w-full flex flex-col gap-4" data-controller="promotions-index products-index">
+  <div class="filter-wrapper w-full bg-white p-4 border border-gray-200 rounded-lg grid gap-4">
+    <%= render_filter_chips(
+      filter_params: @filter_params,
+      filter_labels: @filter_labels,
+      clear_path: local_assigns[:url] || admin_promotions_path
+    ) %>
+
+    <%= form_with url: (local_assigns[:url] || admin_promotions_path), method: :get, local: true, class: "flex flex-col md:flex-row md:items-end gap-2 md:gap-4 w-full max-w-full" do |f| %>
+      <div class="flex flex-col md:flex-row gap-2 md:gap-4 flex-1">
+        <div class="flex flex-col">
+          <input id="q" type="search" name="q" value="<%= params[:q] %>" placeholder="Search promotions..." class="input input-bordered text-sm w-full max-w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" data-action="input->promotions-index#searchChanged" data-promotions-index-target="search" autocomplete="off">
+        </div>
+
+        <div class="flex flex-col">
+          <select id="active" name="active" class="select select-bordered text-sm px-3 py-[0.575rem] rounded border border-gray-300">
+            <option value="">Any</option>
+            <option value="true" <%= "selected" if params[:active] == "true" %>>Active</option>
+            <option value="false" <%= "selected" if params[:active] == "false" %>>Inactive</option>
+          </select>
+        </div>
+      </div>
+
+
+      <%= render "admin/promotions/advanced_filters", f: f %>
+      <div class="flex flex-col justify-end">
+        <button type="submit" class="btn btn-secondary text-sm px-3 py-2 rounded bg-gray-950 text-gray-50 hover:bg-gray-700 cursor-pointer">Filter</button>
+      </div>
+    <% end %>
+  </div>
+
+  <%# Pagination summary and nav (expects `pagy` local) %>
+  <div class="flex justify-between items-end">
+    <span class="text-sm text-gray-500">Total: <%= local_assigns[:pagy]&.count || @pagy&.count %></span>
+    <%== (local_assigns[:pagy] || @pagy).series_nav if (local_assigns[:pagy] || @pagy) %>
+  </div>
+
+  <%# Promotions list render (expects `promotions`, `pagy` and `show_actions`) %>
+  <%= render "admin/promotions/promotion_list", promotions: (local_assigns[:promotions] || @promotions), pagy: (local_assigns[:pagy] || @pagy), show_actions: (local_assigns[:show_actions].nil? ? true : local_assigns[:show_actions]) %>
+</div>

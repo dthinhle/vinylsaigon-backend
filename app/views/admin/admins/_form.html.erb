@@ -1,0 +1,80 @@
+<%= render "admins/shared/error_messages", resource: @admin %>
+
+<%= form_with model: [:admin, @admin], local: true, html: { class: "w-[min(var(--container-xl),100vw)] mx-auto rounded-lg border border-gray-200 bg-white overflow-hidden", data: { controller: "admins-form" } } do |f| %>
+  <div class="title-wrapper gap-4 w-full flex flex-row items-center justify-between py-4 border-b border-gray-200 z-50 px-4">
+    <div class="left-section flex items-center gap-2">
+      <%= link_to admin_admins_path, class: "bg-white border border-gray-200 hover:bg-gray-100 text-gray-700 px-2 py-1.5 rounded" do %>
+        <span class="material-icons text-base align-middle">chevron_left</span>
+      <% end %>
+      <h1 class="text-2xl font-bold">
+        <% if @admin.persisted? %>
+          Edit <%= @admin.name %>
+        <% else %>
+          Create Admin
+        <% end %>
+      </h1>
+    </div>
+
+    <div class="flex gap-2">
+      <% if @admin.persisted? %>
+        <button type="button" data-action="click->admins-form#sendPasswordReset" data-url="<%= send_password_reset_admin_admin_path(@admin) %>" data-admins-form-target="sendPasswordResetButton" class="btn btn-secondary text-sm px-4 py-2 rounded bg-white border border-gray-300 hover:bg-gray-100 flex items-center transition cursor-pointer">
+          <span class="material-icons text-gray-950 text-base! mr-2 -ml-1">mail</span>
+          <span class="text-gray-950">Send Password Reset</span>
+        </button>
+      <% end %>
+
+      <%= f.button class: "btn btn-primary text-sm px-4 py-2 rounded bg-gray-950 hover:bg-gray-700 flex items-center transition cursor-pointer", data: { turbo: false } do %>
+        <span class="material-icons text-white text-base! mr-2 -ml-1">check_circle</span>
+        <span class="text-white">Save</span>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="bg-white p-4 space-y-4">
+    <div>
+      <%= f.label :name, "Name", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :name,
+        required: true,
+        class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500 #{'border-red-500' if @admin.errors[:name].any?}",
+        aria: {
+          invalid: @admin.errors[:name].any?,
+          describedby: @admin.errors[:name].any? ? "admin_name_error" : nil
+        } %>
+      <% if @admin.errors[:name].any? %>
+        <div id="admin_name_error" class="text-red-600 text-xs mt-1" role="alert"><%= @admin.errors[:name].first %></div>
+      <% end %>
+    </div>
+
+    <div>
+      <%= f.label :email, "Email", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.email_field :email,
+        required: true,
+        class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500 #{'border-red-500' if @admin.errors[:email].any?}",
+        aria: {
+          invalid: @admin.errors[:email].any?,
+          describedby: @admin.errors[:email].any? ? "admin_email_error" : nil
+        } %>
+      <% if @admin.errors[:email].any? %>
+        <div id="admin_email_error" class="text-red-600 text-xs mt-1" role="alert"><%= @admin.errors[:email].first %></div>
+      <% end %>
+    </div>
+
+    <% if @admin.persisted? && @admin.id == current_admin.id %>
+      <div>
+        <%= f.label :email_confirmation, "Confirm Email", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.email_field :email_confirmation,
+          class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500",
+          placeholder: "Re-enter email to confirm changes" %>
+        <p class="text-xs text-gray-500 mt-1">Required when updating your own email address</p>
+      </div>
+    <% end %>
+
+    <div>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <%= f.check_box :order_notify, class: "w-4 h-4 text-sky-600 border-gray-300 rounded focus:ring-sky-500" %>
+        <span class="text-sm font-medium text-gray-700">Receive email notifications for new orders</span>
+      </label>
+      <p class="text-xs text-gray-500 mt-1">When enabled, you will receive emails when new orders are placed</p>
+    </div>
+  </div>
+<% end %>

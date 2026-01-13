@@ -1,0 +1,143 @@
+
+<div class="flex flex-col gap-4">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold">Blogs</h1>
+      <nav class="text-sm breadcrumbs mt-1">
+        <ol class="inline-flex items-center space-x-1">
+          <li>
+            <%= link_to "Admin", admin_dashboard_path, class: "text-gray-500 hover:text-gray-700" %>
+          </li>
+          <li>/</li>
+            <%= link_to "Blogs", admin_blogs_path, class: "text-gray-500 hover:text-gray-700" %>
+          <li>/</li>
+          <li class="text-gray-900"><%= @blog.title %></li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+  <div class="max-full mx-auto space-y-4">
+    <div class="max-w-screen-2xl mx-auto rounded-lg border border-gray-200 bg-white overflow-y-hidden">
+      <div class="title-wrapper gap-4 w-full flex flex-row items-center justify-between py-4 border-b border-gray-200 z-50 px-4">
+        <div class="left-section flex items-center gap-2">
+          <%= link_to admin_blogs_path, class: "btn btn-secondary bg-white border border-gray-200 hover:bg-gray-100 rounded-lg" do %>
+            <span class="material-icons px-2 py-1 text-gray-950 text-base!">chevron_left</span>
+          <% end %>
+          <h1 class="text-2xl font-bold"><%= @blog.title %></h1>
+        </div>
+        <div class="flex gap-2">
+          <%= link_to edit_admin_blog_path(@blog), class: "btn btn-primary text-sm px-4 py-2 rounded bg-gray-950 hover:bg-gray-700 flex items-center transition cursor-pointer" do %>
+            <span class="material-icons text-white text-base! mr-2 -ml-1">edit</span>
+            <span class="text-white">Edit</span>
+          <% end %>
+          <%= button_to admin_blog_path(@blog),
+            method: :delete,
+            form: { "data-controller": "confirm", "data-confirm-message-value": "Are you sure you want to delete this blog?" },
+            class: "btn btn-danger text-sm px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 flex items-center transition",
+            aria: { label: "Delete blog" } do %>
+            <span class="material-icons text-white text-base! mr-2 -ml-1">delete</span>
+            <span>Delete</span>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-[auto_minmax(400px,20rem)] relative gap-px bg-gray-200">
+        <div class="bg-white p-4 space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Title</label>
+            <input type="text" disabled value="<%= @blog.title %>" class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 bg-gray-50" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Slug</label>
+            <input type="text" disabled value="<%= @blog.slug %>" class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 bg-gray-50" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Products</label>
+            <% if @blog.products.any? %>
+              <div class="grid grid-cols-1 gap-2 mt-2">
+                <% @blog.products.each do |product| %>
+                  <div class="border border-gray-200 rounded-lg p-3 bg-white hover:shadow-sm transition-shadow">
+                    <div class="flex items-center justify-between">
+                      <div class="flex-1">
+                        <h4 class="font-medium text-gray-900 text-sm"><%= link_to product.name, admin_product_path(product), class: "hover:text-sky-600" %></h4>
+                        <p class="text-xs text-gray-500 mt-1"><%= product.sku %></p>
+                      </div>
+                      <span class="px-2 py-1 text-xs rounded <%= product.active? ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700' %>">
+                        <%= product.active? ? 'Active' : 'Inactive' %>
+                      </span>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="w-full h-32 flex flex-col items-center justify-center bg-gray-50 rounded border border-dashed text-gray-300">
+                <span class="material-icons" style="font-size:2.5rem;margin-bottom:0.5rem;">inventory</span>
+                <span class="text-sm">No products associated</span>
+              </div>
+            <% end %>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Featured Image</label>
+            <% if @blog.image.attached? %>
+              <div class="mt-2">
+                <%= image_tag @blog.image, class: "rounded shadow max-h-96" %>
+              </div>
+            <% else %>
+              <div class="w-full h-48 flex flex-col items-center justify-center bg-gray-50 rounded border border-dashed text-gray-300">
+                <span class="material-icons" style="font-size:2.5rem;margin-bottom:0.5rem;">image</span>
+                <span class="text-sm">No featured image uploaded</span>
+              </div>
+            <% end %>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Content</label>
+            <div class="prose max-w-none text-gray-800 border border-gray-200 rounded-lg p-2 py-1 min-h-96">
+              <div data-controller="lexical-editor" data-lexical-editor-content-value="<%= @blog.content.to_json %>" data-lexical-editor-editable-value="false">
+                <div data-lexical-editor-target="editor"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white p-4 space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Meta Title</label>
+            <input type="text" disabled value="<%= @blog.meta_title || "" %>" class="input input-bordered w-full px-3 py-2 rounded border border-gray-300 bg-gray-50" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Meta Description</label>
+            <textarea disabled class="textarea textarea-bordered w-full px-3 py-2 rounded border border-gray-300 bg-gray-50" rows="2"><%= @blog.meta_description || "" %></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Category</label>
+            <input type="text" disabled value="<%= @blog.category&.name || "-" %>" class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 bg-gray-50" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Author</label>
+            <input type="text" disabled value="<%= @blog.author&.name || "-" %>" class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 bg-gray-50" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Published At</label>
+            <input type="text" disabled value="<%= @blog.published_at&.strftime("%Y-%m-%d") || "-" %>" class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 bg-gray-50" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Status</label>
+            <select disabled class="select select-bordered w-full pl-1.5 pr-3 py-2.25 rounded border border-gray-300 bg-gray-50">
+              <option selected><%= @blog.status.titleize %></option>
+            </select>
+          </div>
+          <div class="pt-2 border-t border-gray-200">
+            <p class="text-sm text-gray-600">
+              <span class="font-medium">Created:</span> <%= @blog.created_at.strftime("%H:%M:%S %d-%m-%Y") %>
+            </p>
+            <p class="text-sm text-gray-600 mt-1">
+              <span class="font-medium">Updated:</span> <%= @blog.updated_at.strftime("%H:%M:%S %d-%m-%Y") %>
+            </p>
+            <p class="text-sm text-gray-600 mt-1">
+              <span class="font-medium">Views:</span> <%= @blog.view_count || 0 %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

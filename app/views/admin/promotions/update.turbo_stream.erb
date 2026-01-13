@@ -1,0 +1,7 @@
+<%= turbo_stream.replace "promotions-list" do %>
+  <%= render partial: "admin/promotions/filters_and_list", locals: { promotions: @promotions } %>
+<% end %>
+
+<%= turbo_stream.replace "flash" do %>
+  <%= render "shared/flash" %>
+<% end %>

@@ -1,0 +1,11 @@
+Thanh toán thành công!
+
+Kính gửi <%= @order.name %>,
+
+Chúng tôi xin thông báo rằng thanh toán cho đơn hàng <%= @order.order_number %> của bạn đã được xử lý thành công.
+
+Đơn hàng của bạn sẽ được chuẩn bị để vận chuyển. Bạn sẽ nhận được email thông báo khi đơn hàng được gửi đi.
+
+Tổng số tiền đã thanh toán: <%= format_vnd_currency(@order.total_vnd) %>
+
+Cảm ơn bạn đã mua hàng!

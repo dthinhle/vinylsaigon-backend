@@ -1,0 +1,41 @@
+<h1>Đơn hàng bị huỷ <%= @order.order_number %></h1>
+
+<p>Một đơn hàng đã bị huỷ trên 3K Shop.</p>
+
+<div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin: 20px 0; background-color: #f8f9fa;">
+  <h2>Chi tiết đơn hàng</h2>
+  <p><strong>Số đơn hàng:</strong> <%= @order.order_number %></p>
+  <p><strong>Ngày đặt:</strong> <%= @order.created_at.strftime("%d/%m/%Y %H:%M") %></p>
+  <p><strong>Trạng thái:</strong> <span style="background-color: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;"><%= @order.status.titleize %></span></p>
+  <p><strong>Email khách hàng:</strong> <%= @customer_email %></p>
+  <p><strong>Phương thức thanh toán:</strong> <%= @order.payment_method&.titleize || 'N/A' %></p>
+</div>
+
+<div style="margin: 20px 0;">
+  <h3>Tóm tắt đơn hàng:</h3>
+
+  <div style="border: 1px solid #eee; border-radius: 4px; padding: 15px; background-color: #fff;">
+    <p style="margin: 5px 0;"><strong>Số sản phẩm:</strong> <%= @order.order_items.sum(:quantity) %></p>
+    <p style="margin: 5px 0;"><strong>Tạm tính:</strong> <%= format_vnd_currency(@order.subtotal_vnd) %></p>
+    <% if @order.shipping_vnd > 0 %>
+      <p style="margin: 5px 0;"><strong>Phí vận chuyển:</strong> <%= format_vnd_currency(@order.shipping_vnd) %></p>
+    <% end %>
+    <% if @order.tax_vnd > 0 %>
+      <p style="margin: 5px 0;"><strong>Thuế:</strong> <%= format_vnd_currency(@order.tax_vnd) %></p>
+    <% end %>
+    <% if @order.discount_vnd > 0 %>
+      <p style="margin: 5px 0; color: #28a745;"><strong>Giảm giá:</strong> -<%= format_vnd_currency(@order.discount_vnd) %></p>
+    <% end %>
+    <p style="margin: 10px 0 0 0; font-size: 18px; font-weight: bold; padding-top: 10px; border-top: 1px solid #ddd;"><strong>Tổng:</strong> <%= format_vnd_currency(@order.total_vnd) %></p>
+  </div>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+  <a href="<%= admin_order_url(@order) %>" style="background-color: #007bff; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
+    Xem đơn hàng trong quản trị
+  </a>
+</div>
+
+<p style="font-size: 12px; color: #666; margin-top: 30px;">
+  Đây là thông báo tự động. Vui lòng xử lý đơn hàng.
+</p>

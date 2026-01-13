@@ -1,0 +1,93 @@
+<%= form_with(model: blog, url: form_url, local: true, html: { class: "max-w-screen-2xl mx-auto rounded-lg border border-gray-200 bg-white overflow-y-hidden", "data-controller": "blog-form", multipart: true }) do |form| %>
+  <div class="title-wrapper gap-4 w-full flex flex-row items-center justify-between py-4 border-b border-gray-200 z-50 px-4">
+    <div class="left-section flex items-center gap-2">
+      <%= link_to admin_blogs_path, class: "btn btn-secondary bg-white border border-gray-200 hover:bg-gray-100 rounded-lg" do %>
+        <span class="material-icons px-2 py-1 text-gray-950 text-base!">chevron_left</span>
+      <% end %>
+      <h1 class="text-2xl font-bold">
+        <% if blog.persisted? %>
+          Edit Blog
+        <% else %>
+          Create Blog
+        <% end %>
+      </h1>
+    </div>
+    <%= form.button class: "btn btn-primary text-sm px-4 py-2 rounded bg-gray-950 hover:bg-gray-700 flex items-center transition cursor-pointer", data: { turbo: false } do %>
+      <span class="material-icons text-white text-base! mr-2 -ml-1">check_circle</span>
+      <span class="text-white">Save</span>
+    <% end %>
+  </div>
+
+  <div class="grid grid-cols-[auto_minmax(400px,20rem)] relative gap-px bg-gray-200">
+    <div class="bg-white p-4 space-y-4">
+      <div>
+        <%= form.label :title, class: "block text-sm font-medium text-gray-700" %>
+        <%= form.text_field :title, required: true, class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500" %>
+      </div>
+      <% if action_name == "edit" %>
+        <div>
+          <%= form.label :slug, class: "block text-sm font-medium text-gray-700" %>
+          <%= form.text_field :slug, required: true, class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500" %>
+        </div>
+      <% end %>
+      <div>
+        <%= form.label :product_ids, "Products", class: "block text-sm font-medium text-gray-700" %>
+        <% selected_products = @blog.products.map { |p| [p.name, p.id] } %>
+        <%= form.select :product_ids,
+          options_for_select(selected_products, @blog.product_ids),
+          { prompt: "Search products..." },
+          {
+            class: "select select-bordered text-sm w-full rounded focus:ring-2 focus:ring-sky-500",
+            multiple: true,
+            data: {
+              blog_form_target: "productsSelect"
+            }
+          } %>
+      </div>
+      <div>
+        <%= form.label :image, class: "block text-sm font-medium text-gray-700" %>
+        <%= form.file_field :image, direct_upload: true, class: "file-input file-input-bordered w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" %>
+        <% if @blog.image.attached? && @blog.image.blob && @blog.image.blob.persisted? %>
+          <div class="mt-2">
+            <%= image_tag @blog.image, class: "rounded shadow" %>
+          </div>
+        <% end %>
+      </div>
+      <div>
+        <%= form.label :content, class: "block text-sm font-medium text-gray-700" %>
+        <div data-controller="lexical-editor" data-lexical-editor-content-value="<%= @blog.content.to_json %>" data-lexical-editor-upload-url-value="<%= upload_image_admin_blogs_path %>" data-lexical-editor-video-upload-url-value="<%= upload_video_admin_blogs_path %>">
+          <div data-lexical-editor-target="editor"></div>
+          <%= form.hidden_field :content, value: @blog.content.to_json, data: { lexical_editor_target: "input" } %>
+        </div>
+      </div>
+    </div>
+    <div class="space-y-4">
+      <div class="bg-white p-4 space-y-4">
+        <div>
+          <%= form.label :meta_title, "Meta Title", class: "block text-sm font-medium text-gray-700" %>
+          <%= form.text_field :meta_title, maxlength: 255, class: "input input-bordered w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" %>
+        </div>
+        <div>
+          <%= form.label :meta_description, "Meta Description", class: "block text-sm font-medium text-gray-700" %>
+          <%= form.text_area :meta_description, rows: 2, maxlength: 500, class: "textarea textarea-bordered w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" %>
+        </div>
+        <div>
+          <%= form.label :category_id, "Category", class: "block text-sm font-medium text-gray-700" %>
+          <%= form.collection_select :category_id, BlogCategory.all, :id, :name, { prompt: "Select category" }, { required: true, class: "select select-bordered w-full pl-1.5 pr-3 py-2.25 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" } %>
+        </div>
+        <div>
+          <%= form.label :author_id, "Author", class: "block text-sm font-medium text-gray-700" %>
+          <%= form.collection_select :author_id, Admin.all, :id, :name, { prompt: "Select author" }, { required: true, class: "select select-bordered w-full pl-1.5 pr-3 py-2.25 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" } %>
+        </div>
+        <div>
+          <%= form.label :published_at, class: "block text-sm font-medium text-gray-700" %>
+          <%= form.date_field :published_at, class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500" %>
+        </div>
+        <div>
+          <%= form.label :status, class: "block text-sm font-medium text-gray-700" %>
+          <%= form.select :status, Blog.statuses.keys.map { |s| [s.titleize, s] }, { prompt: "Select status" }, { class: "select select-bordered w-full pl-1.5 pr-3 py-2.25 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" } %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

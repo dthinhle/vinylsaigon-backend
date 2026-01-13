@@ -1,0 +1,11 @@
+<div style="background-color: #f8fafc; border-radius: 0.5rem; padding: 2rem; max-width: 480px; margin: 0 auto; font-family: sans-serif; color: #1e293b;">
+  <h2 style="color: #2563eb; font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Hello <%= @resource.email %>!</h2>
+  <p>Your account has been locked due to an excessive number of unsuccessful sign in attempts.</p>
+  <p style="margin: 1rem 0;">Click the link below to unlock your account:</p>
+  <p>
+    <a href="<%= unlock_url(@resource, unlock_token: @token) %>"
+      style="display: inline-block; background-color: #2563eb; color: #fff; font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.375rem; text-decoration: none; transition: background 0.2s;">
+      Unlock my account
+    </a>
+  </p>
+</div>

@@ -1,0 +1,14 @@
+<div class="flex flex-col gap-4">
+  <%= render 'admin/shared/page_header', title: 'Payment Transaction' %>
+
+  <div class="grid md:grid-cols-2 gap-4">
+    <%= render 'admin/payment_transactions/summary_card', txn: @payment_transaction %>
+    <%= render 'admin/payment_transactions/order_card', txn: @payment_transaction %>
+    <% if payment_transaction_installment?(@payment_transaction) %>
+      <%= render 'admin/payment_transactions/installment_card', txn: @payment_transaction %>
+    <% end %>
+    <%= render 'admin/payment_transactions/metadata_card', txn: @payment_transaction %>
+    <%= render 'admin/payment_transactions/reconciliation_card', txn: @payment_transaction %>
+    <%= render 'admin/payment_transactions/raw_callback', txn: @payment_transaction %>
+  </div>
+</div>

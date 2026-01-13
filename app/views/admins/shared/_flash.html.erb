@@ -1,0 +1,2 @@
+<%# Admin-scoped flash partial delegating to shared flash partial %>
+<%= render 'shared/flash', locals: { flash: (local_assigns[:flash] || flash) } %>

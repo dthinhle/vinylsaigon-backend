@@ -1,0 +1,75 @@
+<h1>Giỏ hàng của bạn</h1>
+
+<p>Xin chào,</p>
+
+<p>Đây là các sản phẩm bạn đã lưu trong giỏ hàng:</p>
+
+<div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin: 20px 0;">
+  <h2>Tóm tắt giỏ hàng</h2>
+  <p><strong>Tổng số sản phẩm:</strong> <%= @cart.total_items %></p>
+  <p><strong>Tổng giá trị:</strong> <%= format_vnd_currency(@cart.total_price) %></p>
+  <p><strong>Giỏ hàng hết hạn:</strong> <%= @cart.expires_at.strftime('%H:%M:%S %d-%m-%Y') %></p>
+</div>
+
+<div style="margin: 20px 0;">
+  <h3>Sản phẩm trong giỏ hàng:</h3>
+
+  <% @cart.cart_items.each do |item| %>
+    <div style="border-bottom: 1px solid #eee; padding: 15px 0; display: flex; align-items: center;">
+      <% if item.product_image_url.present? %>
+        <img src="<%= item.product_image_url %>" alt="<%= item.product_name %>" style="width: 80px; height: 80px; object-fit: cover; margin-right: 15px; border-radius: 4px;">
+      <% end %>
+
+      <div style="flex: 1;">
+        <h4 style="margin: 0 0 5px 0; font-size: 16px;"><%= item.product_name %></h4>
+
+        <% if item.product_variant.present? && item.product.product_variants.count > 1 %>
+          <p style="margin: 0; color: #666; font-size: 14px;">
+            Loại: <%= item.product_variant.name %>
+          </p>
+        <% end %>
+
+        <p style="margin: 0; color: #666; font-size: 14px;">Số lượng: <%= item.quantity %></p>
+        <p style="margin: 5px 0 0 0; font-weight: bold; font-size: 16px;"><%= format_vnd_currency(item.current_price) %>/sản phẩm</p>
+        <% if item.savings > 0 %>
+          <p style="margin: 0; color: #28a745; font-size: 12px;">Bạn tiết kiệm <%= format_vnd_currency(item.savings) %>!</p>
+        <% end %>
+      </div>
+
+      <div style="text-align: right;">
+        <p style="margin: 0; font-weight: bold; font-size: 18px;"><%= format_vnd_currency(item.line_total) %></p>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+  <a href="<%= @share_url %>" style="background-color: #007bff; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
+    Xem giỏ hàng
+  </a>
+</div>
+
+<% if @create_account_prompt %>
+  <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+    <h3>Tạo tài khoản</h3>
+    <p>Tạo tài khoản để lưu giỏ hàng và theo dõi đơn hàng của bạn!</p>
+    <p>Các sản phẩm và giá trong giỏ hàng sẽ được bảo toàn khi bạn đăng ký.</p>
+  </div>
+<% end %>
+
+<div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #666;">
+  <p><strong>Lưu ý quan trọng:</strong></p>
+  <ul>
+    <li>Giỏ hàng của bạn được lưu tạm thời và có thể hết hạn sau một khoảng thời gian nhất định.</li>
+    <li>Giỏ hàng và giá cố định sẽ hết hạn vào <%= @cart.expires_at.strftime('%H:%M:%S %d-%m-%Y')%>.</li>
+    <li>Link email này hết hạn vào <%= @emailed_cart.expires_at.strftime('%H:%M:%S %d-%m-%Y')%>.</li>
+    <li>Giá cả và tính khả dụng của sản phẩm có thể thay đổi theo thời gian.</li>
+    <li>Để đảm bảo bạn có thể mua các sản phẩm trong giỏ hàng, hãy hoàn tất việc đặt hàng càng sớm càng tốt.</li>
+  </ul>
+</div>
+
+<p>Chúc bạn mua sắm vui vẻ!</p>
+
+<p>
+  3K Shop
+</p>

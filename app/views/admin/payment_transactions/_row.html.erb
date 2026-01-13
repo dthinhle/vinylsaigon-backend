@@ -1,0 +1,33 @@
+<tr class="hover:bg-gray-50">
+  <td class="px-4 py-3 whitespace-nowrap font-medium text-gray-900">
+    <%= link_to (txn.onepay_transaction_id.presence || '—'), admin_payment_transaction_path(txn), class: 'text-sky-600 hover:text-sky-900 font-medium' %>
+  </td>
+  <td class="px-4 py-3 whitespace-nowrap text-gray-700">
+    <%= link_to txn.order.order_number, admin_order_path(txn.order), class: 'text-sky-600 hover:text-sky-900' %>
+  </td>
+  <td class="px-4 py-3 whitespace-nowrap text-gray-700"><%= format_vnd_currency(txn.amount.to_i) %></td>
+  <td class="px-4 py-3 whitespace-nowrap">
+    <div class="flex gap-1 flex-wrap max-w-32">
+      <%= payment_txn_status_badge(txn.status) %>
+      <% if txn.fully_free_installment_order? %>
+        <span class="px-1.5 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800">Free Installment Fee</span>
+      <% elsif txn.has_free_installment_product? %>
+        <span class="px-1.5 py-0.5 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">Mixed Fee</span>
+      <% end %>
+    </div>
+  </td>
+  <td class="px-4 py-3 whitespace-nowrap text-gray-700"><%= txn.order.payment_status.titleize %></td>
+  <td class="px-4 py-3 whitespace-nowrap text-gray-700">
+    <% if txn.order.installment_payment? %>
+      Installment (<%= txn.order.installment_bank %> / <%= txn.order.installment_months %>m)
+    <% else %>
+      <%= txn.order.payment_method.presence || '—' %>
+    <% end %>
+  </td>
+  <td class="px-4 py-3 whitespace-nowrap text-gray-700"><%= format_datetime(txn.created_at) %></td>
+  <td class="px-4 py-2 text-right">
+    <div class="button-wrapper h-full flex gap-2 justify-end">
+      <%= render_action_button(admin_payment_transaction_path(txn), icon: 'remove_red_eye', type: :show) %>
+    </div>
+  </td>
+</tr>

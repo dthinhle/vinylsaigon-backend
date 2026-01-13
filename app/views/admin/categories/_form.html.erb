@@ -1,0 +1,84 @@
+<%= form_with model: @category, url: @category.persisted? ? admin_category_path(@category) : admin_categories_path, local: false, html: { id: "category-form", class: "w-[min(var(--container-xl),100vw)] mx-auto rounded-lg border border-gray-200 bg-white", multipart: true, "data-controller": "categories-form" } do |f| %>
+  <div class="flex flex-row items-center justify-between py-4 px-4 border-b border-gray-200">
+    <div class="flex items-center gap-2">
+      <%= link_to admin_categories_path, class: "bg-white border border-gray-200 hover:bg-gray-100 text-gray-700 px-2 py-1.5 rounded" do %>
+        <span class="material-icons text-base align-middle">chevron_left</span>
+      <% end %>
+      <h2 class="text-2xl font-bold"><%= @category.persisted? ? "Edit Category" : "New Category" %></h2>
+    </div>
+    <div>
+      <%= button_tag type: "submit", class: "bg-gray-950 hover:bg-gray-700 text-white text-sm font-semibold py-2 px-4 rounded transition-colors flex flex-row items-center gap-1" do %>
+        <span class="material-icons text-base/6! align-middle">check_circle</span>
+        <span>Save</span>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="p-4 space-y-4">
+    <%= render "admins/shared/error_messages", resource: @category %>
+
+    <div>
+      <%= f.label :title, "Title", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :title, required: true, class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500 #{'border-red-500' if @category.errors[:title].any?}", autofocus: true %>
+      <% if @category.errors[:title].any? %>
+        <div class="text-red-600 text-xs mt-1" role="alert"><%= @category.errors[:title].first %></div>
+      <% end %>
+    </div>
+
+    <div>
+      <%= f.label :slug, "Slug", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :slug, required: true, class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500 #{'border-red-500' if @category.errors[:slug].any?}" %>
+      <% if @category.errors[:slug].any? %>
+        <div class="text-red-600 text-xs mt-1" role="alert"><%= @category.errors[:slug].first %></div>
+      <% end %>
+    </div>
+
+    <div>
+      <%= f.label :description, "Description", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_area :description, rows: 3, class: "textarea textarea-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500 #{'border-red-500' if @category.errors[:description].any?}" %>
+      <% if @category.errors[:description].any? %>
+        <div class="text-red-600 text-xs mt-1" role="alert"><%= @category.errors[:description].first %></div>
+      <% end %>
+    </div>
+
+    <div>
+      <label class="inline-flex items-center gap-2 text-sm font-medium text-gray-700">
+        <%= f.check_box :is_root, class: "checkbox checkbox-primary size-4 accent-gray-950", data: { "categories-form-target": "isRoot", action: "change->categories-form#toggleParentSelect" } %>
+        <span>Is Root Category</span>
+      </label>
+      <% if @category.errors[:is_root].any? %>
+        <div class="text-red-600 text-xs mt-1" role="alert"><%= @category.errors[:is_root].first %></div>
+      <% end %>
+    </div>
+
+    <div>
+      <%= f.label :parent_id, "Parent Category", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.collection_select :parent_id, Category.root_categories.order(title: :asc), :id, :title, { prompt: "Select parent (optional)" }, class: "select select-bordered w-full pl-1.5 pr-3 py-2.25 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500", data: { "categories-form-target": "parentSelect" } %>
+      <% if @category.errors[:parent_id].any? %>
+        <div class="text-red-600 text-xs mt-1" role="alert"><%= @category.errors[:parent_id].first %></div>
+      <% end %>
+    </div>
+
+    <div>
+      <%= f.label :button_text, "Button Text", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :button_text, class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500 #{'border-red-500' if @category.errors[:button_text].any?}" %>
+      <% if @category.errors[:button_text].any? %>
+        <div class="text-red-600 text-xs mt-1" role="alert"><%= @category.errors[:button_text].first %></div>
+      <% end %>
+    </div>
+
+    <div>
+      <%= f.label :image, "Image", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.file_field :image, class: "file-input file-input-bordered w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500", data: { "categories-form-target": "fileInput", action: "change->categories-form#fileChanged" } %>
+      <% if @category.errors[:image].any? %>
+        <div class="text-red-600 text-xs mt-1" role="alert"><%= @category.errors[:image].first %></div>
+      <% end %>
+      <img data-categories-form-target="previewImage" class="mt-2 rounded border border-gray-200 max-h-32 hidden" alt="Preview" />
+      <% if @category.image.attached? %>
+        <div class="mt-2">
+          <%= image_tag @category.image.variant(resize_to_limit: [120, 120]), class: "rounded border border-gray-200" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

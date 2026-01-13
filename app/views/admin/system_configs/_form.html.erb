@@ -1,0 +1,22 @@
+<div id="system_config_form">
+  <%= form_with model: [:admin, @system_config], local: true do |f| %>
+    <%= render 'admins/shared/error_messages', object: @system_config %>
+
+    <div class="grid gap-4">
+      <div>
+        <%= f.label :name, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.text_field :name, class: "input input-bordered w-full px-3 py-2 rounded border border-gray-300" %>
+      </div>
+
+      <div>
+        <%= f.label :value, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.text_field :value, class: "input input-bordered w-full px-3 py-2 rounded border border-gray-300" %>
+      </div>
+    </div>
+
+    <div class="mt-4 flex gap-2">
+      <%= f.submit class: "btn btn-primary px-4 py-2 rounded bg-sky-600 text-white hover:bg-sky-700 transition cursor-pointer" %>
+      <%= link_to 'Cancel', admin_system_configs_path, class: "btn btn-secondary px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 transition text-sm" %>
+    </div>
+  <% end %>
+</div>

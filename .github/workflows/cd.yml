@@ -1,0 +1,40 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      trace:
+        description: 'Set `--trace` for Capistrano commands'
+        required: false
+        default: 'false'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Zeitwerk check
+        run: |
+          bin/rails zeitwerk:check
+
+      - name: Capistrano deploy
+        env:
+          PRODUCTION_SSH_KEY: ${{ secrets.PRODUCTION_SSH_KEY }}
+          BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
+        run: |
+          echo "$PRODUCTION_SSH_KEY" > deploy_key
+          chmod 600 deploy_key
+
+          mv deploy_key ~/baka-gha-deploy
+          DEPLOY_SERVER=main KEY_PATH=/home/runner/baka-gha-deploy bin/bundle exec cap production deploy ${{ github.event.inputs.trace == 'true' && '--trace' || '' }}

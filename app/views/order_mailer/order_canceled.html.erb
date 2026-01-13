@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+  <h1>Đơn hàng đã bị hủy: <%= @order.order_number %></h1>
+  <p>
+    Kính gửi <%= @order.name %>,
+  </p>
+  <p>
+    Email này xác nhận rằng đơn hàng <strong><%= @order.order_number %></strong> của bạn đã bị hủy.
+  </p>
+  <p>
+    Nếu bạn không yêu cầu hủy đơn, vui lòng liên hệ ngay với bộ phận hỗ trợ khách hàng của chúng tôi.
+  </p>
+  <p>
+    Nếu bạn đã thanh toán cho đơn hàng này, khoản hoàn tiền sẽ được xử lý trong thời gian sớm nhất. Bạn sẽ nhận được email xác nhận riêng khi hoàn tiền hoàn tất.
+  </p>
+  <p>Trân trọng.</p>
+</body>
+</html>

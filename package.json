@@ -1,0 +1,35 @@
+{
+  "dependencies": {
+    "@floating-ui/dom": "^1.7.4",
+    "@hotwired/stimulus": "^3.2.2",
+    "@hotwired/turbo": "^8.0.13",
+    "@lexical/clipboard": "^0.38.2",
+    "@lexical/code": "^0.38.2",
+    "@lexical/history": "^0.38.2",
+    "@lexical/html": "^0.38.2",
+    "@lexical/link": "^0.38.2",
+    "@lexical/list": "^0.38.2",
+    "@lexical/rich-text": "^0.38.2",
+    "@lexical/selection": "^0.38.2",
+    "@lexical/table": "^0.38.2",
+    "@lexical/utils": "^0.38.2",
+    "@microsoft/clarity": "^1.0.2",
+    "lexical": "^0.38.2",
+    "sortablejs": "^1.15.6",
+    "stimulus-use": "^0.52.3",
+    "tom-select": "^2.4.3"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.8"
+  },
+  "optionalDependencies": {
+    "@tailwindcss/oxide-linux-arm64-musl": "^4.0.1",
+    "@tailwindcss/oxide-linux-x64-musl": "^4.0.1",
+    "lightningcss-linux-arm64-musl": "^1.29.1",
+    "lightningcss-linux-x64-musl": "^1.29.1"
+  },
+  "scripts": {
+    "build": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets"
+  },
+  "packageManager": "yarn@4.6.0+sha512.5383cc12567a95f1d668fbe762dfe0075c595b4bfff433be478dbbe24e05251a8e8c3eb992a986667c1d53b6c3a9c85b8398c35a960587fbd9fa3a0915406728"
+}

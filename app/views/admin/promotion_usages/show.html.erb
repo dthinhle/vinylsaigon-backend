@@ -1,0 +1,55 @@
+<div class="mb-4 flex items-center justify-between">
+  <h1 class="text-2xl font-semibold">Usage ##<%= @usage.id %></h1>
+  <div class="flex items-center gap-2">
+    <%= link_to "Back to Usages", admin_promotion_promotion_usages_path(@promotion), class: "px-3 py-1.5 bg-white border rounded" %>
+    <%= link_to "Back to Promotion", admin_promotion_path(@promotion), class: "px-3 py-1.5 bg-white border rounded" %>
+  </div>
+</div>
+
+<div class="bg-white shadow sm:rounded-lg p-6">
+  <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <div>
+      <dt class="text-sm font-medium text-gray-500">ID</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= @usage.id %></dd>
+    </div>
+
+    <div>
+      <dt class="text-sm font-medium text-gray-500">User</dt>
+      <dd class="mt-1 text-sm text-gray-900">
+        <% if @usage.user.present? %>
+          <%= link_to(@usage.user.name.presence || @usage.user.email, [:admin, @usage.user]) rescue (@usage.user.name.presence || @usage.user.email) %>
+        <% else %>
+          -
+        <% end %>
+      </dd>
+    </div>
+
+    <div>
+      <dt class="text-sm font-medium text-gray-500">User Email</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= @usage.user&.email || @usage.metadata['created_by'] || '-' %></dd>
+    </div>
+
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Redeemable</dt>
+      <dd class="mt-1 text-sm text-gray-900">
+        <%= admin_redeemable_display(@usage) %>
+      </dd>
+    </div>
+
+
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Active</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= @usage.active? ? "Yes" : "No" %></dd>
+    </div>
+
+    <div>
+      <dt class="text-sm font-medium text-gray-500">Created At</dt>
+      <dd class="mt-1 text-sm text-gray-900"><%= @usage.created_at.strftime("%Y-%m-%d %H:%M") %></dd>
+    </div>
+  </dl>
+
+  <div class="mt-6 flex justify-end gap-2">
+    <%# Revoke action removed from UI (deprecated) %>
+    <%= link_to "Show Promotion", admin_promotion_path(@promotion), class: "px-3 py-2 bg-gray-200 rounded" %>
+  </div>
+</div>

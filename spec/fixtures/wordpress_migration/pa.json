@@ -1,0 +1,95 @@
+[
+  {
+    "id": 1,
+    "name": "Color",
+    "slug": "pa_color",
+    "type": "select",
+    "order_by": "menu_order",
+    "has_archives": false,
+    "terms": [
+      {
+        "id": 10,
+        "name": "Black",
+        "slug": "black",
+        "description": "",
+        "count": 5
+      },
+      {
+        "id": 11,
+        "name": "White",
+        "slug": "white",
+        "description": "",
+        "count": 3
+      },
+      {
+        "id": 12,
+        "name": "Red",
+        "slug": "red",
+        "description": "",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Size",
+    "slug": "pa_size",
+    "type": "select",
+    "order_by": "menu_order",
+    "has_archives": false,
+    "terms": [
+      {
+        "id": 20,
+        "name": "Small",
+        "slug": "small",
+        "description": "",
+        "count": 4
+      },
+      {
+        "id": 21,
+        "name": "Medium",
+        "slug": "medium",
+        "description": "",
+        "count": 6
+      },
+      {
+        "id": 22,
+        "name": "Large",
+        "slug": "large",
+        "description": "",
+        "count": 5
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Storage",
+    "slug": "pa_storage",
+    "type": "select",
+    "order_by": "menu_order",
+    "has_archives": false,
+    "terms": [
+      {
+        "id": 30,
+        "name": "64GB",
+        "slug": "64gb",
+        "description": "",
+        "count": 2
+      },
+      {
+        "id": 31,
+        "name": "128GB",
+        "slug": "128gb",
+        "description": "",
+        "count": 3
+      },
+      {
+        "id": 32,
+        "name": "256GB",
+        "slug": "256gb",
+        "description": "",
+        "count": 2
+      }
+    ]
+  }
+]

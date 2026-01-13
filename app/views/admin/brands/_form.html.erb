@@ -1,0 +1,83 @@
+<%= form_with model: [:admin, @brand], local: true, html: { class: "w-[min(var(--container-xl),100vw)] mx-auto rounded-lg border border-gray-200 bg-white", multipart: true } do |f| %>
+  <div class="title-wrapper gap-4 w-full flex flex-row items-center justify-between py-4 border-b border-gray-200 z-50 px-4">
+    <div class="left-section flex items-center gap-2">
+      <%= link_to admin_brands_path, class: "btn btn-secondary bg-white border border-gray-200 hover:bg-gray-100 rounded-lg" do %>
+        <span class="material-icons px-2 py-1 text-gray-950 text-base!">chevron_left</span>
+      <% end %>
+      <h1 class="text-2xl font-bold">
+        <% if @brand.persisted? %>
+          Edit Brand <%= @brand.name %>
+        <% else %>
+          Create Brand
+        <% end %>
+      </h1>
+    </div>
+    <%= f.button class: "btn btn-primary text-sm px-4 py-2 rounded bg-gray-950 hover:bg-gray-700 flex items-center transition cursor-pointer", data: { turbo: false } do %>
+      <span class="material-icons text-white text-base! mr-2 -ml-1">check_circle</span>
+      <span class="text-white">Save</span>
+    <% end %>
+  </div>
+
+  <div class="bg-white p-4 space-y-4">
+    <div>
+      <%= f.label :name, "Name", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :name,
+        required: true,
+        class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500 #{'border-red-500' if @brand.errors[:name].any?}",
+        aria: {
+          invalid: @brand.errors[:name].any?,
+          describedby: @brand.errors[:name].any? ? "brand_name_error" : nil
+        } %>
+      <% if @brand.errors[:name].any? %>
+        <div id="brand_name_error" class="text-red-600 text-xs mt-1" role="alert"><%= @brand.errors[:name].first %></div>
+      <% end %>
+    </div>
+
+    <div>
+      <%= f.label :slug, "Slug", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :slug,
+        class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500 #{'border-red-500' if @brand.errors[:slug].any?}",
+        aria: {
+          invalid: @brand.errors[:slug].any?,
+          describedby: @brand.errors[:slug].any? ? "brand_slug_error" : nil
+        } %>
+      <% if @brand.errors[:slug].any? %>
+        <div id="brand_slug_error" class="text-red-600 text-xs mt-1" role="alert"><%= @brand.errors[:slug].first %></div>
+      <% end %>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div data-controller="image-preview" class="space-y-2">
+        <%= f.label :logo, "Logo", class: "block text-sm font-medium text-gray-700" %>
+        <% if f.object.logo.attached? %>
+          <div class="mb-2">
+            <%= link_to url_for(f.object.logo.variant(format: :webp).processed), data: { action: "click->image-preview#open", 'image-preview-image-url-value': url_for(f.object.logo.variant(format: :webp)) }, class: "inline-block" do %>
+              <%= image_tag f.object.logo_webp_small, class: "w-24 h-24 object-cover rounded border border-gray-300" %>
+            <% end %>
+          </div>
+        <% end %>
+        <%= f.file_field :logo, direct_upload: true, class: "file-input file-input-bordered w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500", data: { action: "change->image-preview#preview", 'image-preview-target': "input" } %>
+        <div data-image-preview-target="previews" class="flex flex-wrap gap-2 mt-2"></div>
+      </div>
+
+      <div data-controller="image-preview" class="space-y-2">
+        <%= f.label :banner, "Banner", class: "block text-sm font-medium text-gray-700" %>
+        <% if f.object.banner.attached? %>
+          <div class="mb-2">
+            <%= link_to url_for(f.object.banner), data: { action: "click->image-preview#open", 'image-preview-image-url-value': url_for(f.object.banner) }, class: "inline-block" do %>
+              <%= image_tag f.object.banner.variant(resize_to_limit: [200, 200]), class: "w-48 h-24 object-cover rounded border border-gray-300" %>
+            <% end %>
+          </div>
+        <% end %>
+        <%= f.file_field :banner, direct_upload: true, class: "file-input file-input-bordered w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500", data: { action: "change->image-preview#preview", 'image-preview-target': "input" } %>
+        <div data-image-preview-target="previews" class="flex flex-wrap gap-2 mt-2"></div>
+      </div>
+    </div>
+
+    <div class="bg-gray-50 p-4 border border-gray-200 rounded-lg">
+      <%= f.label :product_ids, "Products", class: "block text-sm font-medium text-gray-700 mb-2" %>
+      <%= f.collection_select :product_ids, Product.order(:name), :id, :name, { selected: @brand.product_ids }, { multiple: true, class: "select select-bordered w-full rounded border border-gray-300 focus:ring-2 focus:ring-sky-500", size: 6, data: { controller: "tom-select" } } %>
+      <p class="text-xs text-gray-600 mt-1">Select products to associate with this brand (optional)</p>
+    </div>
+  </div>
+<% end %>

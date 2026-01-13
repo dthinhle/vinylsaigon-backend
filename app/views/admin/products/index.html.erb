@@ -1,0 +1,51 @@
+<div class="flex flex-col gap-4" data-controller="products-index">
+  <%= render 'admin/shared/page_header',
+    title: 'Products',
+    button_text: 'Create Product',
+    button_path: new_admin_product_path %>
+
+  <div class="filter-wrapper w-full bg-white p-4 border border-gray-200 rounded-lg grid gap-4">
+    <%= render_filter_chips(
+      filter_params: @filter_params,
+      filter_labels: @filter_labels,
+      clear_path: admin_products_path
+    ) %>
+
+    <!-- Filter Bar -->
+    <div class="w-full max-w-full">
+      <%= form_with url: admin_products_path, method: :get, local: true, class: "flex flex-col md:flex-row md:items-end gap-2 md:gap-4 w-full max-w-full" do |f| %>
+        <!-- Key Filters -->
+          <div class="flex flex-col md:flex-row gap-2 md:gap-4 flex-1">
+            <div class="flex flex-col">
+              <input id="q" type="search" name="q" value="<%= params[:q] %>" placeholder="Search products..." class="input input-bordered text-sm w-full max-w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" data-action="input->products-index#search" autocomplete="off">
+            </div>
+            <div class="flex flex-col">
+              <select id="status" name="status" class="select select-bordered text-sm px-3 py-[0.575rem] rounded border border-gray-300">
+                <option value="">All Statuses</option>
+                <% Product.statuses.keys.each do |key| %>
+                  <option value="<%= key %>" <%= "selected" if params[:status] == key %>><%= key.titleize %></option>
+                <% end %>
+              </select>
+            </div>
+            <div class="flex flex-col">
+              <div class="flex gap-1">
+                <input type="number" step="0.01" name="min_price" value="<%= params[:min_price] %>" placeholder="Min price" class="input input-bordered text-sm w-full max-w-full px-3 py-2 rounded border border-gray-300" aria-label="Min Price">
+                <input type="number" step="0.01" name="max_price" value="<%= params[:max_price] %>" placeholder="Max price" class="input input-bordered text-sm w-full max-w-full px-3 py-2 rounded border border-gray-300" aria-label="Max Price">
+              </div>
+            </div>
+          </div>
+        <%= render "admin/shared/advanced_filters", f: f %>
+        <!-- Submit -->
+        <div class="flex flex-col justify-end">
+          <button type="submit" class="btn btn-secondary text-sm px-3 py-2 rounded bg-gray-950 text-gray-50 hover:bg-gray-700 cursor-pointer">Filter</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="flex justify-between items-end">
+    <span class="text-sm text-gray-500">Total: <%= @pagy&.count %></span>
+    <%== @pagy.series_nav if @pagy %>
+  </div>
+
+  <%= render "admin/products/product_list", products: @products, pagy: @pagy, show_actions: true %>
+</div>

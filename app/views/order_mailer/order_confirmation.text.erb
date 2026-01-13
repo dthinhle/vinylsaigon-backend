@@ -1,0 +1,84 @@
+Xác nhận đơn hàng - <%= @order.order_number %>
+
+Kính gửi<% if @order.user&.email.present? %> <%= @order.user.email %><% end %>,
+
+Cảm ơn bạn đã đặt hàng! Chúng tôi đã nhận được đơn hàng và đang xử lý.
+
+========================================
+CHI TIẾT ĐƠN HÀNG
+========================================
+Số đơn hàng: <%= @order.order_number %>
+Ngày đặt: <%= @order.created_at.strftime("%d/%m/%Y %H:%M") %>
+Trạng thái: <%= @order.status.titleize %>
+
+========================================
+SẢN PHẨM
+========================================
+<% @order_items.each do |item| %>
+----------------------------------------
+<%= item.product_name %>
+<% if item.product_variant.present? %>
+Loại: <%= item.product_variant.name %>
+<% end %>
+Số lượng: <%= item.quantity %>
+Giá: <%= format_vnd_currency(item.unit_price_vnd) %> /sản phẩm
+Thành tiền: <%= format_vnd_currency(item.subtotal_vnd) %>
+
+<% end %>
+========================================
+
+TÓM TẮT ĐƠN HÀNG
+----------------------------------------
+Tạm tính: <%= format_vnd_currency(@order.subtotal_vnd) %>
+<% if @order.shipping_vnd > 0 %>
+Phí vận chuyển: <%= format_vnd_currency(@order.shipping_vnd) %>
+<% end %>
+<% if @order.tax_vnd > 0 %>
+Thuế: <%= format_vnd_currency(@order.tax_vnd) %>
+<% end %>
+<% if @order.discount_vnd > 0 %>
+Giảm giá: -<%= format_vnd_currency(@order.discount_vnd) %>
+<% end %>
+----------------------------------------
+TỔNG: <%= format_vnd_currency(@order.total_vnd) %>
+
+<% if @shipping_address.present? %>
+========================================
+ĐỊA CHỈ GIAO HÀNG
+========================================
+<%= @shipping_address['name'] %>
+<%= @shipping_address['address_line1'] %>
+<% if @shipping_address['address_line2'].present? %>
+<%= @shipping_address['address_line2'] %>
+<% end %>
+<%= @shipping_address['city'] %>, <%= @shipping_address['state'] %> <%= @shipping_address['postal_code'] %>
+<%= @shipping_address['country'] %>
+<% if @shipping_address['phone'].present? %>
+Số điện thoại: <%= @shipping_address['phone'] %>
+<% end %>
+
+<% end %>
+<% if @billing_address.present? && @billing_address != @shipping_address %>
+========================================
+ĐỊA CHỈ THANH TOÁN
+========================================
+<%= @billing_address['name'] %>
+<%= @billing_address['address_line1'] %>
+<% if @billing_address['address_line2'].present? %>
+<%= @billing_address['address_line2'] %>
+<% end %>
+<%= @billing_address['city'] %>, <%= @billing_address['state'] %> <%= @billing_address['postal_code'] %>
+<%= @billing_address['country'] %>
+
+<% end %>
+========================================
+CẦN HỖ TRỢ?
+========================================
+Nếu bạn có thắc mắc về đơn hàng, vui lòng liên hệ đội hỗ trợ của chúng tôi:
+Email: support@3kshop.com
+Điện thoại: 0914 345 357
+Số đơn hàng: <%= @order.order_number %>
+
+Cảm ơn bạn đã mua sắm tại 3K Shop!
+
+Trân trọng.

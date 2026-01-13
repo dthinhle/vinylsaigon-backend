@@ -1,0 +1,28 @@
+<%# Renders a customers table and pagination. Locals: customers (collection), pagy (optional) %>
+
+<div class="overflow-x-auto w-full border border-gray-200 rounded-lg">
+  <table class="w-full max-w-full divide-y divide-gray-200 table-auto text-sm">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-4 py-2 text-left">
+          <input type="checkbox" class="accent-gray-700" data-action="change->customers-index#toggleAll" data-customers-index-target="toggleAllCheckbox">
+        </th>
+        <%= render_customer_table_headers(params) %>
+      </tr>
+      <%= render_bulk_actions_row(controller_name: 'customers-index', colspan: 8, delete_path: destroy_selected_admin_customers_path) %>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-100">
+      <% if customers.blank? %>
+        <%= render_empty_state(colspan: 8, icon: '👥', title: 'No customers found') %>
+      <% else %>
+        <% customers.each do |customer| %>
+          <%= render "admin/customers/customer_card", customer: customer %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="mb-2 flex justify-end-safe">
+  <%== pagy.series_nav if pagy %>
+</div>

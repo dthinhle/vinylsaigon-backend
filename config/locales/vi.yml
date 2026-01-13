@@ -1,0 +1,8 @@
+vi:
+  collections:
+    new_arrivals:
+      name: "Hàng mới về"
+      description: "Sản phẩm mới nhất vừa được thêm vào danh mục của chúng tôi"
+    on_sale:
+      name: "Khuyến mãi"
+      description: "Sản phẩm đang khuyến mãi hoặc có quà tặng đặc biệt"

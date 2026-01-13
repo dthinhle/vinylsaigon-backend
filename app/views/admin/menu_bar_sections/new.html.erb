@@ -1,0 +1,20 @@
+<div class="flex flex-col gap-4">
+  <div>
+    <h1 class="text-2xl font-bold">New Menu Bar Section</h1>
+    <nav class="text-sm breadcrumbs mt-1">
+      <ol class="inline-flex items-center space-x-1">
+        <li><a href="/admin" class="text-gray-500 hover:text-gray-700">Admin</a></li>
+        <li>/</li>
+        <li><a href="<%= admin_menu_bar_sections_path %>" class="text-gray-500 hover:text-gray-700">Menu Bar Sections</a></li>
+        <li>/</li>
+        <li class="text-gray-900">New</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="bg-white border border-gray-200 rounded-lg p-6">
+    <%= render "form", menu_bar_section: @menu_bar_section %>
+    <div class="mt-6">
+      <%= link_to "Back", admin_menu_bar_sections_path, class: "btn btn-xs border border-gray-100 text-gray-700 hover:border-gray-200 hover:text-gray-900 px-2 py-1 rounded" %>
+    </div>
+  </div>
+</div>

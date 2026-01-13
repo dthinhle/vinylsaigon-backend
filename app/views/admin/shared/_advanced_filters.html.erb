@@ -1,0 +1,363 @@
+<div class="relative flex flex-col w-full md:w-auto">
+  <button
+    type="button"
+    class="btn btn-secondary text-sm px-3 py-2 rounded bg-gray-200 text-gray-950 focus:outline-none cursor-pointer"
+    aria-expanded="false"
+    aria-controls="more-filters"
+    data-products-index-target="moreFiltersToggle"
+    data-action="click->products-index#toggleMoreFilters keydown->products-index#toggleMoreFiltersKeydown"
+  >
+    Advanced Filters
+  </button>
+
+  <div
+    id="more-filters"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="more-filters-label"
+    class="hidden md:absolute left-0 md:left-auto md:right-4 top-0 md:top-auto md:mt-2 bg-white rounded-none md:rounded shadow border border-gray-200 z-50 w-full h-full md:w-[min(90vw,420px)] md:min-w-[320px] md:max-w-[500px] md:h-auto md:max-h-[80vh] focus:outline-none relative"
+    tabindex="-1"
+    data-products-index-target="moreFilters"
+  >
+    <div class="flex justify-between items-center py-2 border-b border-gray-200 md:pt-0 pt-4 px-3 mt-2">
+      <h4 id="more-filters-label" class="font-bold text-base">Advanced Filters</h4>
+      <button
+        type="button"
+        aria-label="Close Advanced Filters"
+        class="text-gray-600 hover:text-gray-900 flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 transition-colors"
+        data-action="click->products-index#closeMoreFilters"
+        tabindex="0"
+      >
+        <span class="material-icons text-xl">close</span>
+      </button>
+    </div>
+
+    <div class="overflow-y-auto pb-32 md:pb-0 max-h-120 px-4 mt-2">
+      <%# Render brand-specific advanced filters when on brands index, promotions-specific when on promotions, otherwise render product advanced filters %>
+      <% f = local_assigns[:f] %>
+      <% form_object = f&.object %>
+      <% if controller.controller_name == 'brands' %>
+
+        <!-- Date Filters -->
+        <div class="mb-6">
+          <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Date Filters</div>
+          <div class="space-y-3">
+            <div class="flex flex-col">
+              <label class="text-xs font-medium text-gray-700 mb-1">Created At Range</label>
+              <div class="flex gap-2">
+                <input type="date" name="created_after" value="<%= params[:created_after] %>" placeholder="From" class="input input-bordered text-sm px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+                <input type="date" name="created_before" value="<%= params[:created_before] %>" placeholder="To" class="input input-bordered text-sm px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <% if Brand.column_names.include?('flags') && Brand.distinct.pluck(:flags).flatten.compact.uniq.any? %>
+          <!-- Brand Attributes -->
+          <div class="mb-6">
+            <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Brand Attributes</div>
+            <div class="space-y-4">
+              <div class="flex flex-col">
+                <label class="text-xs font-medium text-gray-700 mb-2">Flags</label>
+                <div class="flex flex-wrap gap-2">
+                  <% Brand.distinct.pluck(:flags).flatten.compact.uniq.each do |flag| %>
+                    <label class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-md cursor-pointer text-xs font-medium transition-colors">
+                      <input
+                        type="checkbox"
+                        name="flags[]"
+                        value="<%= flag %>"
+                        <%= Array(params[:flags] || []).include?(flag) ? "checked" : "" %>
+                        class="form-checkbox accent-sky-600 rounded"
+                      >
+                      <span><%= flag.titleize %></span>
+                    </label>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Sorting -->
+        <div class="mb-4">
+          <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Sorting</div>
+          <div class="flex flex-col">
+            <label for="sort_by" class="text-xs font-medium text-gray-700 mb-1">Sort By</label>
+            <% current_sort = "#{params[:sort]}_#{params[:direction]}" %>
+            <select id="sort_by" name="sort_by" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+              <option value="">Default</option>
+              <optgroup label="Name & Identity">
+                <option value="name_asc" <%= "selected" if current_sort == "name_asc" %>>Name (A → Z)</option>
+                <option value="name_desc" <%= "selected" if current_sort == "name_desc" %>>Name (Z → A)</option>
+                <option value="slug_asc" <%= "selected" if current_sort == "slug_asc" %>>Slug (A → Z)</option>
+                <option value="slug_desc" <%= "selected" if current_sort == "slug_desc" %>>Slug (Z → A)</option>
+              </optgroup>
+              <optgroup label="Dates">
+                <option value="created_at_asc" <%= "selected" if current_sort == "created_at_asc" %>>Created At (Oldest → Newest)</option>
+                <option value="created_at_desc" <%= "selected" if current_sort == "created_at_desc" %>>Created At (Newest → Oldest)</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+      <% elsif controller.controller_name == 'promotions' %>
+        <!-- Promotion Identification -->
+        <div class="mb-6">
+          <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Promotion Identification</div>
+          <div class="space-y-3">
+            <div class="flex flex-col">
+              <label for="title" class="text-xs font-medium text-gray-700 mb-1">Title</label>
+              <input id="title" type="text" name="title" value="<%= params[:title] %>" placeholder="Enter title..." class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+            </div>
+            <div class="flex flex-col">
+              <label for="code" class="text-xs font-medium text-gray-700 mb-1">Code</label>
+              <input id="code-more" type="text" name="code" value="<%= params[:code] %>" placeholder="Enter code..." class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+            </div>
+          </div>
+        </div>
+
+        <!-- Date Filters -->
+        <div class="mb-6">
+          <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Date Filters</div>
+          <div class="space-y-4">
+            <div class="flex flex-col">
+              <label class="text-xs font-medium text-gray-700 mb-1">Starts At Range</label>
+              <div class="flex gap-2">
+                <input type="date" name="starts_after" value="<%= params[:starts_after] %>" placeholder="From" class="input input-bordered text-sm px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+                <input type="date" name="starts_before" value="<%= params[:starts_before] %>" placeholder="To" class="input input-bordered text-sm px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+              </div>
+            </div>
+            <div class="flex flex-col">
+              <label class="text-xs font-medium text-gray-700 mb-1">Ends At Range</label>
+              <div class="flex gap-2">
+                <input type="date" name="ends_after" value="<%= params[:ends_after] %>" placeholder="From" class="input input-bordered text-sm px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+                <input type="date" name="ends_before" value="<%= params[:ends_before] %>" placeholder="To" class="input input-bordered text-sm px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Promotion Status -->
+        <div class="mb-6">
+          <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Status</div>
+          <div class="flex flex-col">
+            <label for="active-more" class="text-xs font-medium text-gray-700 mb-1">Active</label>
+            <select id="active-more" name="active" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+              <option value="">All</option>
+              <option value="true" <%= "selected" if params[:active] == "true" %>>Active</option>
+              <option value="false" <%= "selected" if params[:active] == "false" %>>Inactive</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Sorting -->
+        <div class="mb-4">
+          <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Sorting</div>
+          <div class="flex flex-col">
+            <label for="sort_by" class="text-xs font-medium text-gray-700 mb-1">Sort By</label>
+            <% current_sort = "#{params[:sort]}_#{params[:direction]}" %>
+            <select id="sort_by" name="sort_by" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+              <option value="">Default</option>
+              <optgroup label="Promotion Details">
+                <option value="main_title_asc" <%= "selected" if current_sort == "main_title_asc" %>>Main Title (A → Z)</option>
+                <option value="main_title_desc" <%= "selected" if current_sort == "main_title_desc" %>>Main Title (Z → A)</option>
+                <option value="title_asc" <%= "selected" if current_sort == "title_asc" %>>Title (A → Z)</option>
+                <option value="title_desc" <%= "selected" if current_sort == "title_desc" %>>Title (Z → A)</option>
+                <option value="code_asc" <%= "selected" if current_sort == "code_asc" %>>Code (A → Z)</option>
+                <option value="code_desc" <%= "selected" if current_sort == "code_desc" %>>Code (Z → A)</option>
+              </optgroup>
+              <optgroup label="Dates">
+                <option value="starts_at_asc" <%= "selected" if current_sort == "starts_at_asc" %>>Starts At (Oldest → Newest)</option>
+                <option value="starts_at_desc" <%= "selected" if current_sort == "starts_at_desc" %>>Starts At (Newest → Oldest)</option>
+                <option value="ends_at_asc" <%= "selected" if current_sort == "ends_at_asc" %>>Ends At (Oldest → Newest)</option>
+                <option value="ends_at_desc" <%= "selected" if current_sort == "ends_at_desc" %>>Ends At (Newest → Oldest)</option>
+                <option value="created_at_asc" <%= "selected" if current_sort == "created_at_asc" %>>Created At (Oldest → Newest)</option>
+                <option value="created_at_desc" <%= "selected" if current_sort == "created_at_desc" %>>Created At (Newest → Oldest)</option>
+              </optgroup>
+              <optgroup label="Status">
+                <option value="active_asc" <%= "selected" if current_sort == "active_asc" %>>Active (Inactive → Active)</option>
+                <option value="active_desc" <%= "selected" if current_sort == "active_desc" %>>Active (Active → Inactive)</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+
+      <% elsif controller.controller_name == 'hero_banners' %>
+        <!-- Hero Banner Identification -->
+        <div class="mb-6">
+          <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Hero Banner Identification</div>
+          <div class="space-y-3">
+            <div class="flex flex-col">
+              <label for="main_title" class="text-xs font-medium text-gray-700 mb-1">Main Title</label>
+              <input id="main_title" type="text" name="main_title" value="<%= params[:main_title] %>" placeholder="Enter main title..." class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+            </div>
+            <div class="flex flex-col">
+              <label for="sub_title" class="text-xs font-medium text-gray-700 mb-1">Sub Title</label>
+              <input id="sub_title" type="text" name="sub_title" value="<%= params[:sub_title] %>" placeholder="Enter sub title..." class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Banner Status -->
+        <div class="mb-4">
+          <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Status</div>
+          <div class="flex flex-col">
+            <label for="status-more" class="text-xs font-medium text-gray-700 mb-1">Status</label>
+            <select id="status-more" name="status" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+              <option value="">All</option>
+              <option value="active" <%= "selected" if params[:status] == "active" %>>Active</option>
+              <option value="deleted" <%= "selected" if params[:status] == "deleted" %>>Deleted</option>
+            </select>
+          </div>
+        </div>
+      <% else %>
+        <!-- Product Identification -->
+        <div class="mb-6">
+          <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Product Identification</div>
+          <div class="space-y-3">
+            <div class="flex flex-col">
+              <label for="sku" class="text-xs font-medium text-gray-700 mb-1">SKU</label>
+              <input id="sku" type="text" name="sku" value="<%= params[:sku] %>" placeholder="Enter SKU..." class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+            </div>
+            <div class="flex flex-col">
+              <label for="slug-more" class="text-xs font-medium text-gray-700 mb-1">Slug</label>
+              <input id="slug-more" type="text" name="slug" value="<%= params[:slug] %>" placeholder="Enter slug..." class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+            </div>
+          </div>
+        </div>
+
+        <!-- Categorization -->
+        <div class="mb-6">
+          <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Categorization</div>
+          <div class="space-y-4">
+            <div class="flex flex-col">
+              <label class="text-xs font-medium text-gray-700 mb-1">Categories</label>
+              <% category_selected = Array(params[:category_ids] || form_object&.category_ids || []) %>
+              <% preload_categories = defined?(@preload_categories) ? @preload_categories : Category.order(:title).limit(10).pluck(:id, :title) %>
+              <% if f %>
+                <%= f.select :category_ids, options_for_select(preload_categories.map { |id, title| [title, id] }, category_selected), {}, multiple: true, class: "", data: { controller: "tom-select-remote", tom_select_remote_url_value: "/admin/selectors/categories", tom_select_remote_value_field_value: "id", tom_select_remote_label_field_value: "title", tom_select_remote_search_field_value: "title" } %>
+              <% else %>
+                <%= select_tag "category_ids[]", options_for_select(preload_categories.map { |id, title| [title, id] }, category_selected), multiple: true, class: "", data: { controller: "tom-select-remote", tom_select_remote_url_value: "/admin/selectors/categories", tom_select_remote_value_field_value: "id", tom_select_remote_label_field_value: "title", tom_select_remote_search_field_value: "title" } %>
+              <% end %>
+              <p class="text-xs text-gray-500 mt-1">Select one or more categories</p>
+            </div>
+
+            <div class="flex flex-col">
+              <label class="text-xs font-medium text-gray-700 mb-1">Brands</label>
+              <% brand_selected = Array(params[:brand_ids] || form_object&.brand_ids || []) %>
+              <% preload_brands = defined?(@preload_brands) ? @preload_brands : Brand.order(:name).limit(10).pluck(:id, :name) %>
+              <% if f %>
+                <%= f.select :brand_ids, options_for_select(preload_brands.map { |id, name| [name, id] }, brand_selected), {}, multiple: true, class: "", data: { controller: "tom-select-remote", tom_select_remote_url_value: "/admin/selectors/brands", tom_select_remote_value_field_value: "id", tom_select_remote_label_field_value: "name", tom_select_remote_search_field_value: "name" } %>
+              <% else %>
+                <%= select_tag "brand_ids[]", options_for_select(preload_brands.map { |id, name| [name, id] }, brand_selected), multiple: true, class: "", data: { controller: "tom-select-remote", tom_select_remote_url_value: "/admin/selectors/brands", tom_select_remote_value_field_value: "id", tom_select_remote_label_field_value: "name", tom_select_remote_search_field_value: "name" } %>
+              <% end %>
+              <p class="text-xs text-gray-500 mt-1">Select one or more brands</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Attributes -->
+        <div class="mb-6">
+          <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Product Attributes</div>
+          <div class="space-y-4">
+            <div class="grid grid-cols-2 gap-3">
+              <div class="flex flex-col">
+                <label for="featured" class="text-xs font-medium text-gray-700 mb-1">Featured</label>
+                <select id="featured" name="featured" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+                  <option value="">All</option>
+                  <option value="true" <%= "selected" if params[:featured] == "true" %>>Yes</option>
+                  <option value="false" <%= "selected" if params[:featured] == "false" %>>No</option>
+                </select>
+              </div>
+              <div class="flex flex-col">
+                <label for="sort_order" class="text-xs font-medium text-gray-700 mb-1">Sort Order</label>
+                <input id="sort_order" type="number" name="sort_order" value="<%= params[:sort_order] %>" placeholder="0" class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+              </div>
+            </div>
+
+            <div class="flex flex-col">
+              <label for="free_installment_fee" class="text-xs font-medium text-gray-700 mb-1">Free Installment Fee</label>
+              <select id="free_installment_fee" name="free_installment_fee" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+                <option value="">All</option>
+                <option value="true" <%= "selected" if params[:free_installment_fee] == "true" %>>Yes (Store Pays)</option>
+                <option value="false" <%= "selected" if params[:free_installment_fee] == "false" %>>No (Buyer Pays)</option>
+              </select>
+            </div>
+
+            <% preload_flags = defined?(@preload_flags) ? @preload_flags : Product.distinct.pluck(:flags).flatten.compact.uniq %>
+            <% if preload_flags.any? %>
+              <div class="flex flex-col">
+                <label class="text-xs font-medium text-gray-700 mb-2">Flags</label>
+                <div class="flex flex-wrap gap-2">
+                  <% preload_flags.each do |flag| %>
+                    <label class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-md cursor-pointer text-xs font-medium transition-colors">
+                      <input
+                        type="checkbox"
+                        name="flags[]"
+                        value="<%= flag %>"
+                        <%= Array(params[:flags] || []).include?(flag) ? "checked" : "" %>
+                        class="form-checkbox accent-sky-600 rounded"
+                      >
+                      <span><%= flag.titleize %></span>
+                    </label>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Sorting -->
+        <div class="mb-4">
+          <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Sorting</div>
+          <div class="flex flex-col">
+            <label for="sort_by" class="text-xs font-medium text-gray-700 mb-1">Sort By</label>
+            <% current_sort = "#{params[:sort]}_#{params[:direction]}" %>
+            <select id="sort_by" name="sort_by" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+              <option value="">Default</option>
+              <optgroup label="Name & Identity">
+                <option value="name_asc" <%= "selected" if current_sort == "name_asc" %>>Name (A → Z)</option>
+                <option value="name_desc" <%= "selected" if current_sort == "name_desc" %>>Name (Z → A)</option>
+                <option value="sku_asc" <%= "selected" if current_sort == "sku_asc" %>>SKU (A → Z)</option>
+                <option value="sku_desc" <%= "selected" if current_sort == "sku_desc" %>>SKU (Z → A)</option>
+                <option value="slug_asc" <%= "selected" if current_sort == "slug_asc" %>>Slug (A → Z)</option>
+                <option value="slug_desc" <%= "selected" if current_sort == "slug_desc" %>>Slug (Z → A)</option>
+              </optgroup>
+              <optgroup label="Pricing">
+                <option value="original_price_asc" <%= "selected" if current_sort == "original_price_asc" %>>Price (Low → High)</option>
+                <option value="original_price_desc" <%= "selected" if current_sort == "original_price_desc" %>>Price (High → Low)</option>
+              </optgroup>
+              <optgroup label="Status & Order">
+                <option value="status_asc" <%= "selected" if current_sort == "status_asc" %>>Status (A → Z)</option>
+                <option value="status_desc" <%= "selected" if current_sort == "status_desc" %>>Status (Z → A)</option>
+                <option value="featured_asc" <%= "selected" if current_sort == "featured_asc" %>>Featured (No → Yes)</option>
+                <option value="featured_desc" <%= "selected" if current_sort == "featured_desc" %>>Featured (Yes → No)</option>
+                <option value="sort_order_asc" <%= "selected" if current_sort == "sort_order_asc" %>>Sort Order (Low → High)</option>
+                <option value="sort_order_desc" <%= "selected" if current_sort == "sort_order_desc" %>>Sort Order (High → Low)</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+
+      <% end %>
+    </div>
+
+    <!-- Sticky Footer for Mobile Actions -->
+    <div class="fixed md:static bottom-0 left-0 w-full bg-white border-t border-gray-200 flex justify-end gap-2 p-4 z-50 md:bg-transparent">
+      <button
+        type="button"
+        role="button"
+        tabindex="0"
+        class="w-1/2 md:w-auto min-w-16 px-3 py-0.5 md:py-2 rounded text-base md:text-sm border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
+        aria-label="Cancel"
+        data-action="click->products-index#closeMoreFilters"
+      >Cancel</button>
+      <button
+        type="submit"
+        role="button"
+        tabindex="0"
+        class="w-1/2 md:w-auto min-w-16 px-3 py-0.5 md:py-2 rounded text-base md:text-sm bg-gray-950 text-white hover:bg-gray-700 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
+        aria-label="Apply Filters"
+      >Apply</button>
+    </div>
+  </div>
+</div>

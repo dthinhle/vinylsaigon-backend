@@ -1,0 +1,5 @@
+<turbo-stream action="replace" target="menu_bar_item_<%= @menu_bar_item.id %>">
+  <template>
+    <%= render partial: "admin/menus/menu_item", locals: { item: @menu_bar_item, depth: 0 } %>
+  </template>
+</turbo-stream>

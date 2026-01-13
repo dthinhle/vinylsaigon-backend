@@ -1,0 +1,50 @@
+[
+  {
+    "id": 15,
+    "name": "Electronics",
+    "slug": "electronics",
+    "parent": 0,
+    "description": "Electronic devices and accessories",
+    "display": "default",
+    "image": {
+      "id": 123,
+      "src": "https://example.com/wp-content/uploads/electronics.jpg",
+      "name": "electronics.jpg"
+    },
+    "count": 45
+  },
+  {
+    "id": 16,
+    "name": "Smartphones",
+    "slug": "smartphones",
+    "parent": 15,
+    "description": "Latest smartphones from top brands",
+    "display": "default",
+    "image": {
+      "id": 124,
+      "src": "https://example.com/wp-content/uploads/smartphones.jpg",
+      "name": "smartphones.jpg"
+    },
+    "count": 20
+  },
+  {
+    "id": 17,
+    "name": "Laptops",
+    "slug": "laptops",
+    "parent": 15,
+    "description": "High-performance laptops for work and gaming",
+    "display": "default",
+    "image": null,
+    "count": 15
+  },
+  {
+    "id": 18,
+    "name": "Fashion",
+    "slug": "fashion",
+    "parent": 0,
+    "description": "Clothing and accessories",
+    "display": "default",
+    "image": null,
+    "count": 30
+  }
+]

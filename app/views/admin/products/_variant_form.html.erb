@@ -1,0 +1,189 @@
+<div class="max-full mx-auto px-6 py-5 bg-white last:rounded-b-lg nth-last-[2]:rounded-b-lg not-last:border-t-0 border border-gray-200 variant-form-wrapper" data-controller="nested-form" data-product-form-target="variantForm">
+  <%= render "admins/shared/error_messages", resource: f.object %>
+  <!-- Variant Header with Remove Button -->
+  <div class="flex items-center justify-between mb-4">
+    <h5 class="text-lg font-medium text-gray-900">
+      <%= f.object.persisted? ? "Edit Variant: #{f.object.name}" : "New Variant" %>
+    </h5>
+  </div>
+  <!-- Ensure shared error partial uses Tailwind and role="alert" -->
+  <div class="variant-input-wrapper" data-product-form-target="variantInnerForm">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <div class="mb-3">
+          <%= f.label :name, t(".variant_name", default: t("admin.products.variant_name")), class: "block text-sm font-medium text-gray-700" %>
+          <%= f.text_field :name,
+            placeholder: "e.g. Large Red T-shirt",
+            class: "input input-bordered w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500 #{'border-red-500' if f.object.errors[:name].any?}",
+            data: { action: "input->variant-form#validate" },
+            aria: {
+              invalid: f.object.errors[:name].any?,
+              describedby: f.object.errors[:name].any? ? "variant_name_error" : nil
+            } %>
+          <% if f.object.errors[:name].any? %>
+            <div id="variant_name_error" class="text-red-600 text-xs mt-1" role="alert">
+              <%= f.object.errors[:name].join(', ') %>
+            </div>
+          <% end %>
+        </div>
+        <div class="mb-3">
+          <%= f.label :sku, t(".sku", default: t("admin.products.sku")), class: "block text-sm font-medium text-gray-700" %>
+          <%= f.text_field :sku,
+            placeholder: "e.g. SKU12345",
+            class: "input input-bordered w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500 #{'border-red-500' if f.object.errors[:sku].any?}",
+            data: { action: "input->variant-form#validate" },
+            aria: {
+              invalid: f.object.errors[:sku].any?,
+              describedby: f.object.errors[:sku].any? ? "variant_sku_error" : nil
+            } %>
+          <% if f.object.errors[:sku].any? %>
+            <div id="variant_sku_error" class="text-red-600 text-xs mt-1" role="alert">
+              <%= f.object.errors[:sku].join(', ') %>
+            </div>
+          <% end %>
+        </div>
+        <div class="mb-3">
+          <%= f.label :slug, t(".slug", default: t("admin.products.slug", default: "Slug")), class: "block text-sm font-medium text-gray-700" %>
+          <%= f.text_field :slug,
+            placeholder: "e.g. large-red-tshirt",
+            class: "input input-bordered w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500 #{'border-red-500' if f.object.errors[:slug].any?}",
+            data: { action: "input->variant-form#validate" },
+            aria: {
+              invalid: f.object.errors[:slug].any?,
+              describedby: f.object.errors[:slug].any? ? "variant_slug_error" : nil
+            } %>
+          <% if f.object.errors[:slug].any? %>
+            <div id="variant_slug_error" class="text-red-600 text-xs mt-1" role="alert">
+              <%= f.object.errors[:slug].join(', ') %>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :original_price, t(".original_price", default: t("admin.products.original_price")), class: "block text-sm font-medium text-gray-700" %>
+          <div class="flex flex-row">
+            <%= f.number_field :original_price,
+              step: 1,
+              placeholder: "e.g. 1.000.000",
+              value: (f.object.original_price.presence),
+              class: "input input-bordered w-full px-3 py-2 rounded-l border border-gray-300 border-r-0 focus:ring-2 focus:ring-sky-500 #{'border-red-500' if f.object.errors[:original_price].any?}",
+              data: { action: "input->variant-form#validate" },
+              aria: {
+                invalid: f.object.errors[:original_price].any?,
+                describedby: f.object.errors[:original_price].any? ? "variant_original_price_error" : nil
+              } %>
+            <div class="input-group-text border bg-gray-100 border-gray-300 rounded-r flex items-center px-1 text-sm leading-tight">VNĐ</div>
+          </div>
+          <% if f.object.errors[:original_price].any? %>
+            <div id="variant_original_price_error" class="text-red-600 text-xs mt-1" role="alert">
+              <%= f.object.errors[:original_price].join(', ') %>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :price, t(".current_price", default: t("admin.products.current_price")), class: "block text-sm font-medium text-gray-700" %>
+          <div class="flex flex-row">
+            <%= f.number_field :current_price,
+              step: 1,
+              placeholder: "e.g. 1.000.000",
+              value: (f.object.current_price.presence),
+              class: "input input-bordered w-full px-3 py-2 rounded-l border border-gray-300 border-r-0 focus:ring-2 focus:ring-sky-500 #{'border-red-500' if f.object.errors[:current_price].any?}",
+              data: { action: "input->variant-form#validate" },
+              aria: {
+                invalid: f.object.errors[:current_price].any?,
+                describedby: f.object.errors[:current_price].any? ? "variant_current_price_error" : nil
+              } %>
+            <div class="input-group-text border bg-gray-100 border-gray-300 rounded-r flex items-center px-1 text-sm leading-tight">VNĐ</div>
+          </div>
+          <% if f.object.errors[:current_price].any? %>
+            <div id="variant_current_price_error" class="text-red-600 text-xs mt-1" role="alert">
+              <%= f.object.errors[:current_price].join(', ') %>
+            </div>
+          <% end %>
+        </div>
+        <!-- Stock quantity field removed as per requirements -->
+      </div>
+      <div>
+        <div class="mb-3">
+          <%= f.label :status, t(".status", default: t("admin.products.status")), class: "block text-sm font-medium text-gray-700" %>
+          <%= f.select :status, ProductVariant.statuses.keys.map { |s| [s.titleize, s] }, {},
+            class: "select select-bordered w-full pl-1.5 pr-3 py-2.25 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500 #{'border-red-500' if f.object.errors[:status].any?}",
+            data: { action: "change->variant-form#validate" },
+            aria: {
+              invalid: f.object.errors[:status].any?,
+              describedby: f.object.errors[:status].any? ? "variant_status_error" : nil
+            } %>
+          <% if f.object.errors[:status].any? %>
+            <div id="variant_status_error" class="text-red-600 text-xs mt-1" role="alert">
+              <%= f.object.errors[:status].join(', ') %>
+            </div>
+          <% end %>
+        </div>
+        <div class="mb-3">
+          <%= f.label :sort_order, t(".sort_order", default: t("admin.products.sort_order")), class: "block text-sm font-medium text-gray-700" %>
+          <%= f.number_field :sort_order,
+            placeholder: "e.g. 1",
+            class: "input input-bordered w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500 #{'border-red-500' if f.object.errors[:sort_order].any?}",
+            data: { action: "input->variant-form#validate" },
+            aria: {
+              invalid: f.object.errors[:sort_order].any?,
+              describedby: f.object.errors[:sort_order].any? ? "variant_sort_order_error" : nil
+            } %>
+        </div>
+        <div class="mb-3">
+          <%= f.label :product_images, t(".images", default: t("admin.products.images")), class: "block text-sm font-medium text-gray-700" %>
+
+          <div data-controller="image-preview"
+               data-image-preview-type-value='variant'
+               data-image-preview-existing-images-value="<%= image_preview_data_for(f.object, attachment: :product_images, single: false) %>"
+               data-image-preview-field-base-name-value="<%= f.object_name %>">
+            <%= f.file_field :product_images, multiple: true,
+              class: "file-input file-input-bordered w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500 #{'border-red-500' if f.object.errors[:product_images].any?}",
+              data: { image_preview_target: "input", action: "image-preview#preview change->variant-form#validate" },
+              aria: {
+                invalid: f.object.errors[:product_images].any?,
+                describedby: f.object.errors[:images].any? ? "variant_images_error" : nil
+              } %>
+            <div class="description text-xs text-gray-500 my-2">
+              Leave empty to use other variant images. Must upload on exactly 1 variant.
+            </div>
+            <div data-image-preview-target="previews" class="flex flex-wrap gap-2 mt-2"></div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :variant_attributes, t(".variant_attributes", default: t("admin.products.variant_attributes")), class: "block text-sm font-medium text-gray-700" %>
+        <div class="<%= 'border border-red-500 rounded' if f.object.errors[:variant_attributes].any? %>">
+          <%= render "admin/products/variant_attributes_fields",
+            form: f,
+            field_name: "variant_attributes",
+            initial_attributes: f.object.safe_variant_attributes || {},
+            input_label: nil %>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3 p-4 bg-gray-50 rounded border border-gray-200">
+      <label class="flex items-center cursor-pointer">
+        <%= f.check_box :_destroy,
+          {
+            class: "form-checkbox h-5 w-5 text-red-600 transition duration-150 ease-in-out accent-red-600",
+            data: {
+              action: "change->nested-form#toggleDestroy"
+            },
+            aria: { label: t(".remove_variant", default: "Mark for removal") }
+          },
+          "true",
+          "false" %>
+        <span class="ml-2 text-sm font-medium text-red-700">
+          <%= t(".remove_variant", default: "Mark this variant for removal") %>
+        </span>
+      </label>
+      <p class="text-xs text-gray-500 mt-1 ml-7">
+        Check this box to remove this variant when you save the product.
+      </p>
+    </div>
+</div>

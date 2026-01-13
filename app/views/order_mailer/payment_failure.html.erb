@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+  <h1>Thanh toán thất bại cho đơn hàng <%= @order.order_number %></h1>
+  <p>
+    Kính gửi <%= @order.name %>,
+  </p>
+  <p>
+    Rất tiếc, thanh toán cho đơn hàng <strong><%= @order.order_number %></strong> của bạn chưa thể được xử lý.
+  </p>
+  <p>
+    Nguyên nhân có thể do nhiều lý do, như không đủ tiền hoặc thông tin thẻ không chính xác.
+    Đơn hàng của bạn vẫn đang ở trạng thái chờ. Vui lòng truy cập website để thử thanh toán lại.
+  </p>
+  <p>
+    Nếu bạn tiếp tục gặp sự cố, vui lòng liên hệ đội hỗ trợ khách hàng của chúng tôi.
+  </p>
+  <p>Trân trọng.</p>
+</body>
+</html>

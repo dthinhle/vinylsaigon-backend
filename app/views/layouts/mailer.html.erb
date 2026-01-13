@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      /* Reset styles */
+      body, table, td, p, h1, h2, h3, h4, h5, h6 {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+      }
+
+      /* Base styles */
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100% !important;
+        min-width: 100%;
+        background-color: #f4f4f4;
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1.4;
+        color: #333333;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+
+      table {
+        border-collapse: collapse;
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+      }
+
+      img {
+        border: 0;
+        height: auto;
+        line-height: 100%;
+        outline: none;
+        text-decoration: none;
+        -ms-interpolation-mode: bicubic;
+      }
+
+      /* Container styles */
+      .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+      }
+
+      /* Header styles */
+      .header {
+        background-color: #ffffff;
+        padding: 40px 20px;
+      }
+
+      .header-logo {
+        display: block;
+        max-width: 150px;
+        height: auto;
+      }
+
+      .header-nav {
+        font-size: 14px;
+        font-weight: 500;
+        color: #333333;
+        text-decoration: none;
+      }
+
+      /* Content styles */
+      .content {
+        padding: 20px;
+        background-color: #ffffff;
+      }
+
+      .content h1 {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333333;
+        margin-bottom: 20px;
+        line-height: 1.3;
+      }
+
+      .content h2 {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333333;
+        margin-bottom: 15px;
+        margin-top: 25px;
+        line-height: 1.3;
+      }
+
+      .content p {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #333333;
+        margin-bottom: 15px;
+      }
+
+      /* Button styles */
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #007bff;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 16px;
+        text-align: center;
+        margin: 10px 0;
+      }
+
+      .btn-primary {
+        background-color: #007bff;
+      }
+
+      .btn-secondary {
+        background-color: #6c757d;
+      }
+
+      .btn-success {
+        background-color: #28a745;
+      }
+
+      /* Footer styles */
+      .footer {
+        background-color: #333333;
+        color: #ffffff;
+        padding: 40px 20px;
+        text-align: center;
+      }
+
+      .footer-links {
+        margin-bottom: 20px;
+      }
+
+      .footer-links a {
+        color: #ffffff;
+        text-decoration: none;
+        margin: 0 10px;
+        font-size: 14px;
+      }
+
+      .footer-social {
+        margin: 20px 0;
+      }
+
+      .footer-social a {
+        display: inline-block;
+        margin: 0 5px;
+      }
+
+      .footer-social img {
+        width: 24px;
+        height: 24px;
+      }
+
+      .footer-text {
+        font-size: 12px;
+        line-height: 1.5;
+        color: #cccccc;
+        margin-top: 20px;
+      }
+
+      .footer-text a {
+        color: #ffffff;
+        text-decoration: underline;
+      }
+
+      /* Responsive styles */
+      @media only screen and (max-width: 600px) {
+        .email-container {
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+
+        .header {
+          padding: 20px 15px !important;
+        }
+
+        .content {
+          padding: 15px !important;
+        }
+
+        .footer {
+          padding: 20px 15px !important;
+        }
+
+        .header-nav {
+          display: none !important;
+        }
+
+        .content h1 {
+          font-size: 20px !important;
+        }
+
+        .content h2 {
+          font-size: 18px !important;
+        }
+
+        .content p {
+          font-size: 14px !important;
+        }
+
+        .btn {
+          display: block !important;
+          width: 100% !important;
+          box-sizing: border-box !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f4f4f4;">
+      <tr>
+        <td align="center" valign="top">
+          <table class="email-container" role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="margin: 0 auto; background-color: #ffffff;">
+            <tr>
+              <td class="header" align="center" style="padding: 30px 20px; background-color: #ffffff;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                  <tr>
+                    <td width="40%" align="left" valign="bottom" style="padding: 0 0 4px 0;">
+                      <%= link_to FRONTEND_HOST, target: '_blank' do %>
+                        <%= image_tag "logo-black.svg", alt: "3K Shop", class: "header-logo", style: "display: block; max-width: 150px; height: auto;" %>
+                      <% end %>
+                    </td>
+                    <td width="60%" align="right" valign="bottom" style="padding: 0;">
+                      <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                        <tr>
+                          <td style="padding: 0 10px;">
+                            <%= link_to "Sản phẩm", "#{FRONTEND_HOST}/san-pham", target: '_blank', class: "header-nav", style: "color: #333333; text-decoration: none; font-size: 16px; font-weight: 500;" %>
+                          </td>
+                          <td style="padding: 0 10px;">
+                            <%= link_to "Liên hệ", "#{FRONTEND_HOST}/lien-he", target: '_blank', class: "header-nav", style: "color: #333333; text-decoration: none; font-size: 16px; font-weight: 500;" %>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <%= image_tag "banner-static.png", alt: "3K Shop banner", style: "display: block; width: 100%; height: auto;" %>
+              </td>
+            </tr>
+            <tr>
+              <td class="content" style="padding: 40px 20px; background-color: #ffffff;">
+                <%= yield %>
+              </td>
+            </tr>
+            <tr>
+              <td class="footer" style="background-color: #333333; color: #ffffff; padding: 40px 20px; text-align: center;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 30px;">
+                  <tr>
+                    <td style="padding: 5px;">
+                      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                        <tr>
+                          <td width="33%" align="center" style="border: 1px solid #ffffff; padding: 15px; vertical-align: middle;">
+                            <%= link_to "Sản phẩm mới", "#{FRONTEND_HOST}/san-pham", target: '_blank', style: "color: #ffffff; text-decoration: none; font-weight: bold; font-size: 14px;" %>
+                          </td>
+                          <td width="33%" align="center" style="border: 1px solid #ffffff; padding: 15px; vertical-align: middle;">
+                            <%= link_to "Thương hiệu", "#{FRONTEND_HOST}/thuong-hieu", target: '_blank', style: "color: #ffffff; text-decoration: none; font-weight: bold; font-size: 14px;" %>
+                          </td>
+                          <td width="33%" align="center" style="border: 1px solid #ffffff; padding: 15px; vertical-align: middle;">
+                            <%= link_to "Đăng ký ngay", "#{FRONTEND_HOST}/dang-ky", target: '_blank', style: "color: #ffffff; text-decoration: none; font-weight: bold; font-size: 14px;" %>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 20px;">
+                  <tr>
+                    <td align="center" style="padding: 10px 0;">
+                      <%= link_to "https://www.facebook.com/3Kshop/", style: "display: inline-block; margin: 0 5px;" do %>
+                        <%= image_tag "facebook-white.svg", alt: "Facebook", style: "width: 24px; height: 24px; border: none;" %>
+                      <% end %>
+                      <%= link_to "https://www.instagram.com/khanh3kshop", style: "display: inline-block; margin: 0 5px;" do %>
+                        <%= image_tag "instagram-white.svg", alt: "Instagram", style: "width: 24px; height: 24px; border: none;" %>
+                      <% end %>
+                      <%= link_to "https://www.youtube.com/channel/UCWFSrSYbRV79dhHFFqSHeHw", style: "display: inline-block; margin: 0 5px;" do %>
+                        <%= image_tag "youtube-white.svg", alt: "YouTube", style: "width: 24px; height: 24px; border: none;" %>
+                      <% end %>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Footer Links -->
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 20px;">
+                  <tr>
+                    <td align="center" style="padding: 10px 0;">
+                      <p style="font-size: 14px; line-height: 1.5; color: #ffffff; margin: 0;">
+                        <%= link_to "Chính sách bảo mật", "#{FRONTEND_HOST}/bao-mat-thong-tin-ca-nhan", style: "color: #ffffff; text-decoration: underline;" %> |
+                        <%= link_to "Chính sách vận chuyển", "#{FRONTEND_HOST}/chinh-sach-van-chuyen", style: "color: #ffffff; text-decoration: underline;" %>
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Company Info -->
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                  <tr>
+                    <td align="center" style="padding: 5px 0;">
+                      <p class="footer-text" style="font-size: 12px; line-height: 1.5; color: #cccccc; margin: 0;">
+                        <span style="font-size: 16px;"><strong>3K Shop</strong></span><br>
+                        <span>
+                          <a href="https://goo.gl/maps/ZdxraaA4LawbRose6" target="_blank">
+                            14 Nguyễn Văn Giai, P. Đa Kao, Q.1, TP.HCM
+                          </a>
+                        </span><br>
+                        <span>Điện thoại: (028) 38 202 909 - 0914 345 357</span><br><br>
+                        <span>
+                          <a href="https://goo.gl/maps/GEKrLoC91cbwkrbdA" target="_blank">
+                            6B Đinh Bộ Lĩnh, P.24, Q. Bình Thạnh, TP.HCM
+                          </a>
+                        </span><br>
+                        <span>Điện thoại: (028) 62 656 596 - 0914 345 357</span>
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

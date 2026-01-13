@@ -1,0 +1,9 @@
+id;name;short_description;original_price;current_price;category;brand;installment_plan;free_shipping;tags;collections;created_at;updated_at
+1;Focal Utopia;Tai nghe đầu bảng của Focal;;119000000;"[""Headphones"",""Full-sized headphones""]";Focal;TRUE;TRUE;[];"[""new_arrivals""]";1728678649;1728678825
+2;Schiit Ragnarok 2;Headphone amplifier đầu bảng của Schiit;47990000;42000000;"[""DAC/Amp"",""Headphones Amplifier""]";Schiit;TRUE;TRUE;"[""on_sale""]";[];1688142795;1688143467
+3;Schiit Yggdrasil+;DAC đầu bảng của Schiit;;75990000;"[""DAC/Amp"",""Desktop DAC""]";Schiit;TRUE;TRUE;[];[];1733917417;1733918412
+4;JBL TT350;Mâm cao cấp của JBL;29990000;18900000;"[""Analog/Vinyl"",""Turntable""]";JBL;TRUE;TRUE;"[""arriving""]";"[""featured""]";1679763168;1679763500
+5;FiiO LL-RC 2025;Dây tai nghe thay thế của Fiio;;;"[""Phụ kiện"", ""Dây tai nghe""]";Fiio;FALSE;FALSE;[];[];1731122878;1731123472
+6;JVC EP-FX12 Spiral Dot Pro;Núm tai nghe cao cấp của JVC;;400000;"[""Phụ kiện"", ""Núm tai nghe/Đệm tai nghe""]";JVC;FALSE;FALSE;[];[];1688981474;1688981968
+7;Barefoot Microsub45;Subwoofer nhỏ gọn Barefoot;;184000000;"[""Loa"", ""Loa hi-end""]";Barefoot;TRUE;TRUE;[];[];1712587511;1712588480
+8;Audeze Maxwell (Xbox/PC);Tai nghe gaming Audeze;7990000;7000000;"[""Headphones"",""Full-sized headphones""]";;TRUE;TRUE;[];[];1657260184;1657260243

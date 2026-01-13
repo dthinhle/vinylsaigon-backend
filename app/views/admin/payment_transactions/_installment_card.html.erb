@@ -1,0 +1,19 @@
+<div class="rounded-lg border border-gray-200 bg-white p-4 space-y-2">
+  <h3 class="font-semibold text-sm">Installment Details</h3>
+  <% details = payment_transaction_installment_details(txn) %>
+  <div class="text-sm space-y-1">
+    <div><span class="text-gray-500">Months:</span> <span class="font-medium"><%= details[:months] %></span></div>
+    <div>
+      <span class="text-gray-500">Fee Amount:</span>
+      <span class="font-medium"><%= format_vnd_currency(details[:fee_amount]) %></span>
+      <% if txn.fully_free_installment_order? %>
+        <div class="text-xs text-green-600 mt-1">✓ All products eligible for reimbursement</div>
+      <% elsif txn.has_free_installment_product? %>
+        <div class="text-xs text-yellow-600 mt-1">⚠ Partial reimbursement (some products eligible)</div>
+      <% else %>
+        <div class="text-xs text-gray-500 mt-1">Buyer pays (no reimbursement)</div>
+      <% end %>
+    </div>
+    <div><span class="text-gray-500">Bank:</span> <span class="font-medium"><%= details[:bank] %></span></div>
+  </div>
+</div>

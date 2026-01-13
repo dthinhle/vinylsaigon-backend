@@ -1,0 +1,91 @@
+[
+  {
+    "id": 10001,
+    "name": "FiiO M11 Plus LTD",
+    "slug": "fiio-m11-plus-ltd",
+    "type": "simple",
+    "status": "publish",
+    "featured": false,
+    "description": "<p>High-resolution digital audio player with ESS SABRE DAC.</p>",
+    "short_description": "Premium DAP with ESS DAC",
+    "sku": "",
+    "price": "12900000",
+    "regular_price": "12900000",
+    "sale_price": "",
+    "manage_stock": true,
+    "stock_quantity": 5,
+    "stock_status": "instock",
+    "weight": "0.25",
+    "categories": [{"id": 17, "name": "DAP", "slug": "dap"}],
+    "tags": [{"id": 60, "name": "FiiO", "slug": "fiio"}, {"id": 61, "name": "DAP", "slug": "dap"}],
+    "images": [
+      {
+        "id": 2001,
+        "src": "https://3kshop.vn/wp-content/uploads/2023/fiio-m11.jpg",
+        "name": "fiio-m11.jpg",
+        "alt": "FiiO M11 Plus"
+      }
+    ],
+    "meta_data": [
+      {"key": "bao_hanh", "value": "12 tháng"},
+      {"key": "_yoast_wpseo_title", "value": "FiiO M11 Plus LTD - Máy nghe nhạc cao cấp"}
+    ]
+  },
+  {
+    "id": 10002,
+    "name": "Audeze LCD-5",
+    "slug": "audeze-lcd-5",
+    "type": "simple",
+    "status": "publish",
+    "featured": true,
+    "description": "<p>Flagship planar magnetic headphones.</p>",
+    "short_description": "",
+    "sku": "",
+    "price": "89900000",
+    "regular_price": "99900000",
+    "sale_price": "89900000",
+    "manage_stock": false,
+    "stock_quantity": null,
+    "stock_status": "instock",
+    "weight": "0.42",
+    "categories": [{"id": 15, "name": "Headphone", "slug": "headphone"}],
+    "tags": [{"id": 70, "name": "Audeze", "slug": "audeze"}, {"id": 71, "name": "Planar", "slug": "planar"}],
+    "images": [
+      {
+        "id": 3001,
+        "src": "https://3kshop.vn/wp-content/uploads/2023/audeze-lcd5.jpg",
+        "name": "audeze-lcd5.jpg",
+        "alt": ""
+      }
+    ],
+    "meta_data": [
+      {"key": "bao_hanh", "value": "24 tháng"},
+      {"key": "qua_tang", "value": "Cable XLR + Hard case"},
+      {"key": "sp_sap_ve", "value": "yes"}
+    ]
+  },
+  {
+    "id": 10003,
+    "name": "Chord Mojo 2",
+    "slug": "chord-mojo-2",
+    "type": "simple",
+    "status": "publish",
+    "featured": false,
+    "description": "<p>Portable DAC/AMP with FPGA technology.</p>",
+    "short_description": "Portable DAC/AMP",
+    "sku": "",
+    "price": "0",
+    "regular_price": "",
+    "sale_price": "",
+    "manage_stock": false,
+    "stock_quantity": null,
+    "stock_status": "outofstock",
+    "weight": "0.18",
+    "categories": [{"id": 18, "name": "DAC/Amp", "slug": "dac-amp"}],
+    "tags": [{"id": 80, "name": "Chord", "slug": "chord"}],
+    "images": [],
+    "meta_data": [
+      {"key": "bao_hanh", "value": "12 tháng"}
+    ]
+  }
+]

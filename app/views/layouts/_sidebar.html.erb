@@ -1,0 +1,107 @@
+<!-- Sidebar navigation for admin modules -->
+<aside
+  id="admin-sidebar"
+  class="h-screen bg-white shadow-lg flex flex-col <%= @sidebar_collapsed ? 'w-16 collapsed' : 'w-64' %> fixed z-30 inset-y-0 left-0 transition-all duration-200 ease-in-out"
+  aria-label="Admin sidebar"
+  aria-expanded="<%= @sidebar_collapsed ? 'false' : 'true' %>"
+  tabindex="0"
+  role="navigation"
+>
+  <div class="flex items-center h-16 border-b px-4">
+    <span class="font-bold text-xl text-gray-950 sidebar-label collapse-hide transition-all <%= 'opacity-0' if @sidebar_collapsed %>">3kShop Admin</span>
+  </div>
+  <nav class="flex-1 py-6 overflow-hidden" aria-label="Main navigation">
+    <!-- Sidebar toggle button -->
+    <button
+      data-controller="sidebar"
+      data-action="click->sidebar#toggleSidebar keydown->sidebar#toggleSidebarKey"
+      data-sidebar-target="toggle"
+      class="inline-flex items-center justify-center size-9 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 ml-4"
+      aria-label="Toggle sidebar"
+      aria-pressed="<%= @sidebar_collapsed ? 'true' : 'false' %>"
+      type="button"
+      tabindex="0"
+    >
+      <span class="material-icons text-[17px] transition-transform duration-200" data-sidebar-target="icon"><%= @sidebar_collapsed ? 'chevron_right' : 'chevron_left' %></span>
+    </button>
+    <!-- Navigation Links -->
+    <div class="menu-wrapper space-y-2 h-[calc(100vh-7.75rem)] overflow-y-auto pt-4" role="menu">
+      <% sidebar_groups = [
+        {
+          title: 'Dashboard',
+          links: [
+            { href: admin_dashboard_path, icon: 'dashboard', label: 'Dashboard' }
+          ]
+        },
+        {
+          title: 'Catalog',
+          links: [
+            { href: admin_products_path, icon: 'inventory_2', label: 'Products' },
+            { href: admin_brands_path, icon: 'branding_watermark', label: 'Brands' },
+            { href: admin_categories_path, icon: 'category', label: 'Categories' },
+            { href: admin_collections_path, icon: 'collections_bookmark', label: 'Collections' }
+          ]
+        },
+        {
+          title: 'Sales',
+          links: [
+            { href: admin_customers_path, icon: 'people', label: 'Customers' },
+            { href: admin_orders_path, icon: 'shopping_cart', label: 'Orders' },
+            { href: admin_payment_transactions_path, icon: 'credit_card', label: 'Payment Txns' }
+          ]
+        },
+        {
+          title: 'Marketing',
+          links: [
+            { href: admin_promotions_path, icon: 'local_offer', label: 'Promotions' },
+            { href: admin_promotion_usages_path, icon: 'receipt_long', label: 'Promotion Usages' },
+          ]
+        },
+        {
+          title: 'Content',
+          links: [
+            { href: admin_blogs_path, icon: 'article', label: 'Blog/News' },
+            { href: admin_hero_banners_path, icon: 'image', label: 'Hero Banners' },
+            { href: admin_menus_path, icon: 'menu', label: 'Menus' },
+            { href: admin_related_categories_path, icon: 'category', label: 'Related Categories' }
+          ]
+        },
+        {
+          title: 'Settings',
+          links: [
+            { href: admin_redirection_mappings_path, icon: 'swap_horiz', label: 'Redirection Mappings' },
+            { href: admin_admins_path, icon: 'admin_panel_settings', label: 'Admins' }
+          ]
+        }
+      ] %>
+
+      <% sidebar_groups.each_with_index do |group, group_index| %>
+        <div class="px-4 pt-4 pb-2 m-0 data-[collapse='true']:h-0 data-[collapse='true']:p-0 overflow-hidden transition-all" data-collapse="<%= @sidebar_collapsed %>" role="sidebar-group">
+          <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider sidebar-label">
+            <%= group[:title] %>
+          </h3>
+        </div>
+
+        <% group[:links].each do |link| %>
+          <% active = request.path.start_with?(link[:href].sub('/index', '')) %>
+          <a
+            href="<%= link[:href] %>"
+            aria-label="<%= link[:aria_label] || link[:label] %>"
+            class="flex items-center mx-4 px-2 p-1.5 rounded-md transition focus:outline-none focus:ring-2 focus:ring-sky-500
+              <%= active ? 'bg-sky-100 text-gray-950' : 'text-gray-700 hover:bg-sky-50 hover:text-gray-950' %>"
+            aria-current="<%= active ? 'page' : nil %>"
+            tabindex="0"
+            role="menuitem"
+          >
+            <span class="material-icons mr-3 flex-shrink-0" aria-hidden="true">
+              <div class='text-[17px]'>
+                <%= link[:icon] %>
+              </div>
+            </span>
+            <span class="sidebar-label collapse-hide transition-all text-nowrap overflow-hidden text-ellipsis <%= 'opacity-0' if @sidebar_collapsed %>"><%= link[:label] %></span>
+          </a>
+        <% end %>
+      <% end %>
+    </div>
+  </nav>
+</aside>

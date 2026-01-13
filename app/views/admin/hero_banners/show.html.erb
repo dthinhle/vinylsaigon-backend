@@ -1,0 +1,50 @@
+<%# Show hero banner %>
+<div class="mb-4 flex items-center justify-between">
+  <h1 class="text-2xl font-semibold">Hero Banner</h1>
+  <div class="flex items-center gap-2">
+    <%= link_to 'Edit', edit_admin_hero_banner_path(@hero_banner), class: "btn btn-secondary px-3 py-2 bg-gray-100 text-gray-800 rounded" %>
+    <%= link_to 'Back', admin_hero_banners_path, class: "btn btn-secondary px-3 py-2 bg-gray-200 text-gray-800 rounded" %>
+  </div>
+</div>
+
+<div class="bg-white border border-gray-200 rounded p-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+  <div class="md:col-span-1">
+    <% if @hero_banner.image.attached? %>
+      <button
+        type="button"
+        class="w-full"
+        data-action="click->image-preview#open"
+        data-image-preview-image-url-value="<%= rails_blob_path(@hero_banner.image.variant(resize_to_limit: [1200, 1200]), only_path: true) rescue rails_blob_path(@hero_banner.image, only_path: true) %>"
+        data-image-alt="<%= @hero_banner.main_title.presence || 'Hero banner image' %>"
+      >
+        <%= image_tag @hero_banner.image.variant(resize_to_limit: [900, 600]), class: "w-full object-cover rounded border border-gray-200" %>
+      </button>
+      <p class="text-xs text-gray-500 mt-2">Click image to preview full size.</p>
+    <% else %>
+      <div class="w-full h-48 bg-gray-100 rounded flex items-center justify-center text-gray-400">No image</div>
+    <% end %>
+  </div>
+
+  <div class="md:col-span-2">
+    <div class="mb-4">
+      <div class="text-sm text-gray-500">Main title</div>
+      <div class="text-lg font-medium text-gray-900"><%= @hero_banner.main_title %></div>
+    </div>
+
+    <div class="mb-4">
+      <div class="text-sm text-gray-500">Description</div>
+      <div class="prose max-w-none text-gray-800"><%= simple_format(@hero_banner.description) %></div>
+    </div>
+
+    <div class="mb-4">
+      <%# Display banner URL as escaped plain text (no link) per user request %>
+      <% banner = defined?(@hero_banner) && @hero_banner.present? ? @hero_banner : HeroBanner.find(params[:id]) %>
+      <span class="text-gray-600"><%= h(banner.url.to_s.presence || "No URL") %></span>
+    </div>
+
+    <div class="flex gap-6 mt-4 text-sm text-gray-500">
+      <div>Created: <span class="text-gray-700"><%= @hero_banner.created_at&.strftime("%Y-%m-%d %H:%M") %></span></div>
+      <div>Updated: <span class="text-gray-700"><%= @hero_banner.updated_at&.strftime("%Y-%m-%d %H:%M") %></span></div>
+    </div>
+  </div>
+</div>

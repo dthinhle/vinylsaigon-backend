@@ -1,0 +1,179 @@
+{
+  "id": 12345,
+  "name": "Noble Audio Fokus Prestige Encore",
+  "slug": "noble-fokus-prestige-encore",
+  "permalink": "https://3kshop.vn/product/noble-fokus-prestige-encore/",
+  "date_created": "2023-06-15T10:30:00",
+  "date_modified": "2023-09-20T14:45:00",
+  "type": "variable",
+  "status": "publish",
+  "featured": true,
+  "catalog_visibility": "visible",
+  "description": "<p>The <strong>Noble Audio Fokus Prestige Encore</strong> is a premium in-ear monitor featuring cutting-edge technology.</p>\n<p><img src=\"https://3kshop.vn/wp-content/uploads/2023/noble-detail.jpg\" width=\"600\" height=\"400\" /></p>\n<p>Features include advanced drivers and exceptional sound quality.</p>",
+  "short_description": "<p>Premium in-ear monitor with advanced technology</p>",
+  "sku": "",
+  "price": "8990000",
+  "regular_price": "",
+  "sale_price": "",
+  "date_on_sale_from": null,
+  "date_on_sale_to": null,
+  "price_html": "",
+  "on_sale": false,
+  "purchasable": true,
+  "total_sales": 15,
+  "virtual": false,
+  "downloadable": false,
+  "downloads": [],
+  "download_limit": -1,
+  "download_expiry": -1,
+  "external_url": "",
+  "button_text": "",
+  "tax_status": "taxable",
+  "tax_class": "",
+  "manage_stock": false,
+  "stock_quantity": null,
+  "stock_status": "instock",
+  "backorders": "no",
+  "backorders_allowed": false,
+  "backordered": false,
+  "sold_individually": false,
+  "weight": "0.15",
+  "dimensions": {
+    "length": "",
+    "width": "",
+    "height": ""
+  },
+  "shipping_required": true,
+  "shipping_taxable": true,
+  "shipping_class": "",
+  "shipping_class_id": 0,
+  "reviews_allowed": true,
+  "average_rating": "5.00",
+  "rating_count": 3,
+  "related_ids": [12346, 12347, 12348],
+  "upsell_ids": [],
+  "cross_sell_ids": [],
+  "parent_id": 0,
+  "purchase_note": "",
+  "categories": [
+    {
+      "id": 16,
+      "name": "Tai nghe",
+      "slug": "tai-nghe"
+    }
+  ],
+  "tags": [
+    {
+      "id": 50,
+      "name": "Noble",
+      "slug": "noble"
+    },
+    {
+      "id": 51,
+      "name": "IEM",
+      "slug": "iem"
+    },
+    {
+      "id": 52,
+      "name": "High-End",
+      "slug": "high-end"
+    }
+  ],
+  "images": [
+    {
+      "id": 1001,
+      "date_created": "2023-06-15T10:30:00",
+      "date_modified": "2023-06-15T10:30:00",
+      "src": "https://3kshop.vn/wp-content/uploads/2023/noble-main.jpg",
+      "name": "noble-main.jpg",
+      "alt": "Noble Fokus Prestige"
+    },
+    {
+      "id": 1002,
+      "date_created": "2023-06-15T10:31:00",
+      "date_modified": "2023-06-15T10:31:00",
+      "src": "https://3kshop.vn/wp-content/uploads/2023/noble-side.jpg",
+      "name": "noble-side.jpg",
+      "alt": ""
+    }
+  ],
+  "attributes": [
+    {
+      "id": 1,
+      "name": "Color",
+      "position": 0,
+      "visible": true,
+      "variation": true,
+      "options": ["Black", "Silver"]
+    },
+    {
+      "id": 2,
+      "name": "Cable Type",
+      "position": 1,
+      "visible": true,
+      "variation": true,
+      "options": ["2.5mm", "3.5mm", "4.4mm"]
+    }
+  ],
+  "default_attributes": [],
+  "variations": [12350, 12351, 12352, 12353],
+  "grouped_products": [],
+  "menu_order": 0,
+  "meta_data": [
+    {
+      "id": 2001,
+      "key": "bao_hanh",
+      "value": "12 tháng chính hãng"
+    },
+    {
+      "id": 2002,
+      "key": "qua_tang",
+      "value": "Case da cao cấp + Cleaning kit"
+    },
+    {
+      "id": 2003,
+      "key": "sp_sap_ve",
+      "value": "no"
+    },
+    {
+      "id": 2004,
+      "key": "_yoast_wpseo_title",
+      "value": "Noble Audio Fokus Prestige Encore - Tai nghe IEM cao cấp"
+    },
+    {
+      "id": 2005,
+      "key": "_yoast_wpseo_metadesc",
+      "value": "Noble Audio Fokus Prestige Encore là tai nghe IEM flagship với chất âm tuyệt vời và thiết kế sang trọng"
+    },
+    {
+      "id": 2006,
+      "key": "block_thong_tin_0_dong_0_name",
+      "value": "Driver"
+    },
+    {
+      "id": 2007,
+      "key": "block_thong_tin_0_dong_0_noi_dung",
+      "value": "1DD + 4BA Hybrid"
+    },
+    {
+      "id": 2008,
+      "key": "block_thong_tin_0_dong_1_name",
+      "value": "Frequency Response"
+    },
+    {
+      "id": 2009,
+      "key": "block_thong_tin_0_dong_1_noi_dung",
+      "value": "10Hz - 40kHz"
+    },
+    {
+      "id": 2010,
+      "key": "block_thong_tin_0_dong_2_name",
+      "value": "Impedance"
+    },
+    {
+      "id": 2011,
+      "key": "block_thong_tin_0_dong_2_noi_dung",
+      "value": "16 Ohm"
+    }
+  ]
+}

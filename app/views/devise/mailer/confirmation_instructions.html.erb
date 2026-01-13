@@ -1,0 +1,5 @@
+<p>Chào mừng <%= @email %>!</p>
+
+<p>Bạn có thể xác nhận email tài khoản của mình thông qua liên kết bên dưới:</p>
+
+<p><%= link_to 'Xác nhận tài khoản của tôi', confirmation_url(@resource, confirmation_token: @token) %></p>

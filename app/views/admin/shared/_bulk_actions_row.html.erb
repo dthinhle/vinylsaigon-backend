@@ -1,0 +1,20 @@
+<tr class="bg-gray-50 hidden data-selected-rows:table-row" data-<%= controller_name %>-target="bulkActionsRow">
+  <td colspan="<%= colspan %>" class="px-4 py-2">
+    <% if custom_actions %>
+      <%= custom_actions %>
+    <% else %>
+      <button
+        type="button"
+        class="btn btn-danger my-2 px-2 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition items-center justify-center flex"
+        data-<%= controller_name %>-target="deleteButton"
+        data-action="click-><%= controller_name %>#deleteSelected"
+        <% if delete_path %>data-action-url="<%= delete_path %>"<% end %>
+        aria-label="Delete Selected"
+        title="Delete Selected"
+      >
+        <span class="material-icons" style="font-size:1.25rem;" aria-hidden="true">delete</span>
+        <span class='text-sm ml-2'>Delete selected rows</span>
+      </button>
+    <% end %>
+  </td>
+</tr>

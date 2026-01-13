@@ -1,0 +1,146 @@
+<div class="flex flex-col gap-4">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold">Promotions</h1>
+      <nav class="text-sm breadcrumbs mt-1">
+        <ol class="inline-flex items-center space-x-1">
+          <li><%= link_to "Admin", admin_dashboard_path, class: "text-gray-500 hover:text-gray-700" %></li>
+          <li>/</li>
+          <li><%= link_to "Promotions", admin_promotions_path, class: "text-gray-500 hover:text-gray-700" %></li>
+          <li>/</li>
+          <li class="text-gray-900"><%= @promotion.title %></li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <div class="max-full mx-auto space-y-4">
+    <div class="w-[min(var(--container-xl),100vw)] mx-auto rounded-lg border border-gray-200 bg-white overflow-y-hidden">
+      <div class="title-wrapper gap-4 w-full flex flex-row items-center justify-between py-4 border-b border-gray-200 z-50 px-4">
+        <div class="left-section flex items-center gap-2">
+          <%= link_to admin_promotions_path, class: "btn btn-secondary bg-white border border-gray-200 hover:bg-gray-100 rounded-lg" do %>
+            <span class="material-icons px-2 py-1 text-gray-950 text-base!">chevron_left</span>
+          <% end %>
+          <h1 class="text-2xl font-bold"><%= @promotion.title %></h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <%= link_to edit_admin_promotion_path(@promotion), class: "btn btn-primary text-sm px-4 py-2 rounded bg-gray-950 hover:bg-gray-700 flex items-center transition cursor-pointer" do %>
+            <span class="material-icons text-white text-base! mr-2 -ml-1">edit</span>
+            <span class="text-white">Edit</span>
+          <% end %>
+          <%= button_to admin_promotion_path(@promotion), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-primary text-sm px-4 py-2 rounded bg-red-600 hover:bg-red-700 flex items-center transition cursor-pointer" do %>
+            <span class="material-icons text-white text-base!">delete</span>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 relative gap-4 p-4">
+        <div>
+          <dt class="text-sm font-medium text-gray-700">Code</dt>
+          <dd class="mt-1 text-sm text-gray-900"><%= @promotion.code %></dd>
+        </div>
+
+        <div>
+          <dt class="text-sm font-medium text-gray-700">Type</dt>
+          <dd class="mt-1 text-sm text-gray-900"><%= @promotion.discount_type.humanize %></dd>
+        </div>
+
+        <div>
+          <dt class="text-sm font-medium text-gray-700">Value</dt>
+          <dd class="mt-1 text-sm text-gray-900">
+            <% if @promotion.percentage? %>
+              <%= "#{@promotion.discount_value.to_s}%" %>
+            <% elsif @promotion.bundle? %>
+              <%= format_vnd_currency((@promotion.discount_value || 0).to_i) %> per set
+            <% else %>
+              <%= format_vnd_currency((@promotion.discount_value || 0).to_i) %>
+            <% end %>
+          </dd>
+        </div>
+
+        <div>
+          <dt class="text-sm font-medium text-gray-700">Max discount (VND)</dt>
+          <dd class="mt-1 text-sm text-gray-900">
+            <% if @promotion.max_discount_amount_vnd.present? && @promotion.max_discount_amount_vnd > 0 %>
+              <%= format_vnd_currency(@promotion.max_discount_amount_vnd) %>
+            <% else %>
+              No cap
+            <% end %>
+          </dd>
+        </div>
+
+        <div>
+          <dt class="text-sm font-medium text-gray-700">Active</dt>
+          <dd class="mt-1 text-sm text-gray-900"><%= @promotion.active ? "Yes" : "No" %></dd>
+        </div>
+
+        <div>
+          <dt class="text-sm font-medium text-gray-700">Stackable</dt>
+          <dd class="mt-1 text-sm text-gray-900"><%= @promotion.stackable ? "Yes" : "No" %></dd>
+        </div>
+
+        <div>
+          <dt class="text-sm font-medium text-gray-700">Starts at</dt>
+          <dd class="mt-1 text-sm text-gray-900"><%= @promotion.starts_at&.strftime("%Y-%m-%d %H:%M") %></dd>
+        </div>
+
+        <div>
+          <dt class="text-sm font-medium text-gray-700">Ends at</dt>
+          <dd class="mt-1 text-sm text-gray-900"><%= @promotion.ends_at&.strftime("%Y-%m-%d %H:%M") %></dd>
+        </div>
+
+        <div>
+          <dt class="text-sm font-medium text-gray-700">Usage</dt>
+          <dd class="mt-1 text-sm text-gray-900"><%= @promotion.usage_count %> / <%= @promotion.usage_limit || "∞" %></dd>
+        </div>
+      </div>
+
+      <% if @promotion.bundle? && @promotion.product_bundles.any? %>
+        <div class="p-4 border-t border-gray-200">
+          <h3 class="text-lg font-medium text-gray-900 mb-4">Bundle Products</h3>
+          <div class="space-y-3">
+            <% @promotion.product_bundles.each do |bundle_item| %>
+              <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <div class="grid grid-cols-3 gap-4">
+                  <div>
+                    <dt class="text-sm font-medium text-gray-700">Product</dt>
+                    <dd class="mt-1 text-sm text-gray-900">
+                      <%= link_to bundle_item.product.name, admin_product_path(bundle_item.product), class: "text-sky-600 hover:text-sky-800" %>
+                    </dd>
+                  </div>
+                  <div>
+                    <dt class="text-sm font-medium text-gray-700">Variant</dt>
+                    <dd class="mt-1 text-sm text-gray-900">
+                      <% if bundle_item.product_variant %>
+                        <%= bundle_item.product_variant.name %>
+                      <% else %>
+                        <span class="text-gray-500">Any variant</span>
+                      <% end %>
+                    </dd>
+                  </div>
+                  <div>
+                    <dt class="text-sm font-medium text-gray-700">Quantity</dt>
+                    <dd class="mt-1 text-sm text-gray-900"><%= bundle_item.quantity %></dd>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <div class="mt-4 p-3 bg-blue-50 border border-blue-100 rounded-lg">
+            <p class="text-sm text-blue-800">
+              <span class="font-semibold">Bundle Discount:</span>
+              <%= format_vnd_currency((@promotion.discount_value || 0).to_i) %> off when all <%= @promotion.product_bundles.count %> products are purchased together.
+            </p>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="p-4 border-t border-gray-200">
+        <%= link_to admin_promotion_promotion_usages_path(@promotion), class: "btn btn-secondary text-sm px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 flex items-center gap-2 inline-flex" do %>
+          <span class="material-icons text-base!">visibility</span>
+          <span>View Usages</span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

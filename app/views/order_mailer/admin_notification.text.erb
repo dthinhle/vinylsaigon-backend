@@ -1,0 +1,48 @@
+Đơn hàng mới - <%= @order.order_number %>
+
+Một đơn hàng mới đã được đặt trên 3K Shop.
+
+========================================
+CHI TIẾT ĐƠN HÀNG
+========================================
+Số đơn hàng: <%= @order.order_number %>
+Ngày đặt: <%= @order.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+Trạng thái: <%= @order.status.titleize %>
+Email khách hàng: <%= @customer_email %>
+Phương thức thanh toán: <%= @order.payment_method&.titleize || 'N/A' %>
+
+========================================
+TÓM TẮT ĐƠN HÀNG
+========================================
+Số sản phẩm: <%= @order.order_items.sum(:quantity) %>
+Tạm tính: <%= format_vnd_currency(@order.subtotal_vnd) %>
+<% if @order.shipping_vnd > 0 %>
+Phí vận chuyển: <%= format_vnd_currency(@order.shipping_vnd) %>
+<% end %>
+<% if @order.tax_vnd > 0 %>
+Thuế: <%= format_vnd_currency(@order.tax_vnd) %>
+<% end %>
+<% if @order.discount_vnd > 0 %>
+Giảm giá: -<%= format_vnd_currency(@order.discount_vnd) %>
+<% end %>
+----------------------------------------
+TỔNG: <%= format_vnd_currency(@order.total_vnd) %>
+
+<% if @order.shipping_address.present? %>
+========================================
+ĐỊA CHỈ GIAO HÀNG
+========================================
+<%= @order.shipping_address['name'] %>
+<%= @order.shipping_address['address_line1'] %>
+<% if @order.shipping_address['address_line2'].present? %>
+<%= @order.shipping_address['address_line2'] %>
+<% end %>
+<%= @order.shipping_address['city'] %>, <%= @order.shipping_address['state'] %> <%= @order.shipping_address['postal_code'] %>
+<%= @order.shipping_address['country'] %>
+<% if @order.shipping_address['phone'].present? %>
+Số điện thoại: <%= @order.shipping_address['phone'] %>
+<% end %>
+
+<% end %>
+========================================
+Đây là thông báo tự động. Vui lòng xử lý đơn hàng này kịp thời.

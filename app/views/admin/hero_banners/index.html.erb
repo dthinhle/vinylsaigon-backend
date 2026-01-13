@@ -1,0 +1,108 @@
+<div class="flex flex-col gap-4" data-controller="hero-banners">
+  <%= render 'admin/shared/page_header',
+    title: 'Hero Banners',
+    button_text: 'Create Hero Banner',
+    button_path: new_admin_hero_banner_path %>
+
+  <div class="filter-wrapper w-full bg-white p-4 border border-gray-200 rounded-lg grid gap-4">
+    <% canonical_filter_params = params.permit(:q, :main_title, :sub_title, :status, :page, :per_page, :sort, :direction).to_h %>
+    <% active = @active_filters || canonical_filter_params %><% filter_labels = { "q" => "Search", "main_title" => "Main title", "sort" => "Sort", "direction" => "Direction" }.with_indifferent_access %>
+
+    <%= render_filter_chips(
+      filter_params: active.select { |k, v| v.present? },
+      filter_labels: filter_labels,
+      clear_path: admin_hero_banners_path
+    ) %>
+
+    <div class="w-full max-w-full">
+      <%= form_with url: admin_hero_banners_path, method: :get, local: true, class: "flex flex-col md:flex-row md:items-end gap-2 md:gap-4 w-full max-w-full" do |f| %>
+        <div class="flex flex-col md:flex-row gap-2 md:gap-4 flex-1">
+          <div class="flex flex-col">
+            <input id="q" type="search" name="q" value="<%= params[:q] %>" placeholder="Search hero banners..." class="input input-bordered text-sm w-full max-w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" autocomplete="off">
+          </div>
+        </div>
+        <div class="flex flex-col justify-end">
+          <button type="submit" class="btn btn-secondary text-sm px-3 py-2 rounded bg-gray-950 text-gray-50 hover:bg-gray-700 cursor-pointer">Filter</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="flex justify-between items-end">
+    <span class="text-sm text-gray-500">Total: <%= @pagy&.count %></span>
+    <%== @pagy.series_nav if @pagy %>
+  </div>
+
+<div class="overflow-x-auto w-full border border-gray-200 rounded-lg">
+  <table class="w-full max-w-full divide-y divide-gray-200 table-auto text-sm">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-4 py-2">
+          <input type="checkbox" class="accent-gray-700" data-action="change->hero-banners-index#toggleAll" data-hero-banners-index-target="toggleAllCheckbox">
+        </th>
+        <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Thumbnail</th>
+        <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Main Title</th>
+        <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Description</th>
+        <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">URL</th>
+        <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Created At</th>
+        <th class="px-4 py-2 text-right text-sm font-medium text-gray-500">Actions</th>
+      </tr>
+
+      <%= render_bulk_actions_row(
+        controller_name: 'hero-banners-index',
+        colspan: 7,
+        delete_path: destroy_selected_admin_hero_banners_path
+      ) %>
+    </thead>
+
+    <tbody class="bg-white divide-y divide-gray-100">
+      <% if @hero_banners.blank? %>
+        <%= render_empty_state(colspan: 7, title: 'No hero banners found', message: 'Try adjusting your filters or creating a new banner.') %>
+      <% else %>
+        <% @hero_banners.each do |hb| %>
+          <tr data-hero-banner-id="<%= hb.id %>">
+            <td class="px-4 py-2 align-top">
+              <input
+                type="checkbox"
+                value="<%= hb.id %>"
+                class="accent-gray-700"
+                data-action="change->hero-banners-index#selectRow"
+                data-hero-banners-index-target="rowCheckbox"
+              >
+            </td>
+
+            <td class="px-4 py-2">
+              <% if hb.image.attached? %>
+                <button
+                  type="button"
+                  class="inline-block"
+                  data-action="click->image-preview#open"
+                  data-image-preview-image-url-value="<%= rails_blob_path(hb.image.variant(resize_to_limit: [800, 800]), only_path: true) rescue rails_blob_path(hb.image, only_path: true) %>"
+                  data-image-alt="<%= hb.main_title.presence || 'Hero banner image' %>"
+                >
+                  <%= image_tag hb.image.variant(resize_to_limit: [120, 120]), class: "object-cover rounded border border-gray-200 size-24" %>
+                </button>
+              <% else %>
+                <div class="w-24 h-16 bg-gray-100 rounded flex items-center justify-center text-gray-400">No image</div>
+              <% end %>
+            </td>
+
+            <td class="px-4 py-2 font-medium text-gray-900"><%= hb.main_title %></td>
+            <td class="px-4 py-2 text-gray-700"><%= truncate(hb.description || "", length: 80) %></td>
+            <td class="px-4 py-2 text-gray-700"><%= hb.url %></td>
+            <td class="px-4 py-2 text-gray-700"><%= format_datetime(hb.created_at) %></td>
+
+            <td class="px-4 py-2 text-right">
+              <div class="button-wrapper h-full flex gap-2 justify-end">
+                <%= render_action_button(edit_admin_hero_banner_path(hb), icon: 'edit', type: :edit) %>
+                <%= render_action_button(admin_hero_banner_path(hb), icon: 'remove_red_eye', type: :show) %>
+                <%= render_action_button(admin_hero_banner_path(hb), icon: 'delete', type: :delete, confirm_message: 'Are you sure you want to delete this hero banner?') %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+</div>

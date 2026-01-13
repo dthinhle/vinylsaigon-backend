@@ -1,0 +1,42 @@
+<div class="flex flex-col gap-4">
+  <%= render 'admin/shared/page_header',
+    title: 'Admins',
+    button_text: 'Create Admin',
+    button_path: new_admin_admin_path %>
+
+  <div class="filter-wrapper w-full bg-white p-4 border border-gray-200 rounded-lg grid gap-4">
+    <%= render_filter_chips(
+      filter_params: @filter_params,
+      filter_labels: @filter_labels,
+      clear_path: admin_admins_path
+    ) %>
+
+    <div class="w-full max-w-full">
+      <%= form_with url: admin_admins_path, method: :get, local: true, class: "flex flex-col gap-4 w-full max-w-full" do |f| %>
+        <div class="flex flex-col md:flex-row md:items-end gap-2 md:gap-4 w-full">
+          <div class="flex flex-col md:flex-row gap-2 md:gap-4 flex-1">
+            <div class="flex flex-col">
+              <input id="q" type="search" name="q" value="<%= params[:q] %>" placeholder="Search admins..." class="input input-bordered text-sm w-full max-w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" autocomplete="off">
+            </div>
+            <div class="flex flex-col">
+              <input id="email" type="search" name="email" value="<%= params[:email] %>" placeholder="Email..." class="input input-bordered text-sm w-full max-w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" autocomplete="off">
+            </div>
+            <div class="flex flex-col">
+              <input id="name" type="search" name="name" value="<%= params[:name] %>" placeholder="Name..." class="input input-bordered text-sm w-full max-w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" autocomplete="off">
+            </div>
+          </div>
+          <div class="flex flex-col justify-end">
+            <button type="submit" class="btn btn-secondary text-sm px-3 py-2 rounded bg-gray-950 text-gray-50 hover:bg-gray-700 cursor-pointer">Filter</button>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mt-2 flex justify-between items-end">
+    <span class="text-sm text-gray-500">Total: <%= @pagy&.count %></span>
+    <%== @pagy.series_nav if @pagy %>
+  </div>
+
+  <%= render "admin/admins/admin_list", admins: @admins, pagy: @pagy %>
+</div>

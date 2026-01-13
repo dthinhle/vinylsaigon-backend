@@ -1,0 +1,116 @@
+<div class="flex flex-col gap-4" data-controller="categories-index">
+  <%= render 'admin/shared/page_header',
+    title: 'Categories',
+    button_text: 'Create Category',
+    button_path: new_admin_category_path %>
+
+  <div class="filter-wrapper w-full bg-white p-4 border border-gray-200 rounded-lg grid gap-4">
+    <%= render_filter_chips(
+      filter_params: @filter_params,
+      filter_labels: @filter_labels,
+      clear_path: admin_categories_path
+    ) %>
+
+    <div class="w-full max-w-full">
+      <%= form_with url: admin_categories_path, method: :get, local: true, class: "flex flex-col md:flex-row md:items-end gap-2 md:gap-4 w-full max-w-full", data: { controller: "categories-index" } do |f| %>
+        <div class="flex flex-col md:flex-row gap-2 md:gap-4 flex-1">
+          <div class="flex flex-col">
+            <input id="q" type="search" name="q" value="<%= params[:q] %>" placeholder="Search categories..." class="input input-bordered text-sm w-full max-w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" data-categories-index-target="q" autocomplete="off">
+          </div>
+          <div class="flex flex-col">
+            <select id="is_root" name="is_root" class="select select-bordered text-sm px-3 py-[0.575rem] rounded border border-gray-300" data-categories-index-target="isRoot">
+              <option value="">All Types</option>
+              <option value="true" <%= "selected" if params[:is_root] == "true" %>>Root</option>
+              <option value="false" <%= "selected" if params[:is_root] == "false" %>>Child</option>
+            </select>
+          </div>
+          <div class="flex flex-col">
+            <select id="parent_id" name="parent_id" class="select select-bordered text-sm px-3 py-[0.575rem] rounded border border-gray-300" data-categories-index-target="parentId">
+              <option value="">All Parents</option>
+              <% Category.root_categories.order(title: :asc).each do |cat| %>
+                <option value="<%= cat.id %>" <%= "selected" if params[:parent_id].to_s == cat.id.to_s %>><%= cat.title %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+        <div class="flex flex-col justify-end">
+          <button type="submit" class="btn btn-secondary text-sm px-3 py-2 rounded bg-gray-950 text-gray-50 hover:bg-gray-700 cursor-pointer">Filter</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mt-2 flex justify-between items-end">
+    <span class="text-sm text-gray-500">Total: <%= @pagy&.count %></span>
+    <%== @pagy.series_nav if @pagy %>
+  </div>
+
+  <div class="overflow-x-auto w-full border border-gray-200 rounded-lg">
+    <table class="w-full max-w-full divide-y divide-gray-200 table-auto <%= 'text-sm' %>">
+      <thead class="bg-gray-50">
+        <tr>
+          <%= render_category_table_headers(params) %>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-100">
+        <% @categories.each do |category| %>
+          <tr>
+            <td class="px-4 py-2 whitespace-nowrap font-medium text-gray-900">
+              <% if category.image.attached? %>
+                <button type="button"
+                  class="inline-block mr-2 align-middle focus:outline-none"
+                  data-action="click->categories-index#openImagePreview"
+                  data-image-url="<%= url_for(category.image) %>"
+                  aria-label="Preview image"
+                >
+                  <%= image_tag category.image.variant(resize_to_limit: [40, 40]), class: "rounded border border-gray-200 h-8 w-8 object-cover inline" %>
+                  <span class="sr-only">Preview image</span>
+                </button>
+              <% end %>
+              <%= category.title %>
+            </td>
+            <td class="px-4 py-2 whitespace-nowrap text-gray-700"><%= category.slug %></td>
+            <td class="px-4 py-2 whitespace-nowrap text-center"><%= render_boolean_badge(category.is_root?) %></td>
+            <td class="px-4 py-2 whitespace-nowrap text-gray-700"><%= category.parent&.title %></td>
+            <td class="px-4 py-2 whitespace-nowrap text-gray-700"><%= format_datetime(category.created_at) %></td>
+            <td class="px-4 py-2 whitespace-nowrap text-right">
+              <div class="flex gap-2 justify-end">
+                <%= render_action_button(admin_category_path(category), icon: 'visibility', type: :show) %>
+                <%= render_action_button(edit_admin_category_path(category), icon: 'edit', type: :edit) %>
+                <%= render_action_button(admin_category_path(category), icon: 'delete', type: :delete, confirm_message: 'Are you sure you want to delete this category?') %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mb-2 flex justify-between items-end">
+    <span class="text-sm text-gray-500">Total: <%= @pagy&.count %></span>
+    <%== @pagy.series_nav if @pagy %>
+  </div>
+
+  <!-- Modal for image preview -->
+  <div id="category-image-modal"
+       class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60"
+       tabindex="-1"
+       aria-modal="true"
+       role="dialog"
+       data-categories-index-target="modal"
+       data-action="keydown@window->categories-index#closeOnEsc"
+  >
+    <div class="relative bg-white rounded-lg shadow-lg p-4 max-w-full max-h-full flex flex-col items-center">
+      <button type="button"
+              class="absolute top-2 right-2 text-gray-600 hover:text-gray-900 focus:outline-none"
+              aria-label="Close preview"
+              data-action="click->categories-index#closeModal"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <img src="" alt="Category image preview" class="max-w-[90vw] max-h-[80vh] rounded border border-gray-200" data-categories-index-target="modalImage">
+    </div>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+<% if @menu_item.errors.any? %>
+  <% if @menu_item.parent_id.present? %>
+    <%= turbo_stream.replace "new_sub_menu_item_form_#{@menu_item.parent_id}" do %>
+      <%= render partial: "admin/menus/new_sub_menu_item_form", locals: { parent: MenuBar::Item.find(@menu_item.parent_id), form_model: @menu_item } %>
+    <% end %>
+  <% else %>
+    <%= turbo_stream.replace "new_menu_item_form_#{@menu_item.menu_bar_section_id}" do %>
+      <%= render partial: "admin/menus/new_menu_item_form", locals: { menu: MenuBar::Section.find(@menu_item.menu_bar_section_id), form_model: @menu_item } %>
+    <% end %>
+  <% end %>
+<% else %>
+  <% if @menu_item.parent_id.present? %>
+    <% parent_node = MenuBar::Item.find_by(id: @menu_item.parent_id) %>
+    <% depth = 0 %>
+    <% while parent_node %>
+      <% depth += 1 %>
+      <% parent_node = parent_node.parent %>
+    <% end %>
+
+    <%= turbo_stream.append "menu_item_children_#{@menu_item.parent_id}" do %>
+      <%= render partial: "admin/menus/menu_item", locals: { item: @menu_item, depth: depth } %>
+    <% end %>
+
+    <%= turbo_stream.replace "add_sub_item_button_#{@menu_item.parent_id}" do %>
+      <%= button_tag type: "button",
+        id: "add_sub_item_button_#{@menu_item.parent_id}",
+        class: "material-icons hover:cursor-pointer text-sky-600 hover:text-sky-800 text-lg focus:outline-none",
+        data: { action: "menu-subitem-form#toggle" },
+        "aria-expanded": "false" do %>
+        add
+      <% end %>
+    <% end %>
+
+    <%= turbo_stream.replace "new_menu_item_form_#{@menu_item.menu_bar_section_id}" do %>
+      <%= render partial: "admin/menus/new_menu_item_form", locals: { menu: MenuBar::Section.find(@menu_item.menu_bar_section_id), form_model: MenuBar::Item.new } %>
+    <% end %>
+
+    <%= turbo_stream.replace "add_menu_item_button_#{@menu_item.menu_bar_section_id}" do %>
+      <%= button_tag "Add",
+        type: "button",
+        id: "add_menu_item_button_#{@menu_item.menu_bar_section_id}",
+        class: "bg-blue-600 hover:bg-blue-700 text-white font-medium rounded px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm",
+        data: { action: "click->menu-parent-form#toggle", "menu-parent-form-target": "toggleButton" },
+        "aria-expanded": "false" %>
+    <% end %>
+  <% else %>
+    <%= turbo_stream.append "menu_items_section_#{@menu_item.menu_bar_section_id}" do %>
+      <%= render partial: "admin/menus/menu_item", locals: { item: @menu_item, depth: 0 } %>
+    <% end %>
+
+    <%= turbo_stream.replace "new_menu_item_form_#{@menu_item.menu_bar_section_id}" do %>
+      <%= render partial: "admin/menus/new_menu_item_form", locals: { menu: MenuBar::Section.find(@menu_item.menu_bar_section_id), form_model: MenuBar::Item.new } %>
+    <% end %>
+  <% end %>
+<% end %>

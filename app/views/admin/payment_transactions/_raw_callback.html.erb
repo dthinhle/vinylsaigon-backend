@@ -1,0 +1,8 @@
+<div class="rounded-lg border border-gray-200 bg-white p-4 space-y-2">
+  <h3 class="font-semibold text-sm">Raw Callback</h3>
+  <% if txn.raw_callback.present? %>
+    <pre class="text-xs bg-gray-50 p-3 rounded overflow-x-auto max-h-80" aria-label="Raw payment callback JSON"><%= payment_transaction_raw_callback_pretty(txn) %></pre>
+  <% else %>
+    <div class="text-xs text-gray-500">No callback data recorded.</div>
+  <% end %>
+</div>

@@ -1,0 +1,61 @@
+<div class="flex flex-col gap-4" data-controller="customers-index">
+  <%= render 'admin/shared/page_header',
+    title: 'Customers',
+    button_text: 'Create Customer',
+    button_path: new_admin_customer_path %>
+
+  <div class="filter-wrapper w-full bg-white p-4 border border-gray-200 rounded-lg grid gap-4">
+    <%= render_filter_chips(
+      filter_params: @filter_params,
+      filter_labels: @filter_labels,
+      clear_path: admin_customers_path
+    ) %>
+
+    <!-- Filter Bar -->
+    <div class="w-full max-w-full">
+      <%= form_with url: admin_customers_path, method: :get, local: true, class: "flex flex-col gap-4 w-full max-w-full" do |f| %>
+        <!-- Row 1: Key Filters -->
+        <div class="flex flex-col md:flex-row md:items-end gap-2 md:gap-4 w-full">
+          <div class="flex flex-col md:flex-row gap-2 md:gap-4 flex-1">
+            <div class="flex flex-col">
+              <input id="q" type="search" name="q" value="<%= params[:q] %>" placeholder="Search customers..." class="input input-bordered text-sm w-full max-w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" autocomplete="off">
+            </div>
+            <div class="flex flex-col">
+              <input id="email" type="search" name="email" value="<%= params[:email] %>" placeholder="Email..." class="input input-bordered text-sm w-full max-w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" autocomplete="off">
+            </div>
+            <div class="flex flex-col">
+              <select id="disabled" name="disabled" class="select select-bordered text-sm px-3 py-[0.575rem] rounded border border-gray-300">
+                <option value="">All Statuses</option>
+                <option value="false" <%= "selected" if params[:disabled] == "false" %>>Active</option>
+                <option value="true" <%= "selected" if params[:disabled] == "true" %>>Inactive</option>
+              </select>
+            </div>
+          </div>
+          <!-- Submit -->
+          <div class="flex flex-col justify-end">
+            <button type="submit" class="btn btn-secondary text-sm px-3 py-2 rounded bg-gray-950 text-gray-50 hover:bg-gray-700 cursor-pointer">Filter</button>
+          </div>
+        </div>
+
+        <!-- Row 2: Date Filters -->
+        <div class="flex flex-col md:flex-row gap-2 md:gap-4">
+          <div class="flex flex-col">
+            <label for="created_from" class="text-xs text-gray-600 mb-1">Created From</label>
+            <input id="created_from" type="date" name="created_from" value="<%= params[:created_from] %>" class="input input-bordered text-sm px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+          </div>
+          <div class="flex flex-col">
+            <label for="created_to" class="text-xs text-gray-600 mb-1">Created To</label>
+            <input id="created_to" type="date" name="created_to" value="<%= params[:created_to] %>" class="input input-bordered text-sm px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mt-2 flex justify-between items-end">
+    <span class="text-sm text-gray-500">Total: <%= @pagy&.count %></span>
+    <%== @pagy.series_nav if @pagy %>
+  </div>
+
+  <%= render "admin/customers/customer_list", customers: @customers, pagy: @pagy %>
+</div>

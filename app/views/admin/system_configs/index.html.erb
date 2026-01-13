@@ -1,0 +1,83 @@
+<div class="w-full max-w-full">
+  <div class="mb-4 flex items-center justify-between">
+    <h1 class="text-2xl font-semibold">System Configs</h1>
+  </div>
+
+  <div class="filter-wrapper w-full bg-white p-4 border border-gray-200 rounded-lg grid gap-4 mb-4">
+    <%= form_with url: admin_system_configs_path, method: :get, local: true, class: "flex flex-col md:flex-row md:items-end gap-2 md:gap-4 w-full" do |f| %>
+      <div class="flex flex-1 gap-2 md:gap-4 items-center">
+        <div class="flex items-center gap-2">
+          <label class="text-sm">Name</label>
+          <input name="q[name]" value="<%= params.dig(:q, :name) || params[:name] || '' %>" placeholder="name" class="input input-bordered text-sm px-3 py-2 rounded border border-gray-300">
+        </div>
+
+        <div class="flex items-center gap-2">
+          <label class="text-sm">Value</label>
+          <input name="q[value]" value="<%= params.dig(:q, :value) || params[:value] || '' %>" placeholder="value" class="input input-bordered text-sm px-3 py-2 rounded border border-gray-300">
+        </div>
+      </div>
+
+      <%= hidden_field_tag 'q[sort]', params.dig(:q, :sort) || params[:sort] %>
+      <%= hidden_field_tag 'q[direction]', params.dig(:q, :direction) || params[:direction] %>
+      <%= hidden_field_tag 'per_page', params.dig(:q, :per_page) || params[:per_page] %>
+
+      <div class="flex items-end">
+        <button type="submit" class="btn btn-secondary text-sm px-3 py-2 rounded bg-gray-950 text-gray-50 hover:bg-gray-700">Filter</button>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="overflow-x-auto w-full border border-gray-200 rounded-lg">
+    <table class="w-full max-w-full divide-y divide-gray-200 table-auto text-sm">
+      <thead class="bg-gray-50">
+        <tr>
+          <% sortable_keys = %w[name value created_at updated_at] %>
+          <% current_sort = params.dig(:q, :sort) || params[:sort] %>
+          <% current_dir  = params.dig(:q, :direction) || params[:direction] %>
+          <% invalid_sort_present = current_sort.present? && !sortable_keys.include?(current_sort.to_s) %>
+
+          <%# Use safe_sort_link_for helper to build safe sort links %>
+
+          <th class="px-4 py-2"><%= safe_sort_link_for('name', 'Name', params, current_sort, current_dir, sortable_keys, invalid_sort_present) %></th>
+          <th class="px-4 py-2"><%= safe_sort_link_for('value', 'Value', params, current_sort, current_dir, sortable_keys, invalid_sort_present) %></th>
+          <th class="px-4 py-2"><%= safe_sort_link_for('created_at', 'Created At', params, current_sort, current_dir, sortable_keys, invalid_sort_present) %></th>
+          <th class="px-4 py-2"><%= safe_sort_link_for('updated_at', 'Updated At', params, current_sort, current_dir, sortable_keys, invalid_sort_present) %></th>
+          <th class="px-4 py-2 text-right">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody class="bg-white divide-y divide-gray-100">
+        <% if @system_configs.blank? %>
+          <tr>
+            <td colspan="5" class="py-8 text-center text-gray-500">
+              <div class="flex flex-col items-center justify-center">
+                <span class="text-2xl mb-2" aria-hidden="true">🔍</span>
+                <span class="text-gray-500 text-lg font-medium" role="status">No system configs found</span>
+                <span class="text-gray-400 text-sm mt-1">Try adjusting your filters.</span>
+              </div>
+            </td>
+          </tr>
+        <% else %>
+          <% @system_configs.each do |config| %>
+            <tr>
+              <td class="px-4 py-3 font-medium text-gray-900"><%= config.name %></td>
+              <td class="px-4 py-3 text-gray-700"><%= formatted_system_config_value(config) %></td>
+              <td class="px-4 py-3 text-gray-700"><%= format_datetime(config.created_at) %></td>
+              <td class="px-4 py-3 text-gray-700"><%= format_datetime(config.updated_at) %></td>
+              <td class="px-4 py-3 text-right">
+                <div class="button-wrapper flex gap-2 justify-end">
+                  <%= render_action_button(admin_system_config_path(config), icon: 'visibility', type: :show) %>
+                  <%= render_action_button(edit_admin_system_config_path(config), icon: 'edit', type: :edit) %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-2 flex justify-end-safe">
+    <%== @pagy.series_nav if @pagy %>
+  </div>
+</div>

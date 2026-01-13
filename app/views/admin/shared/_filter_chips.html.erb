@@ -1,0 +1,31 @@
+<% if chips.any? %>
+  <div class="flex flex-wrap gap-2 items-center max-w-full" aria-label="Active filters">
+    <% chips.each do |chip| %>
+      <form method="get" action="<%= clear_path %>" class="inline">
+        <% filter_params.each do |key, val| %>
+          <% next if chip[:remove_params].include?(key) %>
+          <% next if chip[:is_array_item] && key == chip[:key].split('_')[0..-2].join('_') + '_ids' && chip[:remove_params].include?(val.to_s) %>
+
+          <% if val.is_a?(Array) %>
+            <% val.each do |vv| %>
+              <% next if chip[:remove_params].include?(vv.to_s) %>
+              <input type="hidden" name="<%= "#{key}[]" %>" value="<%= vv %>">
+            <% end %>
+          <% else %>
+            <input type="hidden" name="<%= key %>" value="<%= val %>">
+          <% end %>
+        <% end %>
+
+        <span class="inline-flex items-center bg-sky-100 text-sky-800 rounded px-2 py-1 text-xs mr-1 mb-1">
+          <%= chip[:label] %>: <span class="ml-1 font-medium"><%= chip[:value] %></span>
+          <button type="submit" class="ml-2 text-sky-600 hover:text-sky-900 focus:outline-none" aria-label="Remove filter <%= chip[:label] %>">&times;</button>
+        </span>
+      </form>
+    <% end %>
+
+    <form method="get" action="<%= clear_path %>">
+      <button type="submit" class="ml-2 text-xs underline text-gray-600 hover:text-red-600" aria-label="Clear all filters">Clear All Filters</button>
+    </form>
+  </div>
+<% end %>
+

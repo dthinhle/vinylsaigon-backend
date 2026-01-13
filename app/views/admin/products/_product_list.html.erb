@@ -1,0 +1,34 @@
+<%# Renders a products table and pagination. Locals: products (collection), pagy (optional), show_actions (optional, default true) %>
+<% show_actions = true if show_actions.nil? %>
+<% colspan = @brand.present? ? 8 : 18 %>
+
+<div class="overflow-x-auto w-full border border-gray-200 rounded-lg">
+  <table class="w-full max-w-full divide-y divide-gray-200 table-auto <%= 'text-sm' %>">
+    <thead class="bg-gray-50">
+      <tr>
+        <% if @brand.present? %>
+          <%= render_product_table_headers(params, variant: :brand) %>
+        <% else %>
+          <th class="px-4 py-2" scope="col">
+            <input type="checkbox" class="accent-gray-700" data-action="change->products-index#toggleAll" data-products-index-target="toggleAllCheckbox">
+          </th>
+          <%= render_product_table_headers(params, variant: :default) %>
+        <% end %>
+      </tr>
+      <%= render_bulk_actions_row(controller_name: 'products-index', colspan: colspan) %>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-100">
+      <% if products.blank? %>
+        <%= render_empty_state(colspan: colspan) %>
+      <% else %>
+        <% products.each do |product| %>
+          <%= render "admin/products/product_row", product: product, show_actions: show_actions %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="mb-2 flex justify-end-safe">
+  <%== pagy.series_nav if pagy %>
+</div>

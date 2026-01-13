@@ -1,0 +1,95 @@
+<div class="bg-white rounded-lg w-full mx-4 relative overflow-hidden border border-gray-200">
+  <div class="px-6 py-4 border-b border-gray-200">
+    <h2 class="text-lg font-semibold text-gray-900">Recent Changes</h2>
+  </div>
+
+  <div class="overflow-x-auto">
+    <% formatted_changes = VersionChangeFormatterService.call(recent_changes) %>
+    <% if formatted_changes.any? %>
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Type
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Entity
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Changed By
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Date
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Changes
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% formatted_changes.each do |change| %>
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% color_classes = case change[:event]
+                  when 'create' then 'bg-green-100 text-green-800'
+                  when 'update' then 'bg-blue-100 text-blue-800'
+                  when 'destroy' then 'bg-red-100 text-red-800'
+                  else 'bg-gray-100 text-gray-800'
+                  end %>
+                <div class="flex items-center gap-2">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= color_classes %>">
+                    <%= change[:event] %>
+                  </span>
+                  <% if change[:count] > 1 %>
+                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-800">
+                      x<%= change[:count] %>
+                    </span>
+                  <% end %>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="text-xs font-medium text-gray-500 uppercase mb-1"><%= change[:entity_type] %></div>
+                <% if change[:entity_name].include?('(deleted)') %>
+                  <span class="text-gray-500 text-sm"><%= change[:entity_name] %></span>
+                <% else %>
+                  <% if change[:entity_type] == 'Product' %>
+                    <%= link_to change[:entity_name], edit_admin_product_path(change[:entity_id]), class: "text-gray-950 hover:text-gray-800 text-sm" %>
+                  <% elsif change[:entity_type] == 'Blog' %>
+                    <%= link_to change[:entity_name], edit_admin_blog_path(change[:entity_id]), class: "text-gray-950 hover:text-gray-800 text-sm" %>
+                  <% else %>
+                    <span class="text-gray-500 text-sm"><%= change[:entity_name] %></span>
+                  <% end %>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <%= change[:admin_name] %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <%= format_datetime(change[:created_at]) %>
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-500">
+                <div class="max-w-md">
+                  <% change[:display_changes].each_key do |key| %>
+                    <div class="mb-1">
+                      <span class="font-medium"><%= key.humanize %></span>
+                    </div>
+                  <% end %>
+                  <% if change[:total_changes] > 5 %>
+                    <div class="text-xs text-gray-400 mt-1">
+                      + <%= change[:total_changes] - 3 %> more changes
+                    </div>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="px-6 py-12 text-center">
+        <span class="material-icons text-gray-300 text-5xl">history</span>
+        <p class="mt-2 text-sm text-gray-500">No recent changes</p>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+<%# Renders a single promotion usage row. Locals: usage, promotion %>
+<%# Determine a promotion context to use for links: prefer the passed-in promotion, otherwise fall back to the usage's promotion %>
+<% promo = promotion || usage.promotion %>
+<tr>
+  <td class="px-4 py-2"><%= usage.id %></td>
+  <td class="px-4 py-2">
+    <% if promo.present? %>
+      <%= link_to(promo.code.presence || promo.title, admin_promotion_path(promo), class: "text-sky-600 hover:underline") %>
+    <% else %>
+      <%# Fallback: show any available promotion identifier or metadata created_by, otherwise '-' %>
+      <%= usage.promotion&.code || usage.promotion&.title || (usage.metadata && usage.metadata['created_by']) || '-' %>
+    <% end %>
+  </td>
+  <td class="px-4 py-2">
+    <% if usage.user.present? %>
+      <%# Try to link to admin user show if route exists, otherwise show name/email %>
+      <% begin %>
+        <%= link_to(usage.user.name.presence || usage.user.email, [:admin, usage.user], class: "text-sky-600 hover:underline") %>
+      <% rescue %>
+        <%= usage.user.name.presence || usage.user.email %>
+      <% end %>
+    <% else %>
+      -
+    <% end %>
+  </td>
+
+  <td class="px-4 py-2"><%= usage.user&.email || usage.metadata['created_by'] || '-' %></td>
+
+  <td class="px-4 py-2">
+    <% if usage.redeemable.present? %>
+      <%= admin_redeemable_display(usage) %>
+    <% elsif usage.metadata.present? %>
+      <%# Fallback to metadata when polymorphic association is missing (safe, minimal) %>
+      <% order_id = usage.metadata['order_id'] || usage.metadata['redeemable_id'] || usage.metadata.dig('order', 'id') %>
+      <% if order_id.present? %>
+        <% begin %>
+          <% order = Order.find_by(id: order_id) %>
+          <% if order.present? %>
+            <%= link_to("Order ##{order.respond_to?(:order_number) ? order.order_number : order.id}", admin_order_path(order), class: 'text-sky-600 hover:underline') %>
+          <% else %>
+            Order ##{order_id}
+          <% end %>
+        <% rescue %>
+          Order ##{order_id}
+        <% end %>
+      <% else %>
+        -
+      <% end %>
+    <% else %>
+      -
+    <% end %>
+  </td>
+
+
+  <td class="px-4 py-2 text-center">
+    <%= render_boolean_badge(usage.active?) %>
+  </td>
+
+  <td class="px-4 py-2"><%= format_datetime(usage.created_at) %></td>
+
+  <td class="px-4 py-2 text-right">
+    <div class="button-wrapper h-full flex gap-2 justify-end">
+      <% if promo.present? %>
+        <%= render_action_button(admin_promotion_promotion_usage_path(promo, usage), icon: 'remove_red_eye', type: :show) %>
+      <% else %>
+        <%= render_action_button(admin_promotion_usage_path(usage), icon: 'remove_red_eye', type: :show) %>
+      <% end %>
+    </div>
+  </td>
+</tr>

@@ -1,0 +1,363 @@
+<div class="flex flex-col gap-6">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold">Order <%= @order.order_number %></h1>
+      <nav class="text-sm breadcrumbs mt-1">
+        <ol class="inline-flex items-center space-x-1">
+          <li><a href="/admin" class="text-gray-500 hover:text-gray-700">Admin</a></li>
+          <li>/</li>
+          <li><%= link_to "Orders", admin_orders_path, class: "text-gray-500 hover:text-gray-700" %></li>
+          <li>/</li>
+          <li class="text-gray-900"><%= @order.order_number %></li>
+        </ol>
+      </nav>
+    </div>
+    <div class="flex gap-2">
+      <%= link_to "Back to Orders", admin_orders_path, class: "px-3 py-1.5 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50" %>
+    </div>
+  </div>
+
+  <!-- Order Status and Info -->
+  <div class="bg-white border border-gray-200 rounded-lg p-6">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+      <div class="flex items-center gap-3">
+        <h2 class="text-lg font-semibold">Order Details</h2>
+        <%= order_status_badge(@order.status) %>
+      </div>
+      <div class="text-sm text-gray-500">
+        Created: <%= format_datetime(@order.created_at) %>
+      </div>
+    </div>
+
+    <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div>
+        <dt class="text-sm font-medium text-gray-500">Order Number</dt>
+        <dd class="mt-1 text-sm text-gray-900 font-mono"><%= @order.order_number %></dd>
+      </div>
+      <div>
+        <dt class="text-sm font-medium text-gray-500">Status</dt>
+        <dd class="mt-1 text-sm text-gray-900"><%= @order.status.humanize %></dd>
+      </div>
+      <div>
+        <dt class="text-sm font-medium text-gray-500">Currency</dt>
+        <dd class="mt-1 text-sm text-gray-900"><%= @order.currency %></dd>
+      </div>
+    </dl>
+  </div>
+
+  <!-- Customer Information -->
+  <div class="bg-white border border-gray-200 rounded-lg p-6">
+    <h2 class="text-lg font-semibold mb-4">Customer Information</h2>
+    <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div>
+        <dt class="text-sm font-medium text-gray-500">Customer Name</dt>
+        <dd class="mt-1 text-sm text-gray-900"><%= @order.name || 'N/A' %></dd>
+      </div>
+      <div>
+        <dt class="text-sm font-medium text-gray-500">Email</dt>
+        <dd class="mt-1 text-sm text-gray-900"><%= @order.email || 'N/A' %></dd>
+      </div>
+      <div>
+        <dt class="text-sm font-medium text-gray-500">Phone</dt>
+        <dd class="mt-1 text-sm text-gray-900"><%= @order.phone_number || 'N/A' %></dd>
+      </div>
+      <div>
+        <dt class="text-sm font-medium text-gray-500">Account</dt>
+        <dd class="mt-1 text-sm text-gray-900">
+          <% if @order.user %>
+            <%= link_to @order.user.email, admin_customer_path(@order.user), class: "text-sky-600 hover:text-sky-800" %>
+          <% else %>
+            Guest Order
+          <% end %>
+        </dd>
+      </div>
+    </dl>
+  </div>
+
+  <!-- Order Items -->
+  <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+      <h2 class="text-lg font-semibold">Order Items</h2>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Variant</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% @order.order_items.each do |item| %>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <% if item.product_image_url.present? %>
+                    <div class="flex-shrink-0 h-10 w-10">
+                      <img class="h-10 w-10 rounded object-cover" src="<%= item.product_image_url %>" alt="<%= item.product_name %>">
+                    </div>
+                  <% end %>
+                  <div class="<%= item.product_image_url.present? ? 'ml-4' : '' %>">
+                    <div class="flex items-center gap-2">
+                      <div class="text-sm font-medium text-gray-900"><%= item.product_name %></div>
+                      <% if item.product&.free_installment_fee %>
+                        <span class="px-1.5 py-0.5 text-xs font-medium rounded bg-green-100 text-green-800">Free Installment Fee</span>
+                      <% end %>
+                    </div>
+                    <% if item.product %>
+                      <div class="text-xs text-gray-500">
+                        <%= link_to "View Product", edit_admin_product_path(item.product), class: "text-sky-600 hover:text-sky-900", target: '_blank' %>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <% if item.product_variant %>
+                  <%= item.product_variant.name %>
+                <% else %>
+                  —
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+                <%= item.quantity %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+                <%= format_vnd_currency(item.unit_price_vnd) %>
+                <% if item.original_unit_price_vnd != item.unit_price_vnd %>
+                  <div class="text-xs text-gray-500 line-through">
+                    <%= format_vnd_currency(item.original_unit_price_vnd) %>
+                  </div>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right">
+                <%= format_vnd_currency(item.subtotal_vnd) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot class="bg-gray-50">
+          <tr>
+            <td colspan="4" class="px-6 py-3 text-right text-sm font-medium text-gray-900">Items Subtotal:</td>
+            <td class="px-6 py-3 text-right text-sm font-medium text-gray-900">
+              <%= format_vnd_currency(@order.subtotal_vnd) %>
+            </td>
+          </tr>
+          <% if @order.shipping_vnd > 0 %>
+            <tr>
+              <td colspan="4" class="px-6 py-3 text-right text-sm text-gray-500">Shipping:</td>
+              <td class="px-6 py-3 text-right text-sm text-gray-900">
+                <%= format_vnd_currency(@order.shipping_vnd) %>
+              </td>
+            </tr>
+          <% end %>
+          <% if @order.tax_vnd > 0 %>
+            <tr>
+              <td colspan="4" class="px-6 py-3 text-right text-sm text-gray-500">Tax:</td>
+              <td class="px-6 py-3 text-right text-sm text-gray-900">
+                <%= format_vnd_currency(@order.tax_vnd) %>
+              </td>
+            </tr>
+          <% end %>
+          <% if @order.discount_vnd > 0 %>
+            <% if @order.promotions.any? %>
+              <% @order.promotions.each do |promo| %>
+                <% if promo.bundle? %>
+                  <%
+                    bundle_evaluator = BundlePromotionEvaluator.new(@order.cart, promo) if @order.cart
+                    sets_count = bundle_evaluator&.complete_sets_count || 1
+                    discount_per_set = promo.discount_value || 0
+                    total_bundle_discount = discount_per_set * sets_count
+                  %>
+                  <tr>
+                    <td colspan="4" class="px-6 py-3 text-right text-sm text-gray-500">
+                      Discount: <%= link_to promo.title, admin_promotion_path(promo), class: "text-sky-600 hover:text-sky-800" %>
+                      (<span class="font-mono"><%= promo.code %></span>)
+                      <% if sets_count > 1 %>
+                        <div class="text-xs text-gray-400 mt-0.5">
+                          <%= format_vnd_currency(discount_per_set) %> × <%= sets_count %> sets
+                        </div>
+                      <% end %>
+                    </td>
+                    <td class="px-6 py-3 text-right text-sm text-red-600">
+                      -<%= format_vnd_currency(total_bundle_discount) %>
+                    </td>
+                  </tr>
+                <% else %>
+                  <tr>
+                    <td colspan="4" class="px-6 py-3 text-right text-sm text-gray-500">
+                      Discount: <%= link_to promo.title, admin_promotion_path(promo), class: "text-sky-600 hover:text-sky-800" %>
+                      (<span class="font-mono"><%= promo.code %></span>)
+                    </td>
+                    <td class="px-6 py-3 text-right text-sm text-red-600">
+                      -<%= format_vnd_currency(promo.apply_amount(@order.subtotal_vnd)) %>
+                    </td>
+                  </tr>
+                <% end %>
+              <% end %>
+            <% else %>
+              <tr>
+                <td colspan="4" class="px-6 py-3 text-right text-sm text-gray-500">
+                  Discount (Manual):
+                </td>
+                <td class="px-6 py-3 text-right text-sm text-red-600">
+                  -<%= format_vnd_currency(@order.discount_vnd) %>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+          <tr class="border-t border-gray-300">
+            <td colspan="4" class="px-6 py-4 text-right text-base font-bold text-gray-900">Total:</td>
+            <td class="px-6 py-4 text-right text-base font-bold text-gray-900">
+              <%= format_vnd_currency(@order.total_vnd) %>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- Payment Details -->
+  <div class="bg-white border border-gray-200 rounded-lg p-6">
+    <h2 class="text-lg font-semibold mb-4">Payment Details</h2>
+    <dl class="space-y-2">
+      <div class="flex justify-between text-sm">
+        <dt class="text-gray-500">Payment Method</dt>
+        <dd class="text-gray-900 font-medium">
+          <% if @order.installment_payment? %>
+            Installment (<%= @order.installment_bank %> / <%= @order.installment_months %> months)
+          <% else %>
+            <%= @order.payment_method.presence&.titleize || 'Not specified' %>
+          <% end %>
+        </dd>
+      </div>
+      <div class="flex justify-between text-sm">
+        <dt class="text-gray-500">Payment Status</dt>
+        <dd class="text-gray-900 font-medium"><%= @order.payment_status.titleize %></dd>
+      </div>
+      <% if @order.installment_payment? && @order.installment_fee_amount.present? %>
+        <div class="flex justify-between text-sm border-t border-gray-200 pt-2 mt-2">
+          <dt class="text-gray-500">
+            Installment Conversion Fee
+            <div class="text-xs text-gray-400 mt-1">
+              <% if @order.fully_free_installment_order? %>
+                <span class="text-green-600">✓ All products eligible for fee reimbursement</span>
+              <% elsif @order.has_free_installment_product? %>
+                <span class="text-yellow-600">⚠ Some products eligible for fee reimbursement</span>
+              <% else %>
+                <span>Buyer pays (no reimbursement)</span>
+              <% end %>
+            </div>
+          </dt>
+          <dd class="text-gray-900 font-medium"><%= format_vnd_currency(@order.installment_fee_amount) %></dd>
+        </div>
+      <% end %>
+    </dl>
+  </div>
+
+  <!-- Addresses -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Shipping Address -->
+    <div class="bg-white border border-gray-200 rounded-lg p-6">
+      <h2 class="text-lg font-semibold mb-4">Shipping Address</h2>
+      <% if @order.shipping_address %>
+        <address class="text-sm text-gray-900 not-italic">
+          <%= format_vn_address(@order.shipping_address) %>
+          <% if @order.shipping_address.phone_numbers.any? %>
+            <div class="mt-2 text-gray-600">
+              Phone: <%= @order.shipping_address.phone_numbers.join(", ") %>
+            </div>
+          <% end %>
+        </address>
+      <% else %>
+        <p class="text-sm text-gray-500">No shipping address provided</p>
+      <% end %>
+    </div>
+
+    <!-- Billing Address -->
+    <div class="bg-white border border-gray-200 rounded-lg p-6">
+      <h2 class="text-lg font-semibold mb-4">Billing Address</h2>
+      <% if @order.billing_address %>
+        <% if @order.billing_address.id == @order.shipping_address&.id %>
+          <p class="text-sm text-gray-500">Same as shipping address</p>
+        <% else %>
+          <address class="text-sm text-gray-900 not-italic">
+            <%= format_vn_address(@order.billing_address) %>
+            <% if @order.billing_address.phone_numbers.any? %>
+              <div class="mt-2 text-gray-600">
+                Phone: <%= @order.billing_address.phone_numbers.join(", ") %>
+              </div>
+            <% end %>
+          </address>
+        <% end %>
+      <% else %>
+        <p class="text-sm text-gray-500">No billing address provided</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Order Timeline/Metadata -->
+  <div class="bg-white border border-gray-200 rounded-lg p-6">
+    <h2 class="text-lg font-semibold mb-4">Order Timeline</h2>
+    <dl class="space-y-3">
+      <div class="flex justify-between text-sm">
+        <dt class="text-gray-500">Created</dt>
+        <dd class="text-gray-900"><%= format_datetime(@order.created_at) %></dd>
+      </div>
+      <div class="flex justify-between text-sm">
+        <dt class="text-gray-500">Last Updated</dt>
+        <dd class="text-gray-900"><%= format_datetime(@order.updated_at) %></dd>
+      </div>
+      <% if @order.cart_id %>
+        <div class="flex justify-between text-sm">
+          <dt class="text-gray-500">Cart Reference</dt>
+          <dd class="text-gray-900 font-mono text-xs"><%= @order.cart_id %></dd>
+        </div>
+      <% end %>
+
+      <% if @order.metadata.present? && @order.metadata['status_history'].present? %>
+        <div class="border-t border-gray-200 pt-3 mt-3">
+          <dt class="text-sm font-medium text-gray-900 mb-2">Status History</dt>
+          <dd>
+            <ul class="space-y-2">
+              <% @order.metadata['status_history'].each do |history| %>
+                <li class="text-sm text-gray-600">
+                  <span class="font-medium"><%= history['from'] %></span> →
+                  <span class="font-medium"><%= history['to'] %></span>
+                  <div class="text-xs text-gray-500">
+                    <%= format_datetime(Time.parse(history['changed_at'])) %> by <%= history['changed_by'] %>
+                  </div>
+                </li>
+              <% end %>
+            </ul>
+          </dd>
+        </div>
+      <% end %>
+    </dl>
+  </div>
+
+  <!-- Status Update Form -->
+  <div class="bg-white border border-gray-200 rounded-lg p-6">
+    <h2 class="text-lg font-semibold mb-4">Update Order Status</h2>
+    <% valid_statuses = valid_next_statuses(@order) %>
+    <% if valid_statuses.any? %>
+      <%= form_with url: update_status_admin_order_path(@order), method: :patch, local: true, class: "flex flex-col md:flex-row gap-4 items-end" do |f| %>
+        <div class="flex-1">
+          <label for="status" class="block text-sm font-medium text-gray-700 mb-1">New Status</label>
+          <%= select_tag :status, options_for_select(valid_statuses.map { |s| [s.humanize, s] }), class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-sky-500" %>
+        </div>
+        <div>
+          <%= button_tag type: "submit", class: "px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 focus:ring-2 focus:ring-sky-500 font-medium" do %>
+            Update Status
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-sm text-gray-500">No status changes available for <%= @order.status.humanize %> orders.</p>
+    <% end %>
+  </div>
+</div>

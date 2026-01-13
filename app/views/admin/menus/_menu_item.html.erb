@@ -1,0 +1,230 @@
+<% current_item = local_assigns[:item] || local_assigns[:menu_item] || @menu_item %>
+<%# Ensure `menu` local exists: prefer explicit local, otherwise derive from the item's section %>
+<% menu = local_assigns[:menu] || (current_item.respond_to?(:menu_bar_section) ? current_item.menu_bar_section : nil) %>
+<% @_gallery_index ||= 0 %>
+<% if depth == 0 %>
+  <div id="menu_item_<%= current_item.id %>" class="menu-container"
+       data-menu-container="true"
+       data-depth="<%= [depth,1].min %>"
+       data-is-parent="true"
+       style="margin-left: <%= [depth,1].min * 24 %>px;">
+    <div class="group flex items-center gap-2 py-3 px-2 bg-white rounded shadow-sm relative mt-1"
+        data-id="<%= item.id %>"
+        data-parent-id="<%= item.parent_id %>"
+        data-position="<%= item.position %>"
+        data-item-ids="<%= item.sub_items.map(&:id).join(',') %>"
+        data-menu-item="true"
+        data-depth="<%= [depth,1].min %>"
+        data-is-parent="true"
+        data-item-name="<%= item.label %>"
+        <%= "data-section-id=\"#{section_id}\"" if defined?(section_id) && section_id.present? %>
+        data-controller="menu-item-edit"
+        data-menu-item-edit-id-value="<%= item.id %>">
+      <button type="button" class="parent-drag-handle cursor-move mr-2 text-gray-400 hover:text-gray-600" aria-label="Drag to reorder parent item">
+        <span class="material-icons text-lg">drag_indicator</span>
+      </button>
+
+      <span class="font-medium text-gray-800"><%= item.label %></span>
+      <% if item.link.present? %>
+        <a href="<%= item.link %>" class="text-sky-600 hover:underline text-xs"><%= item.link %></a>
+      <% end %>
+      <span class="text-xs text-gray-400"><%= item.item_type %></span>
+
+      <% if item.image.present? %>
+        <button type="button"
+                data-action="click->gallery#open keydown->gallery#_onKeydown"
+                data-gallery-target="galleryItem"
+                data-index="<%= @_gallery_index %>"
+                class="cursor-pointer hover:opacity-75 transition-opacity"
+                aria-label="View full size image">
+          <%= image_tag item.image.url, class: "size-7 rounded object-cover mr-2 w-12 h-12", alt: "#{item.label} thumbnail", data: { 'gallery-target': 'image' } %>
+        </button>
+        <% @_gallery_index += 1 %>
+      <% end %>
+
+      <span class="absolute right-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div data-controller="menu-subitem-form" data-menu-subitem-form-parent-id-value="<%= item.id %>">
+          <div id="new_sub_menu_item_form_<%= item.id %>"
+               data-menu-subitem-form-target="form"
+               class="mt-2 bg-white p-3 rounded shadow-sm hidden"
+               aria-hidden="true">
+            <%= render partial: "admin/menus/new_sub_menu_item_form", locals: { parent: item, form_model: MenuBar::Item.new, menu: menu } %>
+          </div>
+        </div>
+
+        <button type="button"
+          class="btn btn-xs border border-sky-100 text-sky-500 hover:border-sky-200 hover:text-sky-700 px-2 py-1 rounded flex items-center justify-center"
+          aria-label="Edit menu item"
+          data-action="click->menu-item-edit#requestOpen"
+          data-menu-item-edit-id="<%= item.id %>">
+          <span class="material-icons text-sm!" aria-label="Edit" title="Edit">edit</span>
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-xs border border-red-100 text-red-700 hover:border-red-200 px-2 py-1 rounded flex items-center justify-center cursor-pointer"
+          aria-label="Delete menu item"
+          data-controller="confirm menu-form"
+          data-confirm-message-value="Are you sure you want to delete this menu item?"
+          data-action="click->menu-form#delete"
+          data-menu-item-edit-id="<%= item.id %>">
+          <span class="material-icons text-sm!" aria-label="Delete" title="Delete">delete</span>
+        </button>
+      </span>
+    </div>
+
+    <div id="menu_item_children_<%= item.id %>" data-child-list="true" aria-hidden="<%= item.sub_items.blank? ? 'true' : 'false' %>">
+      <% item.sub_items.each do |child| %>
+        <%= render partial: "admin/menus/menu_item", locals: { item: child, depth: depth + 1, is_child: true, menu: menu } %>
+      <% end %>
+    </div>
+  </div>
+
+<% else %>
+  <% if item.sub_items.present? %>
+    <div id="menu_item_<%= current_item.id %>" class="menu-container"
+         data-menu-container="true"
+         data-depth="<%= [depth,1].min %>"
+         style="margin-left: <%= depth * 24 %>px;">
+    <div class="group flex items-center gap-2 py-3 px-2 bg-white rounded shadow-sm relative mt-1"
+        data-id="<%= item.id %>"
+        data-parent-id="<%= item.parent_id %>"
+        data-position="<%= item.position %>"
+        data-item-ids="<%= item.sub_items.map(&:id).join(',') %>"
+        data-menu-item="true"
+        data-depth="<%= [depth,1].min %>"
+        data-item-name="<%= item.label %>"
+        <%= "data-section-id=\"#{section_id}\"" if defined?(section_id) && section_id.present? %>
+        data-controller="menu-item-edit"
+        data-menu-item-edit-id-value="<%= item.id %>">
+        <button type="button" class="child-drag-handle cursor-move mr-2 text-gray-400 hover:text-gray-600" aria-label="Drag to reorder child item">
+          <span class="material-icons text-lg">drag_indicator</span>
+        </button>
+
+        <span class="font-medium text-gray-800"><%= item.label %></span>
+        <% if item.link.present? %>
+          <a href="<%= item.link %>" class="text-sky-600 hover:underline text-xs"><%= item.link %></a>
+        <% end %>
+        <span class="text-xs text-gray-400"><%= item.item_type %></span>
+
+        <% if item.image.present? %>
+          <button type="button"
+                  data-action="click->gallery#open keydown->gallery#_onKeydown"
+                  data-gallery-target="galleryItem"
+                  data-index="<%= @_gallery_index %>"
+                  class="cursor-pointer hover:opacity-75 transition-opacity"
+                  aria-label="View full size image">
+            <%= image_tag item.image.url, class: "size-7 rounded object-cover mr-2 w-12 h-12", alt: "#{item.label} thumbnail", data: { 'gallery-target': 'image' } %>
+          </button>
+          <% @_gallery_index += 1 %>
+        <% end %>
+
+        <span class="absolute right-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div data-controller="menu-subitem-form" data-menu-subitem-form-parent-id-value="<%= item.id %>">
+            <div id="new_sub_menu_item_form_<%= item.id %>"
+                  data-menu-subitem-form-target="form"
+                  class="mt-2 bg-white p-3 rounded shadow-sm hidden"
+                  aria-hidden="true">
+              <%= render partial: "admin/menus/new_sub_menu_item_form", locals: { parent: item, form_model: MenuBar::Item.new, menu: menu } %>
+            </div>
+          </div>
+
+          <button type="button"
+            class="btn btn-xs border border-sky-100 text-sky-500 hover:border-sky-200 hover:text-sky-700 px-2 py-1 rounded flex items-center justify-center"
+            aria-label="Edit menu item"
+              data-action="click->menu-item-edit#requestOpen"
+            data-menu-item-edit-id="<%= item.id %>">
+            edit
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-xs border border-red-100 text-red-700 hover:border-red-200 px-2 py-1 rounded flex items-center justify-center cursor-pointer"
+            aria-label="Delete menu item"
+            data-controller="confirm menu-form"
+            data-confirm-message-value="Are you sure you want to delete this menu item?"
+            data-action="click->menu-form#delete"
+            data-menu-item-edit-id="<%= item.id %>">
+            <span class="material-icons text-sm!" aria-label="Delete" title="Delete">delete</span>
+          </button>
+        </span>
+
+      </div>
+
+      <div id="menu_item_children_<%= item.id %>" data-child-list="true">
+        <% item.sub_items.each do |child| %>
+          <%= render partial: "admin/menus/menu_item", locals: { item: child, depth: depth + 1, is_child: true, menu: menu } %>
+        <% end %>
+      </div>
+    </div>
+
+  <% else %>
+    <div id="menu_item_<%= current_item.id %>" class="group flex items-center gap-2 py-3 px-2 bg-white rounded shadow-sm relative mt-1"
+      data-id="<%= item.id %>"
+      data-parent-id="<%= item.parent_id %>"
+      data-position="<%= item.position %>"
+      data-item-ids="<%= item.sub_items.map(&:id).join(',') %>"
+      data-menu-item="true"
+      data-item-name="<%= item.label %>"
+      data-depth="<%= depth %>"
+         <%= "data-section-id=\"#{section_id}\"" if defined?(section_id) && section_id.present? %>
+         style="margin-left: <%= depth * 24 %>px;"
+         data-controller="menu-item-edit"
+         data-menu-item-edit-id-value="<%= item.id %>">
+      <button type="button" class="child-drag-handle cursor-move mr-2 text-gray-400 hover:text-gray-600" aria-label="Drag to reorder child item">
+        <span class="material-icons text-lg">drag_indicator</span>
+      </button>
+
+      <span class="font-medium text-gray-800"><%= item.label %></span>
+      <% if item.link.present? %>
+        <a href="<%= item.link %>" class="text-sky-600 hover:underline text-xs"><%= item.link %></a>
+      <% end %>
+      <span class="text-xs text-gray-400"><%= item.item_type %></span>
+
+      <% if item.image.present? %>
+        <button type="button"
+                data-action="click->gallery#open keydown->gallery#_onKeydown"
+                data-gallery-target="galleryItem"
+                data-index="<%= @_gallery_index %>"
+                class="cursor-pointer hover:opacity-75 transition-opacity"
+                aria-label="View full size image">
+          <%= image_tag item.image.url, class: "size-7 rounded object-cover mr-2 w-12 h-12", alt: "#{item.label} thumbnail", data: { 'gallery-target': 'image' } %>
+        </button>
+        <% @_gallery_index += 1 %>
+      <% end %>
+
+      <span class="absolute right-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div data-controller="menu-subitem-form" data-menu-subitem-form-parent-id-value="<%= item.id %>">
+          <div id="new_sub_menu_item_form_<%= item.id %>"
+               data-menu-subitem-form-target="form"
+               class="mt-2 bg-white p-3 rounded shadow-sm hidden"
+               aria-hidden="true">
+              <%= render partial: "admin/menus/new_sub_menu_item_form", locals: { parent: item, form_model: MenuBar::Item.new, menu: menu } %>
+          </div>
+        </div>
+
+        <button type="button"
+          class="btn btn-xs border border-sky-100 text-sky-500 hover:border-sky-200 hover:text-sky-700 px-2 py-1 rounded flex items-center justify-center"
+          aria-label="Edit menu item"
+            data-action="click->menu-item-edit#requestOpen"
+          data-menu-item-edit-id="<%= item.id %>">
+          <span class="material-icons text-sm!" aria-hidden="true">edit</span>
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-xs border border-red-100 text-red-700 hover:border-red-200 px-2 py-1 rounded flex items-center justify-center cursor-pointer"
+          aria-label="Delete menu item"
+          data-controller="confirm menu-form"
+          data-confirm-message-value="Are you sure you want to delete this menu item?"
+          data-action="click->menu-form#delete"
+          data-menu-item-edit-id="<%= item.id %>">
+          <span class="material-icons text-sm!" aria-label="Delete" title="Delete">delete</span>
+        </button>
+      </span>
+
+    </div>
+
+    <div id="menu_item_children_<%= item.id %>" data-child-list="true"></div>
+  <% end %>
+<% end %>

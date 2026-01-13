@@ -1,0 +1,423 @@
+<%= form_with model: product, url: product.persisted? ? admin_product_path(product) : admin_products_path, local: true, html: { class: "max-w-screen-2xl mx-auto rounded-lg border border-gray-200 bg-white overflow-y-hidden", "data-controller": "product-form", multipart: true } do |f| %>
+  <div class="title-wrapper gap-4 w-full flex flex-row items-center justify-between py-4 border-b border-gray-200 z-50 px-4">
+    <div class="left-section flex items-center gap-2">
+      <%= link_to admin_products_path, class: "btn btn-secondary bg-white border border-gray-200 hover:bg-gray-100 rounded-lg" do %>
+        <span class="material-icons px-2 py-1 text-gray-950 text-base!">chevron_left</span>
+      <% end %>
+      <h1 class="text-2xl font-bold">
+        <% if @product.persisted? %>
+          Edit Product <%= @product.name %>
+        <% else %>
+          Create Product
+        <% end %>
+      </h1>
+    </div>
+    <div class="flex flex-row gap-4">
+      <%= link_to "#{FRONTEND_HOST}/#{product.slug}", class: "btn btn-primary text-sm px-4 py-2 rounded bg-sky-600 hover:bg-sky-800 flex items-center transition cursor-pointer", target: "_blank", rel: "noopener" do %>
+        <span class="material-icons text-white text-base! mr-2 -ml-1">remove_red_eye</span>
+        <span class="text-white">View</span>
+      <% end %>
+      <%= f.button class: "btn btn-primary text-sm px-4 py-2 rounded bg-gray-950 hover:bg-gray-700 flex items-center transition cursor-pointer", data: { "product-form-target": "submitButton", turbo: false } do %>
+        <span class="material-icons text-white text-base! mr-2 -ml-1">check_circle</span>
+        <span class="text-white">Save</span>
+      <% end %>
+    </div>
+  </div>
+
+  <%# The 16rem offset accounts for the combined height of the header, title bar, and vertical paddings/margins above this grid. Update this value if those UI elements change. %>
+  <div class="grid grid-cols-[auto_minmax(400px,20rem)] relative gap-px bg-gray-200">
+    <section class="bg-white p-4 space-y-4">
+      <!-- General Info -->
+      <div>
+        <%= f.label :name, "Product Name", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.text_field :name,
+
+          class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500 #{'border-red-500' if product.errors[:name].any?}",
+          data: { action: "input->product-form#validate" },
+          aria: {
+            invalid: product.errors[:name].any?,
+            describedby: product.errors[:name].any? ? "product_name_error" : nil
+          } %>
+        <div class="text-red-600 text-xs mt-1 product-form-error" data-product-form-target="nameError"></div>
+        <% if product.errors[:name].any? %>
+          <div id="product_name_error" class="text-red-600 text-xs mt-1" role="alert"><%= product.errors[:name].first %></div>
+        <% end %>
+      </div>
+      <div>
+        <%= f.label :sku, "SKU", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.text_field :sku,
+
+          class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500 #{'border-red-500' if product.errors[:sku].any?}",
+          data: { action: "input->product-form#validate" },
+          aria: {
+            invalid: product.errors[:sku].any?,
+            describedby: product.errors[:sku].any? ? "product_sku_error" : nil
+          } %>
+        <div class="text-red-600 text-xs mt-1 product-form-error" data-product-form-target="skuError"></div>
+        <% if product.errors[:sku].any? %>
+          <div id="product_sku_error" class="text-red-600 text-xs mt-1" role="alert"><%= product.errors[:sku].first %></div>
+        <% end %>
+      </div>
+      <div class="mb-4">
+        <%= f.label :slug, "Slug", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.text_field :slug,
+
+          class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500 #{'border-red-500' if product.errors[:slug].any?}",
+          data: { action: "input->product-form#validate" },
+          aria: {
+            invalid: product.errors[:slug].any?,
+            describedby: product.errors[:slug].any? ? "product_slug_error" : nil
+          } %>
+        <div class="text-red-600 text-xs mt-1 product-form-error" data-product-form-target="slugError"></div>
+        <% if product.errors[:slug].any? %>
+          <div id="product_slug_error" class="text-red-600 text-xs mt-1" role="alert"><%= product.errors[:slug].first %></div>
+        <% end %>
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :short_description, "Side Description", class: "block text-sm font-medium text-gray-700" %>
+        <div data-controller="lexical-editor" data-lexical-editor-content-value="<%= product.short_description.to_json %>" data-lexical-editor-upload-url-value="<%= upload_image_admin_products_path %>" data-lexical-editor-video-upload-url-value="<%= upload_video_admin_products_path %>">
+          <div data-lexical-editor-target="editor" data-min-height="100"></div>
+          <%= f.hidden_field :short_description, data: { lexical_editor_target: "input", product_form_target: "short_description" } %>
+        </div>
+        <div class="text-red-600 text-xs mt-1 product-form-error" data-product-form-target="shortDescriptionError"></div>
+        <% if product.errors[:short_description].any? %>
+          <div id="product_short_description_error" class="text-red-600 text-xs mt-1" role="alert"><%= product.errors[:short_description].first %></div>
+        <% end %>
+      </div>
+      <!-- Advanced -->
+      <div class="mb-4">
+        <%= f.label :weight, "Weight (kg)", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.number_field :weight,
+          step: 0.01,
+          class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500 #{'border-red-500' if product.errors[:weight].any?}",
+          data: { action: "input->product-form#validate", product_form_target: "weight" },
+          aria: {
+            invalid: product.errors[:weight].any?,
+            describedby: product.errors[:weight].any? ? "product_weight_error" : nil
+          } %>
+        <div class="text-red-600 text-xs mt-1 product-form-error" data-product-form-target="weightError"></div>
+        <% if product.errors[:weight].any? %>
+          <div id="product_weight_error" class="text-red-600 text-xs mt-1" role="alert"><%= product.errors[:weight].first %></div>
+        <% end %>
+      </div>
+
+      <!-- Product Mode Toggle -->
+      <div class="bg-gray-50 p-4 border border-gray-200 rounded-lg mb-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-medium text-gray-900">Product Variants</h3>
+            <p class="text-sm text-gray-600">Toggle between single product mode and multiple variants mode</p>
+          </div>
+          <label class="inline-flex items-center">
+            <input
+              type="checkbox"
+              class="form-checkbox size-4 text-sky-600 transition duration-150 ease-in-out accent-gray-950"
+              data-product-form-target="variantModeToggle"
+              data-action="change->product-form#toggleVariantMode"
+              checked="<%= product.product_variants.size > 1 %>"
+            >
+            <span class="ml-3 text-sm font-medium text-gray-700" data-product-form-target="variantModeLabel">
+              Multiple Variants Mode
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Product Variants Nested Form -->
+      <div class="product-variants-form-container" data-product-form-target="variantsContainer">
+        <div class="bg-gray-50 p-4 border border-gray-200 rounded-t-lg" data-product-form-target="variantControls">
+          <div class="flex items-center justify-between">
+            <h4 class="text-md font-medium text-gray-900">Product Variants</h4>
+            <button
+              type="button"
+              class="bg-gray-950 hover:bg-gray-700 text-white text-sm font-semibold py-1.5 px-3 rounded transition-colors flex flex-row items-center"
+              data-action="click->product-form#addVariant"
+              data-product-form-target="addVariantButton"
+            >
+              <span class="material-icons text-base/6! align-middle mr-1">add</span>
+              <span>Add variant</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="variants-list" data-product-form-target="variantsList">
+          <%= f.fields_for :product_variants do |variant_fields| %>
+            <%= render "admin/products/variant_form", f: variant_fields, product: product, product_variant: variant_fields.object %>
+          <% end %>
+        </div>
+
+        <!-- Hidden blank variant template for JS cloning -->
+        <template id="variant-form-template" data-product-form-target="variantTemplate">
+          <%= f.fields_for(:product_variants, ProductVariant.new, child_index: "NEW_RECORD") do |variant_fields| %>
+            <%= render "admin/products/variant_form", f: variant_fields, product: product, product_variant: ProductVariant.new %>
+          <% end %>
+        </template>
+      </div>
+
+      <!-- Single Product Mode Image Upload -->
+      <div class="bg-white p-4 border border-gray-200 rounded-lg mb-6 single-product-images" data-product-form-target="singleProductImages">
+        <h4 class="text-md font-medium text-gray-900 mb-3">Product Images</h4>
+        <div class="mb-3">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Upload Images</label>
+          <div data-controller="image-preview"
+               data-image-preview-type-value='single'
+               data-image-preview-existing-images-value="<%= image_preview_data_for(product.product_variants.first || ProductVariant.new, attachment: :product_images, single: false) %>"
+          >
+            <%= f.file_field :single_product_images, multiple: true, name: "product[single_product_images][]",
+              class: "file-input file-input-bordered w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500",
+              data: {
+                image_preview_target: "input",
+                action: "image-preview#preview change->product-form#validate",
+                product_form_target: "singleProductImageInput"
+              } %>
+            <div data-image-preview-target="previews" class="flex flex-wrap gap-2 mt-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <%= f.label :description, "Description", class: "block text-sm font-medium text-gray-700" %>
+      <div data-controller="lexical-editor" data-lexical-editor-content-value="<%= product.description.to_json %>" data-lexical-editor-upload-url-value="<%= upload_image_admin_products_path %>" data-lexical-editor-video-upload-url-value="<%= upload_video_admin_products_path %>">
+        <div data-lexical-editor-target="editor"></div>
+        <%= f.hidden_field :description, data: { lexical_editor_target: "input", product_form_target: "description" } %>
+      </div>
+      <div class="text-red-600 text-xs mt-1 product-form-error" data-product-form-target="descriptionError"></div>
+      <% if product.errors[:description].any? %>
+        <div id="product_description_error" class="text-red-600 text-xs mt-1" role="alert"><%= product.errors[:description].first %></div>
+      <% end %>
+
+      <%= f.label :gift_content, "Gift Content", class: "block text-sm font-medium text-gray-700 mt-4" %>
+      <div data-controller="lexical-editor" data-lexical-editor-content-value="<%= product.gift_content.to_json %>" data-lexical-editor-upload-url-value="<%= upload_image_admin_products_path %>" data-lexical-editor-video-upload-url-value="<%= upload_video_admin_products_path %>">
+        <div data-lexical-editor-target="editor"></div>
+        <%= f.hidden_field :gift_content, data: { lexical_editor_target: "input", product_form_target: "giftContent" } %>
+      </div>
+      <div class="text-red-600 text-xs mt-1 product-form-error" data-product-form-target="giftContentError"></div>
+      <% if product.errors[:gift_content].any? %>
+        <div id="product_gift_content_error" class="text-red-600 text-xs mt-1" role="alert"><%= product.errors[:gift_content].first %></div>
+      <% end %>
+
+      <div>
+        <%= render "product_attributes_fields",
+          form: f,
+          field_name: "product_attributes",
+          initial_attributes: product.product_attributes || {},
+          input_label: "Product Attributes"
+        %>
+      </div>
+    </section>
+    <aside class="space-y-4">
+      <div class="bg-white p-4 space-y-4">
+
+        <!-- Pricing -->
+        <div>
+          <%= f.label :original_price, "Original Price", class: "block text-sm font-medium text-gray-700" %>
+          <div class="flex flex-row">
+            <%= f.number_field :original_price, min: 0, step: 1, pattern: "\d*", class: "input input-bordered text-sm w-full px-3 py-2 rounded-l border border-gray-300 border-r-0 focus:ring-sky-500 #{'border-red-500' if product.errors[:original_price].any?}", data: { action: "input->product-form#validate", product_form_target: "originalPriceInput" } %>
+            <div class="input-group-text border bg-gray-100 border-gray-300 rounded-r flex items-center px-1 text-sm leading-tight">VNĐ</div>
+          </div>
+          <div class="text-red-600 text-xs mt-1 product-form-error" data-product-form-target="originalPriceError"></div>
+          <% if product.errors[:original_price].any? %>
+            <div class="text-red-600 text-xs mt-1"><%= product.errors[:original_price].first %></div>
+          <% end %>
+        </div>
+        <div>
+          <%= f.label :current_price, "Current Price", class: "block text-sm font-medium text-gray-700" %>
+          <div class="flex flex-row">
+            <%= f.number_field :current_price, step: 1, pattern: "\d*", class: "input input-bordered text-sm w-full px-3 py-2 rounded-l border border-gray-300 border-r-0  focus:ring-sky-500 #{'border-red-500' if product.errors[:current_price].any?}", data: { action: "input->product-form#validate", product_form_target: "currentPriceInput" } %>
+            <div class="input-group-text border bg-gray-100 border-gray-300 rounded-r flex items-center px-1 text-sm leading-tight">VNĐ</div>
+          </div>
+          <div class="text-red-600 text-xs mt-1 product-form-error" data-product-form-target="currentPriceError"></div>
+          <% if product.errors[:current_price].any? %>
+            <div class="text-red-600 text-xs mt-1"><%= product.errors[:current_price].first %></div>
+          <% end %>
+        </div>
+
+        <!-- SEO / Meta -->
+        <div>
+          <%= f.label :meta_title, "Meta Title", class: "block text-sm font-medium text-gray-700" %>
+          <%= f.text_field :meta_title, maxlength: 255, class: "input input-bordered w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500 #{'border-red-500' if product.errors[:meta_title].any?}", data: { action: "input->product-form#validate" } %>
+          <div class="text-red-600 text-xs mt-1 product-form-error" data-product-form-target="metaTitleError"></div>
+          <% if product.errors[:meta_title].any? %>
+            <div class="text-red-600 text-xs mt-1"><%= product.errors[:meta_title].first %></div>
+          <% end %>
+        </div>
+
+        <div>
+          <%= f.label :meta_description, "Meta Description (Max 500 characters)", class: "block text-sm font-medium text-gray-700" %>
+          <%= f.text_area :meta_description, rows: 5, maxlength: 500, placehoder: 'What is this product?', class: "textarea textarea-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500 #{'border-red-500' if product.errors[:meta_description].any?}", data: { action: "input->product-form#validate" } %>
+          <div class="text-red-600 text-xs mt-1 product-form-error" data-product-form-target="metaDescriptionError"></div>
+          <% if product.errors[:meta_description].any? %>
+            <div class="text-red-600 text-xs mt-1"><%= product.errors[:meta_description].first %></div>
+          <% end %>
+        </div>
+
+        <!-- Inventory -->
+        <!-- Stock fields removed as per requirements -->
+        <div>
+          <%= f.label :status, "Status", class: "block text-sm font-medium text-gray-700" %>
+          <%= f.select :status, Product.statuses.keys.map { |k| [k.humanize, k] }, {},  class: "select select-bordered w-full pl-1.5 pr-3 py-2.25 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500 #{'border-red-500' if product.errors[:status].any?}", data: { action: "change->product-form#validate" } %>
+          <div class="text-red-600 text-xs mt-1 product-form-error" data-product-form-target="statusError"></div>
+          <% if product.errors[:status].any? %>
+            <div class="text-red-600 text-xs mt-1"><%= product.errors[:status].first %></div>
+          <% end %>
+        </div>
+
+        <!-- Warranty -->
+        <div>
+          <%= f.label :warranty_months, "Warranty (months)", class: "block text-sm font-medium text-gray-700" %>
+          <%= f.number_field :warranty_months, min: 0, class: "input input-bordered w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500 #{'border-red-500' if product.errors[:warranty_months].any?}", data: { action: "input->product-form#validate" } %>
+          <div class="text-red-600 text-xs mt-1 product-form-error" data-product-form-target="warrantyMonthsError"></div>
+          <% if product.errors[:warranty_months].any? %>
+            <div class="text-red-600 text-xs mt-1"><%= product.errors[:meta_title].first %></div>
+          <% end %>
+        </div>
+
+        <div class="flex flex-col mb-4 space-y-2">
+          <!-- Featured Products -->
+          <label class="items-center gap-2 text-sm font-normal accent-gray-950">
+            <%= f.check_box :featured, class: "checkbox checkbox-primary" %>
+            <span>Featured Product</span>
+          </label>
+          <% if product.errors[:featured].any? %>
+            <div class="text-red-600 text-xs mt-1"><%= product.errors[:featured].first %></div>
+          <% end %>
+        </div>
+
+        <!-- Flags -->
+        <div>
+          <%= f.label :flags, "Flags", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%# NOTE: sending an empty flags are for removing all flags %>
+          <%= hidden_field_tag "product[flags][]", "" %>
+          <div class="flex flex-col gap-2">
+            <% Product::FLAGS.each_value do |flag| %>
+              <label class="inline-flex items-center gap-2 text-sm font-normal accent-gray-950">
+                <% case flag
+                  when Product::FLAGS[:arrive_soon] %>
+                  <%= check_box_tag "product[flags][]", flag, product.flags&.include?(flag), class: "checkbox checkbox-primary", data: { product_form_target: 'arriveSoonFlag' } %>
+                  <span><%= flag.titleize %></span>
+                  <%= tooltip_icon("Auto-added on creation when product or all variants have no price. Mutually exclusive with 'Just Arrived'") %>
+                <% when Product::FLAGS[:just_arrived] %>
+                  <%= check_box_tag "product[flags][]", flag, product.flags&.include?(flag), class: "checkbox checkbox-primary", data: { product_form_target: 'justArrivedFlag' } %>
+                  <span><%= flag.titleize %></span>
+                  <%= tooltip_icon("Auto-added when price is first set (uncheck to prevent). Mutually exclusive with 'Arrive Soon'") %>
+                <% else %>
+                  <%= check_box_tag "product[flags][]", flag, product.flags&.include?(flag), class: "checkbox checkbox-primary" %>
+                  <span><%= flag.titleize %></span>
+                <% end %>
+              </label>
+            <% end %>
+          </div>
+          <%= f.hidden_field :skip_auto_flags, value: 'false', data: { product_form_target: 'skipAutoFlagsInput' } %>
+          <% if product.errors[:flags].any? %>
+            <div class="text-red-600 text-xs mt-1"><%= product.errors[:flags].first %></div>
+          <% end %>
+        </div>
+
+        <div>
+          <!-- Category -->
+          <div class="mb-4">
+            <%= f.label :category_id, "Category", class: "block text-sm font-medium text-gray-700" %>
+            <%= f.select :category_id,
+              options_for_select(Category.includes(:parent).order(:title).map { |c| ["#{c.title}#{c.parent ? " (#{c.parent.title})" : ''}", c.id] }, selected: product.category_id),
+              { prompt: "Select a category" },
+              {
+                class: "select select-bordered text-sm w-full rounded focus:ring-2 focus:ring-sky-500 #{'border-red-500' if product.errors[:category_id].any?}",
+                data: {
+                  action: "change->product-form#validate",
+                  product_form_target: "categorySelect"
+                }
+              } %>
+            <div class="text-red-600 text-xs mt-1 product-form-error" data-product-form-target="categoryError"></div>
+            <% if product.errors[:category_id].any? %>
+              <div class="text-red-600 text-xs mt-1"><%= product.errors[:category_id].first %></div>
+            <% end %>
+        </div>
+
+        <div>
+          <!-- Brands -->
+          <div class="mb-4">
+            <%= f.label :brand_ids, "Brands", class: "block text-sm font-medium text-gray-700" %>
+            <%= f.select :brand_ids,
+              options_from_collection_for_select(Brand.order(:name), :id, :name, product.brand_ids),
+              {},
+              {
+                multiple: true,
+                class: "select select-bordered text-sm w-full rounded focus:ring-2 focus:ring-sky-500 #{'border-red-500' if product.errors[:brands].any?}",
+                data: {
+                  action: "change->product-form#validate",
+                  product_form_target: "brandsSelect"
+                }
+              } %>
+            <div class="text-red-600 text-xs mt-1 product-form-error" data-product-form-target="brandsError"></div>
+            <% if product.errors[:brands].any? %>
+              <div class="text-red-600 text-xs mt-1"><%= product.errors[:brands].first %></div>
+            <% end %>
+          </div>
+        </div>
+
+        <div>
+          <!-- Product Collections -->
+          <div class="mb-4">
+            <%= f.label :product_collection_ids, "Collections", class: "block text-sm font-medium text-gray-700" %>
+            <%= f.select :product_collection_ids,
+              options_from_collection_for_select(product.product_collections.order(:name).limit(Admin::SelectorsController::SELECTOR_LIMIT), :id, :name, product.product_collection_ids),
+              {},
+              {
+                multiple: true,
+                class: "select select-bordered text-sm w-full rounded focus:ring-2 focus:ring-sky-500 #{'border-red-500' if product.errors[:product_collections].any?}",
+                data: {
+                  action: "change->product-form#validate",
+                  product_form_target: "collectionsSelect"
+                }
+              } %>
+            <div class="text-red-600 text-xs mt-1 product-form-error" data-product-form-target="collectionsError"></div>
+            <% if product.errors[:product_collections].any? %>
+              <div class="text-red-600 text-xs mt-1"><%= product.errors[:product_collections].first %></div>
+            <% end %>
+          </div>
+        </div>
+        <div>
+          <!-- Product Tags -->
+          <div class="mb-4">
+            <%= f.label :product_tags, "Tags", class: "block text-sm font-medium text-gray-700" %>
+            <%= f.select :product_tags,
+              options_for_select((product.product_tags || []).map { |t| [t, t] }, product.product_tags),
+              {},
+              {
+                multiple: true,
+                class: "select select-bordered text-sm w-full rounded focus:ring-2 focus:ring-sky-500 #{'border-red-500' if product.errors[:product_tags].any?}",
+                data: {
+                  action: "change->product-form#validate",
+                  product_form_target: "tagsSelect"
+                }
+              } %>
+            <div class="text-red-600 text-xs mt-1 product-form-error" data-product-form-target="tagsError"></div>
+            <% if product.errors[:product_tags].any? %>
+              <div class="text-red-600 text-xs mt-1"><%= product.errors[:product_tags].first %></div>
+            <% end %>
+          </div>
+        </div>
+
+        <div>
+          <!-- Related Products -->
+          <div class="mb-4">
+            <%= f.label :related_product_ids, "Related Products", class: "block text-sm font-medium text-gray-700" %>
+            <%= f.select :related_product_ids,
+              options_from_collection_for_select(product.related_products.order(:name).limit(Admin::SelectorsController::SELECTOR_LIMIT), :id, :name, product.related_product_ids),
+              {},
+              {
+                multiple: true,
+                class: "select select-bordered text-sm w-full rounded focus:ring-2 focus:ring-sky-500 #{'border-red-500' if product.errors[:related_product_ids].any?}",
+                data: {
+                  action: "change->product-form#validate",
+                  product_form_target: "relatedProductsSelect"
+                }
+              } %>
+            <p class="text-xs text-gray-600 mt-1">Select products to link as related products (bidirectional)</p>
+          </div>
+        </div>
+      </div>
+      <%= render "version_history", product: product %>
+    </aside>
+  </div>
+<% end %>

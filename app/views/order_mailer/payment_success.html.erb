@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+  <h1>Thanh toán thành công!</h1>
+  <p>
+    Kính gửi <%= @order.name %>,
+  </p>
+  <p>
+    Chúng tôi xin thông báo rằng thanh toán cho đơn hàng <strong><%= @order.order_number %></strong> của bạn đã được xử lý thành công.
+  </p>
+  <p>
+    Đơn hàng của bạn sẽ được chuẩn bị để vận chuyển. Bạn sẽ nhận được email thông báo khi đơn hàng được gửi đi.
+  </p>
+  <p>Tổng số tiền đã thanh toán: <%= format_vnd_currency(@order.total_vnd) %></p>
+  <p>Cảm ơn bạn đã mua hàng!</p>
+</body>
+</html>

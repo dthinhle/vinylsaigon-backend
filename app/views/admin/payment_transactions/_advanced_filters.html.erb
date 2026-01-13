@@ -1,0 +1,174 @@
+<div class="relative flex flex-col w-full md:w-auto">
+  <button
+    type="button"
+    class="btn btn-secondary text-sm px-3 py-2 rounded bg-gray-200 text-gray-950 focus:outline-none cursor-pointer"
+    aria-expanded="false"
+    aria-controls="more-filters"
+    data-payment-transactions-index-target="moreFiltersToggle"
+    data-action="click->payment-transactions-index#toggleMoreFilters keydown->payment-transactions-index#toggleMoreFiltersKeydown"
+  >
+    Advanced Filters
+  </button>
+
+  <div
+    id="more-filters"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="more-filters-label"
+    class="hidden md:absolute left-0 md:left-auto md:right-4 top-0 md:top-auto md:mt-2 bg-white rounded-none md:rounded shadow border border-gray-200 z-50 w-full h-full md:w-[min(90vw,420px)] md:min-w-[320px] md:max-w-[500px] md:h-auto md:max-h-[80vh] focus:outline-none relative"
+    tabindex="-1"
+    data-payment-transactions-index-target="moreFilters"
+  >
+    <div class="flex justify-between items-center py-2 border-b border-gray-200 md:pt-0 pt-4 px-3 mt-2">
+      <h4 id="more-filters-label" class="font-bold text-base">Advanced Filters</h4>
+      <button type="button" aria-label="Close Advanced Filters" class="text-gray-600 hover:text-gray-900 flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 transition-colors" data-action="click->payment-transactions-index#closeMoreFilters" tabindex="0">
+        <span class="material-icons text-xl">close</span>
+      </button>
+    </div>
+
+    <div class="overflow-y-auto pb-32 md:pb-0 max-h-120 px-4 mt-2">
+      <%# Quick search %>
+      <div class="mb-6">
+        <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Search</div>
+        <div class="space-y-3">
+          <div class="flex flex-col">
+            <label for="q" class="text-xs font-medium text-gray-700 mb-1">Search (Txn / Merch Ref / Order #)</label>
+            <input id="q" type="search" name="q" value="<%= params[:q] %>" placeholder="Enter keyword..." class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" autocomplete="off">
+          </div>
+        </div>
+      </div>
+      <%# Identification %>
+      <div class="mb-6">
+        <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Identification</div>
+        <div class="space-y-3">
+          <div class="flex flex-col">
+            <label for="merch_txn_ref" class="text-xs font-medium text-gray-700 mb-1">Merch Txn Ref</label>
+            <input id="merch_txn_ref" type="text" name="merch_txn_ref" value="<%= params[:merch_txn_ref] %>" placeholder="Enter merch ref..." class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+          </div>
+          <div class="flex flex-col">
+            <label for="onepay_transaction_id" class="text-xs font-medium text-gray-700 mb-1">OnePay Txn ID</label>
+            <input id="onepay_transaction_id" type="text" name="onepay_transaction_id" value="<%= params[:onepay_transaction_id] %>" placeholder="Enter txn id..." class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+          </div>
+        </div>
+      </div>
+
+      <%# Status & Amount %>
+      <div class="mb-6">
+        <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Status & Amount</div>
+        <div class="space-y-3">
+          <div class="flex flex-col">
+            <label for="status_category" class="text-xs font-medium text-gray-700 mb-1">Status Category</label>
+            <select id="status_category" name="status_category" class="select select-bordered text-sm px-3 py-2 rounded border border-gray-300">
+              <option value="">All</option>
+              <% ['success','pending','failed','unknown'].each do |cat| %>
+                <option value="<%= cat %>" <%= 'selected' if params[:status_category] == cat %>><%= cat.titleize %></option>
+              <% end %>
+            </select>
+          </div>
+          <div class="flex flex-col">
+            <label class="text-xs font-medium text-gray-700 mb-1">Amount Range (VND)</label>
+            <div class="flex gap-1">
+              <input type="number" name="min_amount" value="<%= params[:min_amount] %>" placeholder="Min" class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300" aria-label="Min Amount">
+              <input type="number" name="max_amount" value="<%= params[:max_amount] %>" placeholder="Max" class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300" aria-label="Max Amount">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%# Response %>
+      <div class="mb-6">
+        <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Response</div>
+        <div class="space-y-3">
+          <div class="flex flex-col">
+            <label for="response_code" class="text-xs font-medium text-gray-700 mb-1">Response Code</label>
+            <input id="response_code" type="text" name="response_code" value="<%= params[:response_code] %>" placeholder="e.g. 0, 100..." class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+          </div>
+        </div>
+      </div>
+
+      <%# Order State %>
+      <div class="mb-6">
+        <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Order State</div>
+        <div class="space-y-3">
+          <div class="flex flex-col">
+            <label for="payment_status" class="text-xs font-medium text-gray-700 mb-1">Payment Status</label>
+            <select id="payment_status" name="payment_status" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+              <option value="">All</option>
+              <% Order.payment_statuses.keys.each do |ps| %>
+                <option value="<%= ps %>" <%= 'selected' if params[:payment_status] == ps %>><%= ps.titleize %></option>
+              <% end %>
+            </select>
+          </div>
+          <div class="flex flex-col">
+            <label for="order_status" class="text-xs font-medium text-gray-700 mb-1">Order Status</label>
+            <select id="order_status" name="order_status" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+              <option value="">All</option>
+              <% Order.statuses.keys.each do |os| %>
+                <option value="<%= os %>" <%= 'selected' if params[:order_status] == os %>><%= os.titleize %></option>
+              <% end %>
+            </select>
+          </div>
+          <div class="flex flex-col">
+            <label for="payment_method" class="text-xs font-medium text-gray-700 mb-1">Payment Method</label>
+            <select id="payment_method" name="payment_method" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+              <option value="">All</option>
+              <% Order::ORDER_PAYMENT_METHODS.values.each do |pm| %>
+                <option value="<%= pm %>" <%= 'selected' if params[:payment_method] == pm %>><%= pm.titleize %></option>
+              <% end %>
+            </select>
+          </div>
+          <div class="flex flex-row items-center gap-2">
+            <input id="installment_only" type="checkbox" name="installment_only" value="true" <%= 'checked' if params[:installment_only] == 'true' %> class="form-checkbox accent-sky-600 rounded">
+            <label for="installment_only" class="text-xs font-medium text-gray-700">Installment Only</label>
+          </div>
+        </div>
+      </div>
+
+      <%# Free Installment Fee Filters %>
+      <div class="mb-6">
+        <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Installment Fee</div>
+        <div class="space-y-3">
+          <div class="flex flex-col">
+            <label for="contains_free_installment" class="text-xs font-medium text-gray-700 mb-1">Contains Free Installment Products</label>
+            <select id="contains_free_installment" name="contains_free_installment" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+              <option value="">All Transactions</option>
+              <option value="true" <%= "selected" if params[:contains_free_installment] == "true" %>>Yes (Has at least 1)</option>
+              <option value="false" <%= "selected" if params[:contains_free_installment] == "false" %>>No (None)</option>
+            </select>
+          </div>
+          <div class="flex flex-col">
+            <label for="fully_free_installment" class="text-xs font-medium text-gray-700 mb-1">Fully Free Installment</label>
+            <select id="fully_free_installment" name="fully_free_installment" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+              <option value="">All Transactions</option>
+              <option value="true" <%= "selected" if params[:fully_free_installment] == "true" %>>Yes (All products free)</option>
+              <option value="false" <%= "selected" if params[:fully_free_installment] == "false" %>>No (Some/all paid by buyer)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <%# Sorting %>
+      <div class="mb-6">
+        <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Sorting</div>
+        <div class="flex flex-col">
+          <label for="sort_by" class="text-xs font-medium text-gray-700 mb-1">Sort By</label>
+          <select id="sort_by" name="sort_by" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+            <option value="created_at_desc" <%= 'selected' if params[:sort_by] == 'created_at_desc' || params[:sort_by].blank? %>>Created (Newest)</option>
+            <option value="created_at_asc" <%= 'selected' if params[:sort_by] == 'created_at_asc' %>>Created (Oldest)</option>
+            <option value="amount_desc" <%= 'selected' if params[:sort_by] == 'amount_desc' %>>Amount (High → Low)</option>
+            <option value="amount_asc" <%= 'selected' if params[:sort_by] == 'amount_asc' %>>Amount (Low → High)</option>
+            <option value="response_code_desc" <%= 'selected' if params[:sort_by] == 'response_code_desc' %>>Response Code (Z → A)</option>
+            <option value="response_code_asc" <%= 'selected' if params[:sort_by] == 'response_code_asc' %>>Response Code (A → Z)</option>
+            <option value="order_number_desc" <%= 'selected' if params[:sort_by] == 'order_number_desc' %>>Order Number (Z → A)</option>
+            <option value="order_number_asc" <%= 'selected' if params[:sort_by] == 'order_number_asc' %>>Order Number (A → Z)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="fixed md:static bottom-0 left-0 w-full bg-white border-t border-gray-200 flex justify-end gap-2 p-4 z-50 md:bg-transparent">
+      <button type="button" role="button" tabindex="0" class="w-1/2 md:w-auto min-w-16 px-3 py-0.5 md:py-2 rounded text-base md:text-sm border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 focus:ring-2 focus:ring-gray-500 focus:outline-none transition" aria-label="Cancel" data-action="click->payment-transactions-index#closeMoreFilters">Cancel</button>
+      <button type="submit" role="button" tabindex="0" class="w-1/2 md:w-auto min-w-16 px-3 py-0.5 md:py-2 rounded text-base md:text-sm bg-gray-950 text-white hover:bg-gray-700 focus:ring-2 focus:ring-gray-500 focus:outline-none transition" aria-label="Apply Filters">Apply</button>
+    </div>
+  </div>
+</div>

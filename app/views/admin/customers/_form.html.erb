@@ -1,0 +1,108 @@
+<%= form_with model: customer, url: customer.persisted? ? admin_customer_path(customer) : admin_customers_path, method: customer.persisted? ? :patch : :post, local: true, scope: :customer, class: "max-w-screen-2xl mx-auto rounded-lg border border-gray-200 bg-white" do |form| %>
+  <div class="title-wrapper gap-4 w-full flex flex-row items-center justify-between py-4 border-b border-gray-200 z-50 px-4">
+    <div class="flex items-center gap-4">
+      <%= link_to admin_customers_path, class: "btn btn-secondary bg-white border border-gray-200 hover:bg-gray-100 rounded-lg" do %>
+        <span class="material-icons px-2 py-1 text-gray-950 text-base!">chevron_left</span>
+      <% end %>
+      <h1 class="text-2xl font-bold"><%= customer.persisted? ? "Edit Customer" : "Create Customer" %></h1>
+    </div>
+    <%= form.button class: "btn btn-primary text-sm px-4 py-2 rounded bg-gray-950 hover:bg-gray-700 flex items-center transition cursor-pointer", data: { turbo: false } do %>
+      <span class="material-icons text-white text-base! mr-2 -ml-1">check_circle</span>
+      <span class="text-white">Save</span>
+    <% end %>
+  </div>
+
+  <% if customer.errors.any? %>
+    <div class="mx-4 mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+      <div class="flex">
+        <div class="shrink-0">
+          <span class="material-icons text-base text-red-400">error_outline</span>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800">
+            There were <%= pluralize(customer.errors.count, "error") %> with your submission:
+          </h3>
+          <div class="mt-2 text-sm text-red-700">
+            <ul class="list-disc list-inside">
+              <% customer.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="p-4 space-y-4">
+    <div class="grid grid-cols-2 gap-6">
+      <div class="space-y-4">
+        <h3 class="font-medium text-gray-900">Basic Information</h3>
+
+        <div>
+          <%= form.label :email, class: "block text-sm font-medium text-gray-700" %>
+          <%= form.email_field :email, class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500 #{'border-red-500' if customer.errors[:email].any?}", required: true %>
+          <% if customer.errors[:email].any? %>
+            <div class="text-red-600 text-xs mt-1"><%= customer.errors[:email].first %></div>
+          <% end %>
+        </div>
+
+        <div>
+          <%= form.label :password, (customer.persisted? ? "New Password (leave blank to keep current)" : "Password"), class: "block text-sm font-medium text-gray-700" %>
+          <%= form.password_field :password, class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500 #{'border-red-500' if customer.errors[:password].any?}", placeholder: (customer.persisted? ? "Leave blank to keep current password" : "Leave blank for auto-generated password") %>
+          <p class="text-xs text-gray-600 mt-1"><%= customer.persisted? ? "Only fill this if you want to change the password." : "If left blank, a random password will be generated." %></p>
+          <% if customer.errors[:password].any? %>
+            <div class="text-red-600 text-xs mt-1"><%= customer.errors[:password].first %></div>
+          <% end %>
+        </div>
+
+        <div>
+          <%= form.label :disabled, "Status", class: "block text-sm font-medium text-gray-700" %>
+          <%= form.select :disabled,
+            options_for_select([
+              ['Active', false],
+              ['Inactive', true]
+            ], customer.disabled || false),
+            {},
+            class: "select select-bordered w-full pl-1.5 pr-3 py-2.25 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" %>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="font-medium text-gray-900">Contact & Additional Information</h3>
+
+        <div>
+          <%= form.label :name, class: "block text-sm font-medium text-gray-700" %>
+          <%= form.text_field :name, class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500 #{'border-red-500' if customer.errors[:name].any?}" %>
+          <% if customer.errors[:name].any? %>
+            <div class="text-red-600 text-xs mt-1"><%= customer.errors[:name].first %></div>
+          <% end %>
+        </div>
+
+        <div>
+          <%= form.label :phone_number, class: "block text-sm font-medium text-gray-700" %>
+          <%= form.text_field :phone_number, class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500 #{'border-red-500' if customer.errors[:phone_number].any?}" %>
+          <% if customer.errors[:phone_number].any? %>
+            <div class="text-red-600 text-xs mt-1"><%= customer.errors[:phone_number].first %></div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <% if customer.persisted? %>
+      <div class="pt-6 border-t border-gray-200">
+        <h3 class="font-medium text-gray-900 mb-4">Account Information</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div>
+            <span class="text-gray-600">Created:</span>
+            <span class="font-medium block text-gray-900"><%= customer.created_at.strftime("%d/%m/%Y %H:%M") %></span>
+          </div>
+          <div>
+            <span class="text-gray-600">Last Updated:</span>
+            <span class="font-medium block text-gray-900"><%= customer.updated_at.strftime("%d/%m/%Y %H:%M") %></span>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

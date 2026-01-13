@@ -1,0 +1,38 @@
+<%# Reusable flash partial. Accepts optional local `flash` (locals: { flash: flash }) %>
+<% local_flash = local_assigns.fetch(:flash, flash) %>
+<% if local_flash.any? %>
+  <% local_flash.each do |type, message| %>
+    <%
+      alert_class, icon_name = case type.to_sym
+      when :notice, :info
+        [
+          "rounded-xl border border-sky-500 bg-sky-50 p-4 dark:border-sky-500/30 dark:bg-sky-500/15 mb-4 flex items-center gap-3 text-sky-500",
+          "info"
+        ]
+      when :alert, :error
+        [
+          "rounded-xl border border-amber-500 bg-amber-50 p-4 dark:border-amber-500/30 dark:bg-amber-500/15 mb-4 flex items-center gap-3 text-amber-500",
+          "error"
+        ]
+      when :success
+        [
+          "rounded-xl border border-success-500 bg-success-50 p-4 dark:border-success-500/30 dark:bg-success-500/15 mb-4 flex items-center gap-3 text-success-500",
+          "check_circle"
+        ]
+      else
+        [
+          "rounded-xl border border-gray-400 bg-gray-50 p-4 mb-4 flex items-center gap-3 text-gray-500",
+          "notifications"
+        ]
+      end
+    %>
+    <div class="<%= alert_class %>" role="alert" aria-live="polite">
+      <span class="-mt-0.5">
+        <span class="material-icons align-middle text-xl"><%= icon_name %></span>
+      </span>
+      <div class="block text-sm font-semibold">
+        <%= message %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

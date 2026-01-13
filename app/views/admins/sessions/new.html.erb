@@ -1,0 +1,33 @@
+<div class="flex flex-col items-center justify-center min-h-screen ">
+  <div class="mb-8">
+    <div class="w-auto h-20 flex items-center justify-center p-6">
+      <%= image_tag "logo-black.svg", alt: "3K Shop", class: "h-full" %>
+    </div>
+  </div>
+
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'w-full max-w-lg bg-white p-4 rounded-md shadow flex flex-col' }) do |f| %>
+    <%= render "admins/shared/error_messages", resource: resource %>
+
+    <div class="mb-4">
+      <%= f.label :email, class: "block text-xs font-normal text-gray-700 mb-2" do %>
+        Email Address <span class="text-red-500">*</span>
+      <% end %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "w-full text-sm px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400" %>
+    </div>
+
+    <div class="mb-4">
+      <%= f.label :password, class: "block text-xs font-normal text-gray-700 mb-2" do %>
+        Password <span class="text-red-500">*</span>
+      <% end %>
+      <%= f.password_field :password, autocomplete: "current-password", class: "w-full text-sm px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400" %>
+    </div>
+
+    <div class="mb-6">
+      <%= link_to "Forgot password?", new_password_path(resource_name), class: "text-xs text-gray-700 hover:text-gray-900 underline" %>
+    </div>
+
+    <div>
+      <%= f.submit "Login", class: "w-full text-sm bg-gray-950 hover:bg-gray-800 text-white font-medium py-3 px-4 rounded transition-colors cursor-pointer" %>
+    </div>
+  <% end %>
+</div>

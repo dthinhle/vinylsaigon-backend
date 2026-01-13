@@ -1,0 +1,43 @@
+<div class="bundle-item bg-white border border-gray-300 rounded-lg p-4 flex flex-col gap-3" data-bundle-promotion-target="bundleItem">
+  <%= f.hidden_field :_destroy, value: false, data: { bundle_promotion_target: "destroyField" } %>
+
+  <div class="flex items-start justify-between">
+    <h5 class="text-sm font-semibold text-gray-700">Bundle Item</h5>
+    <button type="button" data-action="click->bundle-promotion#removeBundleItem" class="text-red-600 hover:text-red-800">
+      <span class="material-icons text-lg">close</span>
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+    <div>
+      <%= f.label :product_id, "Product", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.select :product_id,
+        f.object.product ? [[f.object.product.name, f.object.product.id]] : [],
+        { prompt: "Select product" },
+        class: "w-full",
+        data: {
+          controller: "tom-select-remote",
+          tom_select_remote_url_value: products_admin_selectors_path,
+          tom_select_remote_value_field_value: "id",
+          tom_select_remote_label_field_value: "name",
+          action: "change->bundle-promotion#productChanged"
+        } %>
+    </div>
+
+    <div>
+      <%= f.label :product_variant_id, "Variant (Optional)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.select :product_variant_id,
+        f.object.product_variant ? [[f.object.product_variant.name, f.object.product_variant.id]] : [['Any variant', '']],
+        { include_blank: false },
+        class: "w-full",
+        data: {
+          bundle_promotion_target: "variantSelect"
+        } %>
+    </div>
+
+    <div>
+      <%= f.label :quantity, "Quantity", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.number_field :quantity, min: 1, value: f.object.quantity || 1, class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500", placeholder: "1" %>
+    </div>
+  </div>
+</div>

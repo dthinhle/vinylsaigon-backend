@@ -1,0 +1,85 @@
+/* Product form validation styles */
+
+/* TinyMCE error styling */
+.tinymce-error {
+  border: 1px solid #ef4444 !important;
+}
+
+.tinymce-error .tox-editor-container {
+  border-color: #ef4444 !important;
+}
+
+/* TomSelect error styling */
+.ts-control.border-red-500 {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 1px #ef4444 !important;
+}
+
+.ts-control.border-red-500:focus {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2) !important;
+}
+
+/* Error message styling */
+.product-form-error:not(:empty),
+.product-form-error-inline:not(:empty) {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Form validation scroll indicator */
+.validation-scroll-indicator {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  background: #ef4444;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 1000;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.8; }
+ 50% { opacity: 1; }
+}
+
+/* Visual indicators for menu item parent relationships */
+.parent-indicator {
+  @apply mt-2 p-2 bg-blue-50 border-blue-200 rounded text-sm text-blue-700;
+}
+
+.parent-indicator-value {
+  @apply font-medium text-blue-900;
+}
+
+.parent-indicator.current-parent {
+  @apply bg-green-50 border-green-20 text-green-700;
+}
+
+.parent-indicator.current-parent .parent-indicator-value {
+  @apply text-green-900;
+}
+
+.parent-indicator.selected-parent {
+  @apply bg-blue-50 border-blue-200 text-blue-700;
+}
+
+.parent-indicator.selected-parent .parent-indicator-value {
+  @apply text-blue-900;
+}
+
+.parent-indicator.top-level {
+  @apply bg-gray-50 border-gray-20 text-gray-700;
+}
+
+.parent-indicator.top-level .parent-indicator-value {
+  @apply text-gray-900;
+}

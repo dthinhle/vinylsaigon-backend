@@ -1,0 +1,31 @@
+<%# Partial for editing product attributes %>
+<div class="mb-4">
+  <label class="block text-sm font-medium text-gray-700 mb-2"><%= input_label || "Product Attributes" %></label>
+  <div data-controller="product-attributes"
+       <% if defined?(initial_attributes) && initial_attributes.present? %>
+         data-product-attributes-initial-value='<%= initial_attributes.to_json %>'
+       <% end %>>
+    <table class="w-full border border-gray-300">
+      <thead>
+        <tr class="border border-gray-300">
+          <th class="text-left px-2 py-1">Key</th>
+          <th class="text-left px-2 py-1">Value</th>
+          <th class="px-2 py-1 flex justify-center items-center"></th>
+        </tr>
+      </thead>
+      <tbody data-product-attributes-target="rows">
+        <!-- Rows are rendered dynamically by Stimulus controller -->
+      </tbody>
+    </table>
+    <button
+      type="button"
+      class="mt-2 bg-gray-950 hover:bg-gray-700 text-white text-sm font-semibold py-1.5 px-3 rounded transition-colors flex flex-row items-center"
+      data-action="product-attributes#addRow"
+      aria-label="Add attribute"
+    >
+      <span class="material-icons text-base/6! align-middle mr-1">add</span>
+      <span>Add attribute</span>
+    </button>
+    <input type="hidden" name="product[product_attributes]" data-product-attributes-target="hidden" />
+  </div>
+</div>

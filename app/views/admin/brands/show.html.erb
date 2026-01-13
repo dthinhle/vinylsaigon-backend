@@ -1,0 +1,90 @@
+<div class="flex flex-col gap-4">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold">Brands</h1>
+      <nav class="text-sm breadcrumbs mt-1">
+        <ol class="inline-flex items-center space-x-1">
+          <li><%= link_to "Admin", admin_dashboard_path, class: "text-gray-500 hover:text-gray-700" %></li>
+          <li>/</li>
+          <li><%= link_to "Brands", admin_brands_path, class: "text-gray-500 hover:text-gray-700" %></li>
+          <li>/</li>
+          <li class="text-gray-900"><%= @brand.name %></li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <div class="max-full mx-auto space-y-4">
+    <div class="mx-auto rounded-lg border border-gray-200 bg-white overflow-y-hidden">
+      <div class="title-wrapper gap-4 w-full flex flex-row items-center justify-between py-4 border-b border-gray-200 z-50 px-4">
+        <div class="left-section flex items-center gap-2">
+          <%= link_to admin_brands_path, class: "btn btn-secondary bg-white border border-gray-200 hover:bg-gray-100 rounded-lg" do %>
+            <span class="material-icons px-2 py-1 text-gray-950 text-base!">chevron_left</span>
+          <% end %>
+          <h1 class="text-2xl font-bold"><%= @brand.name %></h1>
+        </div>
+        <%= link_to edit_admin_brand_path(@brand), class: "btn btn-primary text-sm px-4 py-2 rounded bg-gray-950 hover:bg-gray-700 flex items-center transition cursor-pointer" do %>
+          <span class="material-icons text-white text-base! mr-2 -ml-1">edit</span>
+          <span class="text-white">Edit</span>
+        <% end %>
+      </div>
+
+      <div class="grid grid-cols-2 relative gap-4 p-4">
+        <div>
+          <dt class="text-sm font-medium text-gray-700">Name</dt>
+          <dd class="mt-1 text-sm text-gray-900"><%= @brand.name %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-700">Slug</dt>
+          <dd class="mt-1 text-sm text-gray-900"><%= @brand.slug %></dd>
+        </div>
+      </div>
+
+      <div class="space-y-4" data-controller="image-preview">
+        <div class="images-grid grid grid-cols-2 gap-4 p-4">
+          <% if @brand.logo.attached? %>
+            <div class="flex flex-col">
+              <p class="text-sm font-medium text-gray-700">Logo:</p>
+              <div class="mt-2">
+                <%= link_to rails_blob_path(@brand.logo, disposition: "inline", only_path: true), data: { action: "click->image-preview#open", "image-preview-image-url-value": rails_blob_path(@brand.logo, disposition: "inline", only_path: true), "image-alt": "#{@brand.name} logo" } do %>
+                  <%= image_tag url_for(@brand.logo_webp_small), alt: "#{@brand.name} logo", class: "w-36 object-contain rounded border border-gray-200 bg-white p-1" %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+
+          <% if @brand.banner.attached? %>
+            <div>
+              <p class="text-sm font-medium text-gray-700">Banner:</p>
+              <div class="mt-2">
+                <%= link_to rails_blob_path(@brand.banner, disposition: "inline", only_path: true), data: { action: "click->image-preview#open", "image-preview-image-url-value": rails_blob_path(@brand.banner, disposition: "inline", only_path: true), "image-alt": "#{@brand.name} banner" } do %>
+                  <%= image_tag url_for(@brand.banner), alt: "#{@brand.name} banner", class: "h-36 object-cover rounded border border-gray-200" %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+
+          <div data-image-preview-target="modal" role="dialog" aria-hidden="true" tabindex="-1" class="data-[modal-open=true]:flex hidden fixed inset-0 z-50 items-center justify-center bg-black/60" data-modal-open="false" data-action="click->image-preview#close">
+            <div class="bg-white rounded-lg shadow-lg max-w-3xl w-full mx-4 p-4 relative">
+              <div class="absolute top-2 right-2">
+                <button type="button" data-action="click->image-preview#close" aria-label="Close preview" class="btn btn-secondary bg-red-500 hover:bg-red-700 rounded">
+                  <span class="material-icons px-1.5 text-white text-[12px]!">clear</span>
+                  <span class="sr-only">Close preview</span>
+                </button>
+              </div>
+              <div class="flex items-center justify-center">
+                <div class="w-[90vw] max-w-[90vw] h-[80vh] max-h-[80vh] flex items-center justify-center">
+                  <img data-image-preview-target="image" src="" alt="" class="w-full h-full object-contain" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rounded-lg border border-gray-200 p-4 bg-white">
+      <%= render "admin/products/filters_and_list", url: admin_brand_path(@brand), active_filters: @product_active_filters, products: @products, pagy: @products_pagy, show_actions: true %>
+    </div>
+  </div>
+</div>

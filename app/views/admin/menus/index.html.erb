@@ -1,0 +1,68 @@
+<div class="flex flex-col gap-4">
+  <%= render 'admin/shared/page_header',
+    title: 'Menus',
+    button_text: 'Create Menu',
+    button_path: new_admin_menu_path %>
+
+  <div class="flex flex-col gap-2">
+    <% if @menus.empty? %>
+      <div class="py-12 text-center text-gray-500">No menus found.</div>
+    <% else %>
+      <% @menus.each do |menu| %>
+        <div data-controller="menu-bar-section-toggle" class="border border-gray-200 rounded-lg mb-2" data-section-id="<%= menu.id %>">
+          <button type="button"
+                  data-action="click->menu-bar-section-toggle#toggle"
+                  class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 focus:outline-none">
+            <span class="font-semibold text-gray-900"><%= menu.section_type.titleize %></span>
+            <span class="material-icons h-5 w-5 text-gray-500 ml-2" aria-hidden="true" data-menu-bar-section-toggle-target="arrow">
+              expand_more
+            </span>
+          </button>
+          <div data-menu-bar-section-toggle-target="content" class="px-4 pb-3 hidden">
+            <div id="menu_items_section_<%= menu.id %>" class="flex flex-col gap-2" data-controller="menu-item-sort gallery" data-menu-item-sort-target="container">
+              <% menu.items.select { |item| item.parent_id.nil? }.each do |item| %>
+                <%= render partial: "menu_item", locals: { item: item, depth: 0, menu: menu } %>
+              <% end %>
+              <% if menu.items.empty? %>
+                <div class="text-gray-400 text-xs italic">No items in this section.</div>
+              <% end %>
+
+              <!-- Gallery modal for product images (Stimulus gallery targets) -->
+              <div data-gallery-target="modal" aria-hidden="true" class="hidden fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-50">
+                <div class="relative bg-white rounded p-4 max-w-3xl w-full mx-4">
+                  <h2 id="product-images-heading" class="sr-only">Product images</h2>
+                  <button type="button" data-gallery-target="closeButton" data-action="click->gallery#close" aria-label="Close" class="absolute top-2 right-2 text-xl">&#x2715;</button>
+
+                  <button type="button" data-gallery-target="prevButton" data-action="click->gallery#prev" aria-label="Previous" class="absolute left-4 top-1/2 -translate-y-1/2 text-2xl">‹</button>
+
+                  <img data-gallery-target="modalImage" src="" alt="" class="mx-auto max-h-[70vh] w-auto" />
+
+                  <button type="button" data-gallery-target="nextButton" data-action="click->gallery#next" aria-label="Next" class="absolute right-4 top-1/2 -translate-y-1/2 text-2xl">›</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-2" data-controller="menu-parent-form" data-menu-parent-form-section-id-value="<%= menu.id %>">
+              <div class="flex gap-2 items-center">
+                <button
+                  type="button"
+                  id="add_menu_item_button_<%= menu.id %>"
+                  data-action="click->menu-parent-form#toggle"
+                  data-menu-parent-form-target="toggleButton"
+                  aria-expanded="false"
+                  class="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm"
+                >
+                  Add
+                </button>
+              </div>
+              <%= render partial: "admin/menus/new_menu_item_form", locals: { menu: menu, form_model: MenuBar::Item.new } %>
+            </div>
+
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= render partial: "admin/menus/menu_item_edit_form", locals: { item: MenuBar::Item.new } %>

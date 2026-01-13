@@ -1,0 +1,43 @@
+<tr>
+  <td class="px-4 py-3">
+    <span class="font-medium text-gray-900"><%= admin.name.presence || 'N/A' %></span>
+  </td>
+  <td class="px-4 py-3">
+    <span class="text-gray-700"><%= admin.email %></span>
+  </td>
+  <td class="px-4 py-3">
+    <span class="text-gray-600 text-xs"><%= admin.created_at.strftime('%b %d, %Y %I:%M %p') %></span>
+  </td>
+  <td class="px-4 py-3 text-center">
+    <% if admin.order_notify %>
+      <span class="inline-flex items-center px-2 py-1 text-xs rounded bg-green-100 text-green-700">
+        <span class="material-icons text-sm! align-middle mr-1">notifications_active</span>
+        Enabled
+      </span>
+    <% else %>
+      <span class="inline-flex items-center px-2 py-1 text-xs rounded bg-gray-100 text-gray-500">
+        <span class="material-icons text-sm! align-middle mr-1">notifications_off</span>
+        Disabled
+      </span>
+    <% end %>
+  </td>
+  <td class="px-4 py-3">
+    <div class="flex justify-center gap-2">
+      <%= link_to edit_admin_admin_path(admin), class: "inline-flex items-center px-2 py-1 text-xs rounded border border-sky-100 text-sky-500 hover:border-sky-200 transition-colors" do %>
+        <span class="material-icons text-base/6! align-middle mr-1">edit</span>
+        Edit
+      <% end %>
+      <% if admin.id != current_admin.id %>
+        <%= button_to admin_admin_path(admin), method: :delete, data: { turbo_confirm: "Are you sure you want to delete #{admin.email}?" }, class: "inline-flex items-center px-2 py-1 text-xs rounded border border-red-100 text-red-700 hover:border-red-200 transition-colors" do %>
+          <span class="material-icons text-base/6! align-middle mr-1">delete</span>
+          Delete
+        <% end %>
+      <% else %>
+        <span class="inline-flex items-center px-2 py-1 text-xs rounded border border-gray-100 text-gray-400 cursor-not-allowed">
+          <span class="material-icons text-base/6! align-middle mr-1">block</span>
+          You
+        </span>
+      <% end %>
+    </div>
+  </td>
+</tr>

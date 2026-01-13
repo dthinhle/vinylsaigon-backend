@@ -1,0 +1,9 @@
+<div class="flex flex-col gap-4" data-controller="promotions-index products-index">
+  <%= render 'admin/shared/page_header',
+    title: 'Promotions',
+    button_text: 'Create Promotion',
+    button_path: new_admin_promotion_path %>
+
+  <%# Render filters and list partial (expects `url` local) %>
+  <%= render "admin/promotions/filters_and_list", url: admin_promotions_path, promotions: @promotions, pagy: @pagy, active_filters: @active_filters, show_actions: true %>
+</div>

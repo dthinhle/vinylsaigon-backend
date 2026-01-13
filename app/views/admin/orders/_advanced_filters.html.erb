@@ -1,0 +1,175 @@
+<div class="relative flex flex-col w-full md:w-auto">
+  <button
+    type="button"
+    class="btn btn-secondary text-sm px-3 py-2 rounded bg-gray-200 text-gray-950 focus:outline-none cursor-pointer"
+    aria-expanded="false"
+    aria-controls="more-filters"
+    data-orders-index-target="moreFiltersToggle"
+    data-action="click->orders-index#toggleMoreFilters keydown->orders-index#toggleMoreFiltersKeydown"
+  >
+    Advanced Filters
+  </button>
+
+  <div
+    id="more-filters"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="more-filters-label"
+    class="hidden md:absolute left-0 md:left-auto md:right-4 top-0 md:top-auto md:mt-2 bg-white rounded-none md:rounded shadow border border-gray-200 z-50 w-full h-full md:w-[min(90vw,420px)] md:min-w-[320px] md:max-w-[500px] md:h-auto md:max-h-[80vh] focus:outline-none relative"
+    tabindex="-1"
+    data-orders-index-target="moreFilters"
+  >
+    <div class="flex justify-between items-center py-2 border-b border-gray-200 md:pt-0 pt-4 px-3 mt-2">
+      <h4 id="more-filters-label" class="font-bold text-base">Advanced Filters</h4>
+      <button
+        type="button"
+        aria-label="Close Advanced Filters"
+        class="text-gray-600 hover:text-gray-900 flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 transition-colors"
+        data-action="click->orders-index#closeMoreFilters"
+        tabindex="0"
+      >
+        <span class="material-icons text-xl">close</span>
+      </button>
+    </div>
+
+    <div class="overflow-y-auto pb-32 md:pb-0 max-h-120 px-4 mt-2">
+      <!-- Sorting -->
+      <div class="mb-6">
+        <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Sorting</div>
+        <div class="flex flex-col">
+          <label for="sort_by" class="text-xs font-medium text-gray-700 mb-1">Sort By</label>
+          <% current_sort = "#{params[:sort]}_#{params[:direction]}" %>
+          <select id="sort_by" name="sort_by" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+            <option value="">Default</option>
+            <optgroup label="Order Details">
+              <option value="order_number_asc" <%= "selected" if current_sort == "order_number_asc" %>>Order Number (A → Z)</option>
+              <option value="order_number_desc" <%= "selected" if current_sort == "order_number_desc" %>>Order Number (Z → A)</option>
+            </optgroup>
+            <optgroup label="Amounts">
+              <option value="total_vnd_asc" <%= "selected" if current_sort == "total_vnd_asc" %>>Total (Low → High)</option>
+              <option value="total_vnd_desc" <%= "selected" if current_sort == "total_vnd_desc" %>>Total (High → Low)</option>
+            </optgroup>
+            <optgroup label="Status & Date">
+              <option value="status_asc" <%= "selected" if current_sort == "status_asc" %>>Status (A → Z)</option>
+              <option value="status_desc" <%= "selected" if current_sort == "status_desc" %>>Status (Z → A)</option>
+              <option value="created_at_asc" <%= "selected" if current_sort == "created_at_asc" %>>Date (Oldest → Newest)</option>
+              <option value="created_at_desc" <%= "selected" if current_sort == "created_at_desc" %>>Date (Newest → Oldest)</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+
+      <!-- Order Number & Customer Email -->
+      <div class="mb-6">
+        <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Order Details</div>
+        <div class="space-y-3">
+          <div class="flex flex-col">
+            <label for="order_number" class="text-xs font-medium text-gray-700 mb-1">Order Number</label>
+            <input id="order_number" type="text" name="order_number" value="<%= params[:order_number] %>" placeholder="Enter order number..." class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+          </div>
+          <div class="flex flex-col">
+            <label for="name" class="text-xs font-medium text-gray-700 mb-1">Customer Name</label>
+            <input id="name" type="text" name="name" value="<%= params[:name] %>" placeholder="Enter customer name..." class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+          </div>
+          <div class="flex flex-col">
+            <label for="email" class="text-xs font-medium text-gray-700 mb-1">Email</label>
+            <input id="email" type="text" name="email" value="<%= params[:email] %>" placeholder="Enter email..." class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+          </div>
+          <div class="flex flex-col">
+            <label for="phone_number" class="text-xs font-medium text-gray-700 mb-1">Phone Number</label>
+            <input id="phone_number" type="text" name="phone_number" value="<%= params[:phone_number] %>" placeholder="Enter phone number..." class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+          </div>
+          <div class="flex flex-col">
+            <label for="promotion_code" class="text-xs font-medium text-gray-700 mb-1">Promotion Code</label>
+            <input id="promotion_code" type="text" name="promotion_code" value="<%= params[:promotion_code] %>" placeholder="Enter promo code..." class="input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+          </div>
+        </div>
+      </div>
+
+      <!-- Date Range -->
+      <div class="mb-6">
+        <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Date Range</div>
+        <div class="space-y-3">
+          <div class="flex flex-col">
+            <label for="from_date" class="text-xs font-medium text-gray-700 mb-1">From Date</label>
+            <input type="date" id="from_date" name="from_date" value="<%= params[:from_date] %>" class="input input-bordered text-sm px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+          </div>
+          <div class="flex flex-col">
+            <label for="to_date" class="text-xs font-medium text-gray-700 mb-1">To Date</label>
+            <input type="date" id="to_date" name="to_date" value="<%= params[:to_date] %>" class="input input-bordered text-sm px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500">
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Filter -->
+      <div class="mb-6">
+        <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Status</div>
+        <div class="flex flex-col">
+          <label for="status-more" class="text-xs font-medium text-gray-700 mb-1">Order Status</label>
+          <select id="status-more" name="status" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+            <option value="">All Statuses</option>
+            <% Order.statuses.keys.each do |status| %>
+              <option value="<%= status %>" <%= "selected" if params[:status] == status %>><%= status.humanize %></option>
+            <% end %>
+          </select>
+        </div>
+      </div>
+
+      <!-- Free Installment Fee Filters -->
+      <div class="mb-4">
+        <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Installment Fee</div>
+        <div class="space-y-3">
+          <div class="flex flex-col">
+            <label for="contains_free_installment" class="text-xs font-medium text-gray-700 mb-1">Contains Free Installment Products</label>
+            <select id="contains_free_installment" name="contains_free_installment" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+              <option value="">All Orders</option>
+              <option value="true" <%= "selected" if params[:contains_free_installment] == "true" %>>Yes (Has at least 1)</option>
+              <option value="false" <%= "selected" if params[:contains_free_installment] == "false" %>>No (None)</option>
+            </select>
+          </div>
+          <div class="flex flex-col">
+            <label for="fully_free_installment" class="text-xs font-medium text-gray-700 mb-1">Fully Free Installment</label>
+            <select id="fully_free_installment" name="fully_free_installment" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+              <option value="">All Orders</option>
+              <option value="true" <%= "selected" if params[:fully_free_installment] == "true" %>>Yes (All products free)</option>
+              <option value="false" <%= "selected" if params[:fully_free_installment] == "false" %>>No (Some/all paid by buyer)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- Installment Payment Filter -->
+      <div class="mb-4">
+        <div class="font-semibold text-base mb-3 pb-2 border-b border-gray-200">Payment Method</div>
+        <div class="space-y-3">
+          <div class="flex flex-col">
+            <label for="installment_only" class="text-xs font-medium text-gray-700 mb-1">Installment Payment</label>
+            <select id="installment_only" name="installment_only" class="select select-bordered px-3 py-2 rounded border border-gray-300 text-sm">
+              <option value="">All Orders</option>
+              <option value="true" <%= "selected" if params[:installment_only] == "true" %>>Installment</option>
+              <option value="false" <%= "selected" if params[:installment_only] == "false" %>>Non-Installment</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sticky Footer for Mobile Actions -->
+    <div class="fixed md:static bottom-0 left-0 w-full bg-white border-t border-gray-200 flex justify-end gap-2 p-4 z-50 md:bg-transparent">
+      <button
+        type="button"
+        role="button"
+        tabindex="0"
+        class="w-1/2 md:w-auto min-w-16 px-3 py-0.5 md:py-2 rounded text-base md:text-sm border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
+        aria-label="Cancel"
+        data-action="click->orders-index#closeMoreFilters"
+      >Cancel</button>
+      <button
+        type="submit"
+        role="button"
+        tabindex="0"
+        class="w-1/2 md:w-auto min-w-16 px-3 py-0.5 md:py-2 rounded text-base md:text-sm bg-gray-950 text-white hover:bg-gray-700 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
+        aria-label="Apply Filters"
+      >Apply</button>
+    </div>
+  </div>
+</div>

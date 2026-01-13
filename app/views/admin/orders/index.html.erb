@@ -1,0 +1,120 @@
+<div class="flex flex-col gap-4" data-controller="orders-index products-index">
+  <%= render 'admin/shared/page_header', title: 'Orders' %>
+
+  <div class="filter-wrapper w-full bg-white p-4 border border-gray-200 rounded-lg grid gap-4">
+    <%= render_filter_chips(
+      filter_params: @filter_params,
+      filter_labels: @filter_labels,
+      clear_path: admin_orders_path
+    ) %>
+
+    <!-- Filter Bar -->
+    <div class="w-full max-w-full">
+      <%= form_with url: admin_orders_path, method: :get, local: true, class: "flex flex-col md:flex-row md:items-end gap-2 md:gap-4 w-full max-w-full" do |f| %>
+        <!-- Key Filters -->
+        <div class="flex flex-col md:flex-row gap-2 md:gap-4 flex-1">
+          <div class="flex flex-col">
+            <input id="q" type="search" name="q" value="<%= params[:q] %>" placeholder="Search order or email..." class="input input-bordered text-sm w-full max-w-full px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500" data-action="input->orders-index#search" autocomplete="off">
+          </div>
+        </div>
+        <%= render "admin/orders/advanced_filters", f: f %>
+        <!-- Submit -->
+        <div class="flex flex-col justify-end">
+          <button type="submit" class="btn btn-secondary text-sm px-3 py-2 rounded bg-gray-950 text-gray-50 hover:bg-gray-700 cursor-pointer">Filter</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Status Tabs -->
+  <div class="bg-white border border-gray-200 rounded-lg">
+    <nav class="flex space-x-8 px-4" aria-label="Tabs">
+      <%= link_to admin_orders_path, class: "whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{params[:status].blank? ? 'border-sky-500 text-sky-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}" do %>
+        All <span class="ml-2 py-0.5 px-2.5 rounded-full text-xs font-medium <%= params[:status].blank? ? 'bg-sky-100 text-sky-600' : 'bg-gray-100 text-gray-900' %>"><%= @status_counts[:all] %></span>
+      <% end %>
+      <%= link_to admin_orders_path(status: 'awaiting_payment'), class: "whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{params[:status] == 'awaiting_payment' ? 'border-yellow-500 text-yellow-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}" do %>
+        Awaiting Payment <span class="ml-2 py-0.5 px-2.5 rounded-full text-xs font-medium <%= params[:status] == 'awaiting_payment' ? 'bg-yellow-100 text-yellow-600' : 'bg-gray-100 text-gray-900' %>"><%= @status_counts[:awaiting_payment] %></span>
+      <% end %>
+      <%= link_to admin_orders_path(status: 'paid'), class: "whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{params[:status] == 'paid' ? 'border-green-500 text-green-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}" do %>
+        Paid <span class="ml-2 py-0.5 px-2.5 rounded-full text-xs font-medium <%= params[:status] == 'paid' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-900' %>"><%= @status_counts[:paid] %></span>
+      <% end %>
+      <%= link_to admin_orders_path(status: 'fulfilled'), class: "whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{params[:status] == 'fulfilled' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}" do %>
+        Fulfilled <span class="ml-2 py-0.5 px-2.5 rounded-full text-xs font-medium <%= params[:status] == 'fulfilled' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-900' %>"><%= @status_counts[:fulfilled] %></span>
+      <% end %>
+      <%= link_to admin_orders_path(status: 'canceled'), class: "whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm #{params[:status] == 'canceled' ? 'border-red-500 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}" do %>
+        Canceled <span class="ml-2 py-0.5 px-2.5 rounded-full text-xs font-medium <%= params[:status] == 'canceled' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-900' %>"><%= @status_counts[:canceled] %></span>
+      <% end %>
+    </nav>
+  </div>
+
+  <div class="mt-2 flex justify-between items-end">
+    <span class="text-sm text-gray-500">Total: <%= @pagy&.count %></span>
+    <%== @pagy.series_nav if @pagy %>
+  </div>
+
+  <!-- Orders Table -->
+  <div class="overflow-x-auto w-full border border-gray-200 rounded-lg">
+    <table class="w-full max-w-full divide-y divide-gray-200 table-auto <%= 'text-sm' %>">
+      <thead class="bg-gray-50">
+        <tr>
+          <%= render_order_table_headers(params) %>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% if @orders.any? %>
+          <% @orders.each do |order| %>
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                <%= link_to order.order_number, admin_order_path(order), class: "text-sky-600 hover:text-sky-900 font-medium" %>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                <%= order_customer_name(order) %>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                <% if order.email %>
+                  <div class="text-xs text-gray-500"><%= order.email %></div>
+                <% else %>
+                  <div class="text-xs text-gray-500"><%= order.user&.email %></div>
+                <% end %>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm">
+                <div class="flex gap-1 flex-wrap max-w-32">
+                  <%= order_status_badge(order.status) %>
+                  <%# Show payment_status to avoid confusing it with order.status in the table view %>
+                  <% if order.payment_status.present? %>
+                    <div class="text-xs text-gray-500 mt-1">Payment: <span class="font-medium text-gray-800"><%= order.payment_status.titleize %></span></div>
+                  <% end %>
+                </div>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                <%= order.phone_number %>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                <%= format_vnd_currency(order.total_vnd) %>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                <%= format_datetime(order.created_at) %>
+              </td>
+              <td class="px-4 py-2 text-right">
+                <div class="button-wrapper h-full flex gap-2 justify-end">
+                  <%= render_action_button(admin_order_path(order), icon: 'remove_red_eye', type: :show) %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="8" class="px-4 py-8 text-center text-sm text-gray-500">
+              No orders found. Try adjusting your filters.
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mb-2 flex justify-between items-end">
+    <span class="text-sm text-gray-500">Total: <%= @pagy&.count %></span>
+    <%== @pagy.series_nav if @pagy %>
+  </div>
+</div>

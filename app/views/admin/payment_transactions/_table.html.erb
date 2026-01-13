@@ -1,0 +1,20 @@
+<div class="overflow-x-auto w-full border border-gray-200 rounded-lg">
+  <table class="w-full max-w-full divide-y divide-gray-200 table-auto text-sm">
+    <thead class="bg-gray-50">
+      <tr>
+        <%= render_payment_transaction_table_headers(params) %>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+      <% if payment_transactions.any? %>
+        <% payment_transactions.each do |txn| %>
+          <%= render 'admin/payment_transactions/row', txn: txn %>
+        <% end %>
+      <% else %>
+        <tr>
+          <td colspan="8" class="px-4 py-8 text-center text-sm text-gray-500">No payment transactions found. Adjust filters.</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

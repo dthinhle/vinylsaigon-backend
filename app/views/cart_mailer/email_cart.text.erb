@@ -1,0 +1,40 @@
+Giỏ hàng của bạn từ 3K Shop
+
+Xin chào,
+
+Đây là các sản phẩm bạn đã lưu trong giỏ hàng:
+
+Tóm tắt giỏ hàng:
+- Tổng số sản phẩm: <%= @cart.total_items %>
+- Tổng giá trị: <%= format_vnd_currency(@cart.total_price) %>
+- Giỏ hàng hết hạn: <%= @cart.expires_at.strftime('%H:%M:%S %d-%m-%Y') %>
+
+Sản phẩm trong giỏ hàng:
+<% @cart.cart_items.each do |item| %>
+----------------------------------------
+<%= item.product_name %>
+<% if item.product_variant.present? && item.product.product_variants.count > 1 %>Phiên bản: <%= item.product_variant.name %>
+<% end %>Số lượng: <%= item.quantity %>
+Giá: <%= format_vnd_currency(item.current_price) %>/sản phẩm
+Thành tiền: <%= format_vnd_currency(item.line_total) %>
+<% if item.savings > 0 %>Bạn tiết kiệm <%= format_vnd_currency(item.savings) %>!<% end %>
+Giá cố định đến: <%= item.expires_at.strftime('%H:%M:%S %d-%m-%Y') %>
+
+<% end %>
+----------------------------------------
+
+Xem giỏ hàng đầy đủ tại:
+<%= @share_url %>
+
+<% if @create_account_prompt %>
+TẠO TÀI KHOẢN
+Tạo tài khoản để lưu giỏ hàng và theo dõi đơn hàng của bạn!
+Các sản phẩm và giá trong giỏ hàng sẽ được bảo toàn khi bạn đăng ký.
+
+<% end %>
+LƯU Ý QUAN TRỌNG: Giỏ hàng và giá cố định sẽ hết hạn vào <%= @cart.expires_at.strftime('%H:%M:%S %d-%m-%Y') %>.
+Link email này hết hạn vào <%= @emailed_cart.expires_at.strftime('%H:%M:%S %d-%m-%Y') %>.
+
+Chúc bạn mua sắm vui vẻ!
+
+3K Shop

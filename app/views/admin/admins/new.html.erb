@@ -1,0 +1,18 @@
+<div class="flex flex-col gap-4">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold">Admins</h1>
+      <nav class="text-sm breadcrumbs mt-1">
+        <ol class="inline-flex items-center space-x-1">
+          <li><%= link_to "Admin", admin_dashboard_path, class: "text-sky-600 hover:text-sky-800" %></li>
+          <li>/</li>
+          <li><%= link_to "Admins", admin_admins_path, class: "text-sky-600 hover:text-sky-800" %></li>
+          <li>/</li>
+          <li class="text-gray-900">New</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <%= render 'form', admin: @admin %>
+</div>

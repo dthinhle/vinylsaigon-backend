@@ -1,0 +1,2 @@
+class RedirectionMappingsController < ApplicationController
+end

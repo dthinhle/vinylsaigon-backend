@@ -1,0 +1,66 @@
+<div class="flex flex-col gap-4">
+  <%= render 'admin/shared/page_header',
+    title: 'Collections',
+    button_text: 'Create Collection',
+    button_path: new_admin_collection_path %>
+
+  <%= render 'admin/shared/flash' %>
+
+  <div class="mt-2 flex justify-between items-end">
+    <span class="text-sm text-gray-500">Total: <%= @pagy&.count %></span>
+    <%== @pagy.series_nav if @pagy %>
+  </div>
+
+  <div class="overflow-x-auto w-full border border-gray-200 rounded-lg">
+    <table class="w-full max-w-full divide-y divide-gray-200 table-auto text-sm">
+      <thead class="bg-gray-50">
+        <tr>
+          <%= render_collection_table_headers(params) %>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-100">
+        <% if @collections.empty? %>
+          <%= render_empty_state(colspan: 5, title: 'No collections found', message: '') %>
+        <% else %>
+          <% @collections.each do |collection| %>
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-2 font-medium text-gray-900">
+                <% if collection.thumbnail.attached? %>
+                  <div class="inline-block mr-2 align-middle">
+                    <%= image_tag collection.thumbnail.variant(:thumbnail), class: "rounded border border-gray-200 h-8 w-8 object-cover inline" %>
+                  </div>
+                <% end %>
+                <%= collection.name %>
+                <% if collection.seeded_collection? %>
+                  <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                    Auto-Generated
+                  </span>
+                <% end %>
+              </td>
+              <td class="px-4 py-2 text-center">
+                <%= render_boolean_badge(collection.active) %>
+              </td>
+              <td class="px-4 py-2 text-center text-gray-700">
+                <%= collection.products.count %>
+              </td>
+              <td class="px-4 py-2 text-gray-700"><%= format_datetime(collection.created_at) %></td>
+              <td class="px-4 py-2 text-right">
+                <div class="flex gap-2 justify-end">
+                  <%= render_action_button(edit_admin_collection_path(collection), icon: 'edit', type: :edit) %>
+                  <% unless collection.seeded_collection? %>
+                    <%= render_action_button(admin_collection_path(collection), icon: 'delete', type: :delete, confirm_message: 'Are you sure you want to delete this collection?') %>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mb-2 flex justify-between items-end">
+    <span class="text-sm text-gray-500">Total: <%= @pagy&.count %></span>
+    <%== @pagy.series_nav if @pagy %>
+  </div>
+</div>

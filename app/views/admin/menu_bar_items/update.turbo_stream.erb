@@ -1,0 +1,19 @@
+<% if @menu_item.errors.any? %>
+  <turbo-stream action="replace" target="menu-item-edit-modal">
+    <template>
+      <%= render partial: "admin/menus/menu_item_edit_form", locals: { item: @menu_item } %>
+    </template>
+  </turbo-stream>
+<% else %>
+ <turbo-stream action="replace" target="menu_item_<%= @menu_item.id %>">
+    <template>
+      <% depth = 0
+         parent = @menu_item.parent
+         while parent
+           depth += 1
+           parent = parent.parent
+         end %>
+      <%= render partial: "admin/menus/menu_item", locals: { item: @menu_item, depth: depth }, formats: [:html] %>
+    </template>
+  </turbo-stream>
+<% end %>

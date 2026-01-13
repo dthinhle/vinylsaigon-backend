@@ -1,0 +1,78 @@
+<%# Renders a related categories table and pagination. Locals: related_categories (collection), pagy (optional), show_actions (optional, default true) %>
+<% show_actions = true if show_actions.nil? %>
+
+<div class="overflow-x-auto w-full border border-gray-200 rounded-lg">
+  <table class="w-full max-w-full divide-y divide-gray-200 table-auto text-sm">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-4 py-2 text-left">
+          <input type="checkbox" class="accent-gray-700" data-action="change->related-categories-index#toggleAll" data-related-categories-index-target="toggleAllCheckbox">
+        </th>
+        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Related Category</th>
+        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Weight</th>
+        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+        <% if show_actions %>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+        <% end %>
+      </tr>
+      <%= render_bulk_actions_row(
+        controller_name: 'related-categories-index',
+        colspan: show_actions ? 7 : 6,
+      ) do %>
+        <div class="flex items-center gap-4">
+          <button
+            type="button"
+            class="btn btn-sm bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs transition"
+            data-related-categories-index-target="deleteButton"
+            data-action="click->related-categories-index#deleteSelected"
+            data-action-url="<%= admin_related_categories_path %>/destroy_selected"
+            data-controller="confirm"
+            data-confirm-message="Are you sure you want to delete the selected relationships? This will remove them in both directions."
+          >
+            Delete Selected
+          </button>
+
+          <div class="flex items-center gap-2">
+            <label for="bulk-weight" class="text-sm text-gray-700">Update Weight:</label>
+            <select id="bulk-weight" class="select select-bordered select-sm text-xs px-2 py-1 rounded border border-gray-300" data-related-categories-index-target="bulkWeight">
+              <option value="">Select Weight</option>
+              <% (0..10).each do |w| %>
+                <option value="<%= w %>"><%= w %></option>
+              <% end %>
+            </select>
+            <button
+              type="button"
+              class="btn btn-sm bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-xs transition"
+              data-action="click->related-categories-index#updateWeight"
+              data-action-url="<%= admin_related_categories_path %>/bulk_update_weight"
+            >
+              Update
+            </button>
+          </div>
+        </div>
+      <% end %>
+
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+      <% if related_categories.any? %>
+        <% related_categories.each do |related_category| %>
+          <%= render "admin/related_categories/related_category_card", related_category: related_category, show_actions: show_actions %>
+        <% end %>
+      <% else %>
+        <tr>
+          <td colspan="<%= show_actions ? '7' : '6' %>" class="px-4 py-12 text-center text-gray-500">
+            <div class="flex flex-col items-center gap-2">
+              <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2M4 13h2m8-8v2m0 6V9.5M9 21v-8.5m6 8.5v-8.5"></path>
+              </svg>
+              <p class="text-gray-500 text-lg font-medium">No related categories found</p>
+              <%= link_to "Create your first relationship", new_admin_related_category_path, class: "text-sky-600 hover:text-sky-800 text-sm underline" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

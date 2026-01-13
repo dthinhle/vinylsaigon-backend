@@ -1,0 +1,15 @@
+:concurrency: 3
+:scheduler:
+  :schedule:
+
+    cart_expiration_cleanup:
+      cron: '0 * * * *'
+      class: CartExpirationJob
+      queue: default
+      active_job: true
+      description: 'Cleanup expired cart items and carts'
+
+:queues:
+  - default
+  - mailers
+  - background

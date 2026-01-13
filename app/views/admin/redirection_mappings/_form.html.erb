@@ -1,0 +1,50 @@
+<%= form_with(model: [:admin, @redirection_mapping], html: { class: "w-[min(var(--container-xl),100vw)] mx-auto rounded-lg border border-gray-200 bg-white overflow-y-hidden" }) do |form| %>
+  <div class="title-wrapper gap-4 w-full flex flex-row items-center justify-between py-4 border-b border-gray-200 z-50 px-4">
+    <div class="left-section flex items-center gap-2">
+      <%= link_to admin_redirection_mappings_path, class: "btn btn-secondary bg-white border border-gray-200 hover:bg-gray-100 rounded-lg" do %>
+        <span class="material-icons px-2 py-1 text-gray-950 text-base!">chevron_left</span>
+      <% end %>
+      <h1 class="text-2xl font-bold">
+        <% if @redirection_mapping.persisted? %>
+          Edit Redirection Mapping
+        <% else %>
+          Create Redirection Mapping
+        <% end %>
+      </h1>
+    </div>
+    <%= form.button class: "btn btn-primary text-sm px-4 py-2 rounded bg-gray-950 hover:bg-gray-700 flex items-center transition cursor-pointer", data: { turbo: false } do %>
+      <span class="material-icons text-white text-base! mr-2 -ml-1">check_circle</span>
+      <span class="text-white">Save</span>
+    <% end %>
+  </div>
+
+  <div class="bg-white p-4 space-y-4 overflow-y-auto">
+    <% if @redirection_mapping.errors.any? %>
+      <div id="error_explanation" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+        <h2 class="font-medium"><%= pluralize(@redirection_mapping.errors.count, "error") %> prohibited this redirection mapping from being saved:</h2>
+        <ul class="mt-2 list-disc list-inside text-sm">
+          <% @redirection_mapping.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= form.label :old_slug, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_field :old_slug, class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500" %>
+    </div>
+
+    <div>
+      <%= form.label :new_slug, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_field :new_slug, class: "input input-bordered text-sm w-full px-3 py-2 rounded border border-gray-300 focus:ring-sky-500" %>
+    </div>
+
+    <div>
+      <label class="inline-flex items-center gap-2 text-sm font-medium text-gray-700">
+        <%= form.check_box :active, class: "checkbox checkbox-primary size-4 accent-gray-950" %>
+        <span>Active</span>
+      </label>
+    </div>
+  </div>
+<% end %>

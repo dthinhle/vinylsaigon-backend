@@ -1,0 +1,5 @@
+<div class="admin-page-header mb-6">
+  <h1 class="text-2xl font-bold"><%= t(".title", default: t("admin.product_variants.edit_title", default: "Edit Product Variant")) %></h1>
+</div>
+
+<%= render "admin/products/variant_form", product: @product, product_variant: @product_variant %>
