@@ -52,8 +52,10 @@ class Admin::SelectorsController < Admin::BaseController
       @products = @products.where('name ILIKE ? OR sku ILIKE ?', "%#{params[:q]}%", "%#{params[:q]}%")
     end
 
-    @products = @products.order(:name).limit(SELECTOR_LIMIT)
+    limit = params[:limit].present? ? params[:limit].to_i : SELECTOR_LIMIT
 
-    render json: @products.map { |p| { id: p.id, name: "#{p.name} (#{p.sku})" } }
+    @products = @products.order(:name).limit(limit)
+
+    render json: @products.map { |p| { id: p.id, name: p.name, sku: p.sku, category: p.category&.title } }
   end
 end

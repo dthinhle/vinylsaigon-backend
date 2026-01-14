@@ -21,7 +21,7 @@ class OrderMailer < ApplicationMailer
     @order = order
     @customer_email = order.email.presence || order.user&.email.presence || order.cart&.guest_email.presence || 'N/A'
 
-    admin_email = ENV['ADMIN_EMAIL'] || 'admin@3kshop.com'
+    admin_email = ENV['ADMIN_EMAIL'] || 'admin@vinylsaigon.vn'
 
     mail(
       to: admin_email,

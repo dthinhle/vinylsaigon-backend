@@ -5,7 +5,7 @@ module WordpressMigration
   # Handles variables like %%title%%, %%page%%, %%sep%%, etc.
   class YoastSeoVariableReplacer
     SEPARATOR = '-'
-    SITE_NAME = '3KShop'
+    SITE_NAME = 'Vinyl Saigon'
 
     class << self
       # Replace Yoast SEO variables in text with actual values

@@ -1,6 +1,6 @@
 
-BACKEND_HOST = ENV.fetch('BACKEND_HOST', 'https://app.3kshop.vn')
-FRONTEND_HOST = ENV.fetch('FRONTEND_HOST', 'https://3kshop.vn')
+BACKEND_HOST = ENV.fetch('BACKEND_HOST', 'https://app.vinylsaigon.vn')
+FRONTEND_HOST = ENV.fetch('FRONTEND_HOST', 'https://vinylsaigon.vn')
 
 JWT_SECRET_KEY = ENV.fetch('JWT_SECRET_KEY', 'jwt_secret_key')
 

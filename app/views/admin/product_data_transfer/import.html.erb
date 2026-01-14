@@ -1,0 +1,110 @@
+<div class="flex flex-col gap-4" data-controller="product-import">
+  <%= render 'admin/shared/page_header',
+    title: 'Import Products',
+    button_text: nil %>
+
+  <div class="bg-white p-6 border border-gray-200 rounded-lg">
+    <div class="mb-6">
+      <h2 class="text-lg font-semibold mb-2">Upload Product Data</h2>
+      <p class="text-sm text-gray-600 mb-4">Upload a gzipped JSON file (.json.gz) exported from another system.</p>
+
+      <%= form_with url: process_import_admin_product_data_transfer_path, method: :post, multipart: true, data: { product_import_target: 'form', action: 'submit->product-import#submit' } do |f| %>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Import File</label>
+          <input
+            type="file"
+            name="file"
+            accept=".gz,.json.gz"
+            data-product-import-target="fileInput"
+            data-action="change->product-import#fileSelected"
+            class="file-input file-input-bordered w-full max-w-md"
+            required>
+          <p class="text-xs text-gray-500 mt-1">Accepts .json.gz files only</p>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Import Mode</label>
+          <div class="space-y-2">
+            <label class="flex items-center">
+              <input type="radio" name="mode" value="upsert" checked class="radio radio-sm mr-2 accent-gray-950">
+              <span class="text-sm">Upsert (Create new or update existing products)</span>
+            </label>
+            <label class="flex items-center">
+              <input type="radio" name="mode" value="create" class="radio radio-sm mr-2 accent-gray-950">
+              <span class="text-sm">Create Only (Skip existing products)</span>
+            </label>
+            <label class="flex items-center">
+              <input type="radio" name="mode" value="update" class="radio radio-sm mr-2 accent-gray-950">
+              <span class="text-sm">Update Only (Skip new products)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Additional Options</label>
+          <div class="space-y-2">
+            <label class="flex items-center">
+              <input type="checkbox" name="auto_create_categories" value="1" class="checkbox checkbox-sm mr-2 accent-gray-950">
+              <span class="text-sm">Automatically create categories if they don't exist</span>
+            </label>
+            <label class="flex items-center">
+              <input type="checkbox" name="auto_create_brands" value="1" class="checkbox checkbox-sm mr-2 accent-gray-950">
+              <span class="text-sm">Automatically create brands if they don't exist</span>
+            </label>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          data-product-import-target="submitBtn"
+          class="btn btn-primary text-white text-sm px-4 py-2 rounded bg-gray-950 hover:bg-gray-700 flex items-center transition cursor-pointer">
+          <span class="material-icons text-white text-base! mr-2 -ml-1">file_download</span>
+          Start Import
+        </button>
+      <% end %>
+    </div>
+
+    <div data-product-import-target="messageContainer"></div>
+
+    <div data-product-import-target="progressContainer" class="hidden">
+      <h3 class="text-md font-semibold mb-3">Import Progress</h3>
+      <div class="border border-gray-200 rounded-lg p-4">
+        <div class="mb-4">
+          <div class="flex justify-between text-sm mb-2">
+            <span>Progress</span>
+            <span data-product-import-target="progressText">0 / 0</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div
+              data-product-import-target="progressBar"
+              class="bg-sky-600 h-2.5 rounded-full transition-all duration-300"
+              style="width: 0%"></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-4 mb-4">
+          <div class="text-center p-3 bg-green-50 rounded">
+            <div class="text-2xl font-bold text-green-600" data-product-import-target="importedCount">0</div>
+            <div class="text-xs text-gray-600">Imported</div>
+          </div>
+          <div class="text-center p-3 bg-blue-50 rounded">
+            <div class="text-2xl font-bold text-blue-600" data-product-import-target="updatedCount">0</div>
+            <div class="text-xs text-gray-600">Updated</div>
+          </div>
+          <div class="text-center p-3 bg-yellow-50 rounded">
+            <div class="text-2xl font-bold text-yellow-600" data-product-import-target="skippedCount">0</div>
+            <div class="text-xs text-gray-600">Skipped</div>
+          </div>
+        </div>
+
+        <div data-product-import-target="errorsContainer" class="hidden">
+          <h4 class="text-sm font-semibold mb-2 text-red-600">Errors</h4>
+          <div class="bg-red-50 border border-red-200 rounded p-3 max-h-40 overflow-y-auto">
+            <ul data-product-import-target="errorsList" class="text-xs text-red-700 space-y-1 list-disc list-inside">
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

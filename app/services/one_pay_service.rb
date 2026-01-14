@@ -82,7 +82,7 @@ class OnePayService
     # 2. Thêm các tham số optional (moved into params before hashing so they participate)
     additional_params = {
       'AgainLink' => ENV.fetch('ONEPAY_AGAIN_LINK', 'http://localhost:3000'),
-      'Title' => '3kShop Checkout'
+      'Title' => 'Vinyl Saigon Checkout'
     }
 
     # Add customer information if available (from order or user)

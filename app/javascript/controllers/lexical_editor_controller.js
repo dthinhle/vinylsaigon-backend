@@ -1234,6 +1234,11 @@ export default class extends Controller {
 
   cleanSkeleton(node) {
     if (node.type === 'skeleton') return false
+    if (node.type === 'text' && ['', null, undefined].includes(node.format)) {
+      // Lexical doesn't accept null/undefined/empty string format for text nodes
+      // Text with invalid format can't be styled properly in the editor
+      node.format = 0
+    }
 
     if (node.children && Array.isArray(node.children)) {
       node.children = node.children

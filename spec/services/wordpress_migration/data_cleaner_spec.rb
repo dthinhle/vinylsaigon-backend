@@ -13,10 +13,10 @@ RSpec.describe WordpressMigration::DataCleaner do
     end
 
     it 'converts absolute URLs to relative paths' do
-      html = '<p><img src="https://3kshop.vn/wp-content/uploads/2023/image.jpg" /></p>'
+      html = '<p><img src="https://vinylsaigon.vn/wp-content/uploads/2023/image.jpg" /></p>'
       result = described_class.clean_html(html)
       expect(result).to include('/uploads/2023/image.jpg')
-      expect(result).not_to include('https://3kshop.vn')
+      expect(result).not_to include('https://vinylsaigon.vn')
     end
 
     it 'strips width and height attributes from images' do
@@ -59,19 +59,19 @@ RSpec.describe WordpressMigration::DataCleaner do
 
   describe '.convert_absolute_urls' do
     it 'converts wp-content URLs' do
-      html = 'https://3kshop.vn/wp-content/uploads/2023/file.jpg'
+      html = 'https://vinylsaigon.vn/wp-content/uploads/2023/file.jpg'
       result = described_class.convert_absolute_urls(html)
       expect(result).to eq('/uploads/2023/file.jpg')
     end
 
     it 'converts product URLs' do
-      html = 'https://3kshop.vn/product/my-product/'
+      html = 'https://vinylsaigon.vn/product/my-product/'
       result = described_class.convert_absolute_urls(html)
       expect(result).to eq('/product/my-product/')
     end
 
     it 'converts root URLs' do
-      html = 'https://3kshop.vn/about/'
+      html = 'https://vinylsaigon.vn/about/'
       result = described_class.convert_absolute_urls(html)
       expect(result).to eq('/about/')
     end

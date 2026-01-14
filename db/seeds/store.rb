@@ -4,10 +4,10 @@ stores_created = 0
 addresses_created = 0
 
 store = Store.create!(
-  name: '3K Shop',
-  instagram_url: 'https://www.instagram.com/khanh3kshop',
-  youtube_url: 'https://www.youtube.com/channel/UCWFSrSYbRV79dhHFFqSHeHw',
-  facebook_url: 'https://www.facebook.com/3Kshop/'
+  name: 'Vinyl Saigon',
+  instagram_url: 'https://www.instagram.com/vinylsaigon',
+  youtube_url: 'https://www.youtube.com/@vinylsaigon4576',
+  facebook_url: 'https://www.facebook.com/VinylSaiGon'
 )
 stores_created += 1
 puts "  ✓ Created store '#{store.name}'"

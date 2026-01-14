@@ -26,7 +26,7 @@ class ProductImage < ApplicationRecord
 
   validates :position, presence: true
 
-  has_one_attached :image do |attachable|
+  has_one_attached :image, dependent: :purge_later do |attachable|
     attachable.variant :thumbnail, format: :webp, resize_to_limit: [800, 800], preprocessed: true
   end
 

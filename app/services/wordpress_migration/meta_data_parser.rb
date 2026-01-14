@@ -33,7 +33,7 @@ module WordpressMigration
           @flags << Product::FLAGS[:arrive_soon] if truthy?(value)
         when '_yoast_wpseo_title'
           value = value.gsub(/\|?(?:Hỗ trợ)? ?Trả Góp 0\%/i, '').strip
-          @meta_title = value.gsub(/ ?\|* ?3KShop(?:\.vn)?\|*$/i, '').strip
+          @meta_title = value.gsub(/ ?\|* ?vinylsaigon(?:\.vn)?\|*$/i, '').strip
         when '_yoast_wpseo_metadesc'
           @meta_description = value
         else

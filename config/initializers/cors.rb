@@ -14,9 +14,8 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
       FRONTEND_HOST.split('//').last,
     ]
     allow_origins << %r{\Ahttp://192\.168\.\d{1,3}\.\d{1,3}(:\d+)?\z} if Rails.env.local?
-    allow_origins << /\Ahttps:\/\/3kshop\.vn\z/
-    allow_origins << /\Ahttps:\/\/beta\.3kshop\.vn\z/
-    allow_origins << /\Ahttps:\/\/baka-frontend(.+)?\.vercel\.app\z/
+    allow_origins << /\Ahttps:\/\/vinylsaigon\.vn\z/
+    allow_origins << /\Ahttps:\/\/vinylsaigon-frontend(.+)?\.vercel\.app\z/
     origins(*allow_origins)
 
     resource '/api/*',

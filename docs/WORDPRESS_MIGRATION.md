@@ -144,7 +144,7 @@ Test fixtures are in `spec/fixtures/wordpress_migration/`. Replace with actual W
 4. **Variable Products**: Currently create default variant only (variations need separate migration)
 5. **Timestamps**: WordPress `date_created` and `date_modified` are preserved
 6. **Brand Detection**: Uses KNOWN_BRANDS list for case-insensitive matching
-7. **HTML Cleaning**: Converts 3kshop.vn URLs to relative paths
+7. **HTML Cleaning**: Converts vinylsaigon.vn URLs to relative paths
 
 ## Future Enhancements
 

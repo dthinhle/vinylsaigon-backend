@@ -1,0 +1,108 @@
+<div class="flex flex-col gap-4" data-controller="product-export">
+  <%= render 'admin/shared/page_header',
+    title: 'Export Products',
+    button_text: nil %>
+
+  <div class="bg-white p-6 border border-gray-200 rounded-lg">
+    <div class="mb-6">
+      <div class="flex flex-row justify-between items-center mb-4">
+        <div class="title-wrapper">
+          <h2 class="text-lg font-semibold mb-2">Select Products to Export</h2>
+          <p class="text-sm text-gray-600 mb-4">Search and select products to export. Only selected products will be included in the export.</p>
+        </div>
+        <div class="button-wrapper flex flex-row items-center gap-2">
+          <select
+            data-product-export-target="hoursSelect"
+            class="text-sm px-3 py-2.5 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">
+            <option value="6">Last 6 hours</option>
+            <option value="24">Last 24 hours</option>
+            <option value="48">Last 48 hours</option>
+          </select>
+          <button
+            type="button"
+            data-action="click->product-export#exportRecentProducts"
+            data-product-export-target="recentExportBtn"
+            class="btn btn-primary text-white text-sm px-4 py-2 rounded bg-gray-950 hover:bg-gray-700 flex items-center transition cursor-pointer">
+            <span class="material-icons text-white text-base! mr-2 -ml-1">history</span>
+            Export Recent Products
+          </button>
+          <%= tooltip_icon("Export all products with changes in the selected time range") %>
+        </div>
+      </div>
+
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Search Products</label>
+        <select
+          id="product-selector"
+          data-product-export-target="selector"
+          data-initial-products="<%= @initial_products.to_json %>"
+          class="w-full"
+          placeholder="Type to search products...">
+        </select>
+      </div>
+
+      <div class="flex gap-2 mb-4">
+        <button
+          type="button"
+          data-action="click->product-export#exportProducts"
+          data-product-export-target="exportBtn"
+          class="btn btn-primary text-white text-sm px-4 py-2 rounded bg-gray-950 hover:bg-gray-700 flex items-center transition cursor-pointer"
+          disabled>
+          <span class="material-icons text-white text-base! mr-2 -ml-1">file_upload</span>
+          Export Selected Products
+        </button>
+        <button
+          type="button"
+          data-action="click->product-export#clearProducts"
+          data-product-export-target="clearBtn"
+          class="btn btn-secondary text-sm px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800 flex items-center transition cursor-pointer"
+          disabled>
+          <span class="material-icons text-base! mr-2 -ml-1">clear</span>
+          Clear All
+        </button>
+      </div>
+    </div>
+
+    <div data-product-export-target="messageContainer"></div>
+
+    <div data-product-export-target="productsContainer">
+      <h3 class="text-md font-semibold mb-3">Selected Products (<span data-product-export-target="count">0</span>)</h3>
+      <div class="border border-gray-200 rounded-lg min-h-[200px] max-h-[400px] overflow-y-auto">
+        <table class="w-full">
+          <thead class="bg-gray-50 sticky top-0">
+            <tr>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">SKU</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
+              <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Action</th>
+            </tr>
+          </thead>
+          <tbody data-product-export-target="productsList" class="divide-y divide-gray-200">
+            <tr data-product-export-target="emptyRow">
+              <td colspan="4" class="px-4 py-8 text-center text-gray-500">
+                No products selected. Use the search above to add products.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <template data-product-export-target="productRowTemplate">
+    <tr data-product-id="">
+      <td class="px-4 py-2 text-sm" data-field="sku"></td>
+      <td class="px-4 py-2 text-sm" data-field="name"></td>
+      <td class="px-4 py-2 text-sm" data-field="category"></td>
+      <td class="px-4 py-2 text-right">
+        <button
+          type="button"
+          data-action="click->product-export#removeProduct"
+          class="text-red-600 hover:text-red-800 cursor-pointer">
+          <span class="material-icons text-sm">delete</span>
+        </button>
+      </td>
+    </tr>
+  </template>
+</div>

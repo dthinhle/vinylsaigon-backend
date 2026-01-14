@@ -64,7 +64,7 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  uri = URI.parse(ENV.fetch('BACKEND_HOST', 'https://app.3kshop.vn'))
+  uri = URI.parse(ENV.fetch('BACKEND_HOST', 'https://app.vinylsaigon.vn'))
   config.action_mailer.asset_host = uri.to_s
   config.action_mailer.default_url_options = { host: uri.host, protocol: 'https' }
 
@@ -76,7 +76,7 @@ Rails.application.configure do
     password: ENV.fetch('SMTP_PASSWORD', ''),
     address: ENV.fetch('SMTP_HOST', ''),
     port: ENV.fetch('SMTP_PORT', '587').to_i,
-    domain: ENV.fetch('SMTP_DOMAIN', '3kshop.vn'),
+    domain: ENV.fetch('SMTP_DOMAIN', 'vinylsaigon.vn'),
     authentication: :plain,
     enable_starttls_auto: true
   }

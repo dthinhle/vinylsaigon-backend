@@ -61,7 +61,7 @@ class ContentImageProcessorJob < ApplicationJob
     when Blog
       [:content]
     when Product
-      [:description, :short_description]
+      Product::LEXICAL_COLUMNS.map(&:to_sym)
     else
       model.respond_to?(:content) ? [:content] : []
     end
@@ -130,9 +130,14 @@ class ContentImageProcessorJob < ApplicationJob
   def replace_in_node(node, url_map)
     return unless node.is_a?(Hash)
 
-    if node['type'] == 'image' && node['src']
+    if ['image', 'video'].include?(node['type']) && node['src']
       new_url = url_map[node['src']]
       node['src'] = new_url if new_url
+    end
+
+    if node['type'] == 'link' && node['url']
+      new_url = url_map[node['url']]
+      node['url'] = new_url if new_url
     end
 
     if node['children'].is_a?(Array)
@@ -143,6 +148,6 @@ class ContentImageProcessorJob < ApplicationJob
   end
 
   def rails_blob_url(blob)
-    Rails.application.routes.url_helpers.rails_blob_url(blob, only_path: true)
+    PublicImagePathService.handle(blob)
   end
 end

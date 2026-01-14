@@ -9,7 +9,7 @@ module Api
 
       def products
         expires_in CACHE_OPTIONS[:expires_in], public: CACHE_OPTIONS[:public]
-        @products = Product.where(deleted_at: nil, status: statuses).select(:slug, :updated_at).order(updated_at: :desc)
+        @products = Product.where(deleted_at: nil).select(:slug, :updated_at).order(updated_at: :desc)
       end
 
       def categories

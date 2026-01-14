@@ -8,7 +8,7 @@
   role="navigation"
 >
   <div class="flex items-center h-16 border-b px-4">
-    <span class="font-bold text-xl text-gray-950 sidebar-label collapse-hide transition-all <%= 'opacity-0' if @sidebar_collapsed %>">3kShop Admin</span>
+    <span class="font-bold text-xl text-gray-950 sidebar-label collapse-hide transition-all <%= 'opacity-0' if @sidebar_collapsed %>">Vinyl Saigon Admin</span>
   </div>
   <nav class="flex-1 py-6 overflow-hidden" aria-label="Main navigation">
     <!-- Sidebar toggle button -->
@@ -64,6 +64,13 @@
             { href: admin_hero_banners_path, icon: 'image', label: 'Hero Banners' },
             { href: admin_menus_path, icon: 'menu', label: 'Menus' },
             { href: admin_related_categories_path, icon: 'category', label: 'Related Categories' }
+          ]
+        },
+        {
+          title: 'Data Transfer',
+          links: [
+            { href: export_admin_product_data_transfer_path, icon: 'file_upload', label: 'Export Products' },
+            { href: import_admin_product_data_transfer_path, icon: 'file_download', label: 'Import Products' }
           ]
         },
         {

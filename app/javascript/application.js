@@ -35,6 +35,8 @@ import PaymentTransactionsIndexController from "./controllers/payment-transactio
 import BundlePromotionController from "./controllers/bundle_promotion_controller"
 import TooltipController from "./controllers/tooltip_controller"
 import LexicalEditorController from "./controllers/lexical_editor_controller"
+import ProductExportController from "./controllers/product_export_controller"
+import ProductImportController from "./controllers/product_import_controller"
 
 import Clarity from '@microsoft/clarity';
 
@@ -78,6 +80,8 @@ window.Stimulus.register("payment-transactions-index", PaymentTransactionsIndexC
 window.Stimulus.register("bundle-promotion", BundlePromotionController)
 window.Stimulus.register("tooltip", TooltipController)
 window.Stimulus.register("lexical-editor", LexicalEditorController)
+window.Stimulus.register("product-export", ProductExportController)
+window.Stimulus.register("product-import", ProductImportController)
 
 // Microsoft Clarity Initialization
 const cookies = document.cookie.split('; ').reduce((a, c) => {
@@ -89,7 +93,7 @@ if (cookies.clarity_project_id) {
   const projectId = cookies.clarity_project_id;
   Clarity.init(projectId);
 
-  Clarity.setTag('app', '3kshop-admin');
+  Clarity.setTag('app', 'vinylsaigon-admin');
   if (cookies.email && cookies.name)
     Clarity.identify(cookies.email, undefined, undefined, cookies.name);
 }

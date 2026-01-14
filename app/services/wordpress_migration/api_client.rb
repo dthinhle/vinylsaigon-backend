@@ -7,12 +7,12 @@ module WordpressMigration
     class NotFoundError < ApiError; end
 
     include HTTParty
-    base_uri ENV.fetch('WORDPRESS_SITE_HOST', 'https://3kshop.vn') + '/wp-json/wc/v3'
+    base_uri ENV.fetch('WORDPRESS_SITE_HOST', 'https://vinylsaigon.vn') + '/wp-json/wc/v3'
     basic_auth ENV.fetch('WORDPRESS_API_USERNAME', ''), ENV.fetch('WORDPRESS_API_PASSWORD', '')
     format :json
 
     def initialize
-      @host = ENV.fetch('WORDPRESS_SITE_HOST', 'https://3kshop.vn')
+      @host = ENV.fetch('WORDPRESS_SITE_HOST', 'https://vinylsaigon.vn')
       @username = ENV.fetch('WORDPRESS_API_USERNAME', '')
       @password = ENV.fetch('WORDPRESS_API_PASSWORD', '')
       @base_url = "#{@host}/wp-json/wc/v3"

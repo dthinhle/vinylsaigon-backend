@@ -876,9 +876,20 @@ export default class extends Controller {
       persist: false,
       valueField: 'id',
       labelField: 'name',
-      searchField: 'name',
+      searchField: ['name', 'sku'],
       preload: 'focus',
       plugins: ['remove_button'],
+      render: {
+        option: (item, escape) => {
+          return `<div class="py-2">
+            <div class="font-medium">${escape(item.name)}</div>
+            <div class="text-xs text-gray-500">SKU: ${escape(item.sku)}</div>
+          </div>`
+        },
+        item: (item, escape) => {
+          return `<div>${escape(item.name)}</div>`
+        }
+      },
       load: function (query, callback) {
         const url = query ? `/admin/selectors/products?q=${encodeURIComponent(query)}` : '/admin/selectors/products'
         fetch(url)

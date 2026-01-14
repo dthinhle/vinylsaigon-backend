@@ -6,7 +6,7 @@ module WordpressMigration
 
     DEAD_IMAGE_DOMAINS = %w[
       monospace.vn
-      3kshop.vn/Data/Sites
+      vinylsaigon.vn/Data/Sites
     ].freeze
 
     FALLBACK_LOGO_PATH = '/assets/logo-black.svg'
@@ -163,7 +163,7 @@ module WordpressMigration
       url = url.gsub('//', 'https://') if url.start_with?('//')
 
       if url.start_with?('/')
-        wp_source_url = ENV.fetch('WP_SOURCE_URL', 'https://3kshop.vn')
+        wp_source_url = ENV.fetch('WP_SOURCE_URL', 'https://vinylsaigon.vn')
         url = "#{wp_source_url}#{url}"
       end
 

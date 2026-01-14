@@ -24,7 +24,7 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = '3K Shop <noreply@3kshop.vn>'
+  config.mailer_sender = 'Vinyl Saigon <noreply@vinylsaigon.vn>'
 
   # Configure the class responsible to send e-mails.
   config.mailer = 'UserMailer'

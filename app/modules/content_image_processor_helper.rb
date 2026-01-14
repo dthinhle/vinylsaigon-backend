@@ -15,7 +15,14 @@ module ContentImageProcessorHelper
     return false if url.start_with?('/rails/active_storage/')
     return false if url.start_with?('/assets/')
 
+    backend_host = BACKEND_HOST
+    return false if url.start_with?(backend_host)
+
     url.start_with?('http://', 'https://')
+  end
+
+  def external_media?(url)
+    external_image?(url)
   end
 
   def has_external_images?(node)
@@ -24,9 +31,14 @@ module ContentImageProcessorHelper
       current = queue.shift
       next unless current.is_a?(Hash)
 
-      if current['type'] == 'image'
+      if ['image', 'video'].include?(current['type'])
         src = current['src']
-        return true if src && external_image?(src)
+        return true if src && external_media?(src)
+      end
+
+      if current['type'] == 'link'
+        url = current['url']
+        return true if url && external_media?(url)
       end
 
       if current['children'].is_a?(Array)
@@ -37,22 +49,27 @@ module ContentImageProcessorHelper
   end
 
   def extract_external_images(root)
-    images = []
+    media = []
     queue = [root]
     while queue.any?
       node = queue.shift
       next unless node.is_a?(Hash)
 
-      if node['type'] == 'image'
+      if ['image', 'video'].include?(node['type'])
         src = node['src']
-        images << src if src && external_image?(src)
+        media << src if src && external_media?(src)
+      end
+
+      if node['type'] == 'link'
+        url = node['url']
+        media << url if url && external_media?(url)
       end
 
       if node['children'].is_a?(Array)
         queue.concat(node['children'])
       end
     end
-    images
+    media
   end
 
   def validate_url_safety(url)

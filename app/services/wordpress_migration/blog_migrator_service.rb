@@ -114,7 +114,7 @@ module WordpressMigration
 
       temp_password = SecureRandom.alphanumeric(16)
       default_admin = Admin.first || Admin.create!(
-        email: 'admin@3kshop.vn',
+        email: 'admin@vinylsaigon.vn',
         name: 'Admin',
         password: temp_password,
         password_confirmation: temp_password

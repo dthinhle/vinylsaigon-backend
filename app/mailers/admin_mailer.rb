@@ -5,7 +5,7 @@ class AdminMailer < ApplicationMailer
 
     mail(
       to: @admin.email,
-      subject: 'Welcome to 3kShop Admin - Set Your Password'
+      subject: 'Welcome to Vinyl Saigon Admin - Set Your Password'
     )
   end
 

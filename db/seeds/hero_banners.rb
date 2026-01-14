@@ -6,42 +6,42 @@ hero_banners_data = [
     sub_title: "New Arrivals",
     description: "Immerse yourself in the world of Honkai: Star Rail with our exclusive collection of high-quality merchandise. From limited edition figures to iconic accessories, discover pieces that bring your favorite characters to life.",
     short_description: "Premium collectibles from the hit game Honkai: Star Rail",
-    image_name: "banner-3kshop-1.png"
+    image_name: "banner-vinylsaigon-1.png"
   },
   {
     main_title: "Summer Gaming Festival",
     sub_title: "Special Event",
     description: "Beat the heat with our summer gaming collection! Featuring limited-time offers on gaming merchandise, collectibles, and exclusive items from your favorite franchises. Don't miss out on these seasonal specials!",
     short_description: "Exclusive summer deals on gaming merchandise",
-    image_name: "banner-3kshop-2.png"
+    image_name: "banner-vinylsaigon-2.png"
   },
   {
     main_title: "Anime Essentials",
     sub_title: "Featured Collection",
     description: "Discover our curated selection of must-have anime merchandise. From classic series to the latest hits, find authentic collectibles, apparel, and accessories that celebrate your favorite anime moments.",
     short_description: "Essential items for anime enthusiasts",
-    image_name: "banner-3kshop-3.png"
+    image_name: "banner-vinylsaigon-3.png"
   },
   {
     main_title: "Genshin Impact Collection",
     sub_title: "Popular Items",
     description: "Explore our extensive collection of Genshin Impact merchandise. Find high-quality figures, accessories, and collectibles featuring your favorite characters from Teyvat.",
     short_description: "Official Genshin Impact merchandise collection",
-    image_name: "banner-3kshop-4.png"
+    image_name: "banner-vinylsaigon-4.png"
   },
   {
     main_title: "Limited Edition Figures",
     sub_title: "Exclusive Items",
     description: "Don't miss out on our exclusive collection of limited edition anime figures. Each piece is carefully crafted with attention to detail, making them perfect for serious collectors.",
     short_description: "Exclusive limited edition anime figures",
-    image_name: "banner-3kshop-5.png"
+    image_name: "banner-vinylsaigon-5.png"
   },
   {
     main_title: "Anime Accessories",
     sub_title: "Best Sellers",
     description: "Complete your collection with our premium anime accessories. From keychains to phone cases, find the perfect items to show your love for your favorite series.",
     short_description: "Premium anime accessories and collectibles",
-    image_name: "banner-3kshop-6.png"
+    image_name: "banner-vinylsaigon-6.png"
   },
 ]
 

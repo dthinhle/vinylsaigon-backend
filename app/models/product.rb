@@ -46,6 +46,9 @@ class Product < ApplicationRecord
   include DynamicJsonbAttributes
   include ArrayFormatAttributes
   include Sluggable
+
+  LEXICAL_COLUMNS = %w[short_description description gift_content].freeze
+
   dynamic_jsonb_attribute :product_attributes
 
   validate :validate_product_attributes_format

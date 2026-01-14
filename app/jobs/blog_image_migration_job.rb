@@ -34,7 +34,7 @@ class BlogImageMigrationJob < ApplicationJob
 
   DEAD_IMAGE_DOMAINS = [
     'monospace.vn',
-    '3kshop.vn/Data/Sites',
+    'vinylsaigon.vn/Data/Sites',
   ].freeze
 
   FALLBACK_LOGO_URL = '/assets/logo-black.svg'

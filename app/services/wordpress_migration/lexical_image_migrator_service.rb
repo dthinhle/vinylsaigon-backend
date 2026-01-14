@@ -45,7 +45,7 @@ module WordpressMigration
     end
 
     def wordpress_url?(url)
-      url.match?(%r{3kshop\.vn/wp-content/uploads/})
+      url.match?(%r{vinylsaigon\.vn/wp-content/uploads/})
     end
 
     def download_and_attach_image(url)
