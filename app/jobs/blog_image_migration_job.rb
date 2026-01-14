@@ -37,7 +37,7 @@ class BlogImageMigrationJob < ApplicationJob
     'vinylsaigon.vn/Data/Sites',
   ].freeze
 
-  FALLBACK_LOGO_URL = '/assets/logo-black.svg'
+  FALLBACK_LOGO_URL = '/assets/logo.svg'
 
   def attach_featured_image(blog, wp_db, force: false)
     return if blog.image.attached? && !force

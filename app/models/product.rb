@@ -116,7 +116,6 @@ class Product < ApplicationRecord
   validates :stock_status, presence: true
   validates :stock_quantity, numericality: { greater_than_or_equal_to: 0 }
   validates :low_stock_threshold, numericality: { greater_than_or_equal_to: 0 }
-  validates :short_description, length: { maximum: 500 }, allow_blank: true
   validates :meta_title, length: { maximum: 255 }, allow_blank: true
   validates :meta_description, length: { maximum: 500 }, allow_blank: true
 
@@ -297,6 +296,7 @@ class Product < ApplicationRecord
 
   def process_external_content_images
     return unless saved_change_to_description? || saved_change_to_short_description?
+    return unless id
 
     ContentImageProcessorJob.perform_later('Product', id)
   end

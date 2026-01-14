@@ -1,6 +1,6 @@
-# WordPress to Baka Backend Migration Guide
+# WordPress to Vinyl Saigon Backend Migration Guide
 
-This guide documents the WordPress/WooCommerce data migration services implemented for the Baka Backend system.
+This guide documents the WordPress/WooCommerce data migration services implemented for the Vinyl Saigon Backend system.
 
 ## Overview
 

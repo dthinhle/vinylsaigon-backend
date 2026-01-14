@@ -54,14 +54,14 @@ services:
       - ./data.ms:/data.ms
     restart: unless-stopped
 
-  baka-backend:
+  vinylsaigon-backend:
     build:
       context: .
       dockerfile: Dockerfile
-    image: baka_backend:latest
+    image: vinylsaigon_backend:latest
     environment:
       RAILS_ENV: development
-      DATABASE_URL: postgres://postgres:postgres@host.docker.internal:5432/baka_backend_development
+      DATABASE_URL: postgres://postgres:postgres@host.docker.internal:5432/vinylsaigon_backend_development
       REDIS_URL: redis://redis:6379/0
       RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
@@ -80,10 +80,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: baka_backend:latest
+    image: vinylsaigon_backend:latest
     environment:
       RAILS_ENV: development
-      DATABASE_URL: postgres://postgres:postgres@host.docker.internal:5432/baka_backend_development
+      DATABASE_URL: postgres://postgres:postgres@host.docker.internal:5432/vinylsaigon_backend_development
       REDIS_URL: redis://redis:6379/0
       RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
@@ -94,7 +94,7 @@ services:
     command: bin/bundle exec sidekiq -C config/sidekiq.yml
     depends_on:
       - redis
-      - baka-backend
+      - vinylsaigon-backend
 
 volumes:
   rails_tmp:

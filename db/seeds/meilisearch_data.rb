@@ -24,6 +24,11 @@ PRODUCT_INDEX_DATA = {
     'updatedAt',
   ]
 }
+PRODUCTS_SEARCH_INDEX_DATA = {
+  name: 'products_search',
+  filterable_attrs: [],
+  sortable_attributes: []
+}
 ARTICLE_INDEX_DATA = {
   name: 'articles',
   filterable_attrs: [
@@ -41,6 +46,7 @@ indexes_updated = 0
 [
   PRODUCT_INDEX_DATA,
   ARTICLE_INDEX_DATA,
+  PRODUCTS_SEARCH_INDEX_DATA,
 ].each do |data|
   name, filter_attrs, sort_attrs = data.values_at(:name, :filterable_attrs, :sortable_attributes)
   puts "Creating index: #{name}"

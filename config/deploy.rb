@@ -1,8 +1,8 @@
 # config valid for current version and patch releases of Capistrano
 lock '~> 3.19.2'
 
-set :application, 'baka-shop'
-set :repo_url, 'git@github.com-3k:dthinhle/baka-backend.git'
+set :application, 'vinylsaigon-backend'
+set :repo_url, 'git@github.com-vsg:dthinhle/vinylsaigon-backend.git'
 
 # Default branch is :master
 ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp

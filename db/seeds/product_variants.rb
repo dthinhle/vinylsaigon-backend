@@ -198,8 +198,9 @@ end
 ProductVariant.all.each do |variant|
   # Attach random images to each variant
   attached_images = images.sample(rand(1..3))
-  attached_images.each do |image_path|
-    variant.images.attach(
+  attached_images.each_with_index do |image_path, idx|
+    img = variant.product_images.create!(position: idx + 1)
+    img.image.attach(
       io: File.open(image_path),
       filename: File.basename(image_path),
       content_type: 'image/webp'

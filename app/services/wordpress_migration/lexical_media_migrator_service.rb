@@ -9,7 +9,7 @@ module WordpressMigration
       vinylsaigon.vn/Data/Sites
     ].freeze
 
-    FALLBACK_LOGO_PATH = '/assets/logo-black.svg'
+    FALLBACK_LOGO_PATH = '/assets/logo.svg'
 
     class << self
       def call(record:, content_field: :content)

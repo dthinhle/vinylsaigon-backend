@@ -98,6 +98,17 @@ Rails.application.routes.draw do
       end
     end
     resources :payment_transactions, only: [:index, :show]
+
+    resource :product_data_transfer, only: [], controller: 'product_data_transfer' do
+      collection do
+        get :export
+        post :generate_export
+        post :export_recent
+        get :import
+        post :process_import
+        get :import_progress
+      end
+    end
   end
 
   mount RailsAdmin::Engine => '/sadmin', as: 'rails_admin'

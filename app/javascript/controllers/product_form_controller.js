@@ -1,4 +1,4 @@
-// baka-backend/app/javascript/controllers/product_form_controller.js
+// vinylsaigon-backend/app/javascript/controllers/product_form_controller.js
 import { Controller } from "@hotwired/stimulus"
 import TomSelect from "tom-select"
 

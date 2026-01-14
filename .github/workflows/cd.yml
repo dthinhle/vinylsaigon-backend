@@ -36,5 +36,5 @@ jobs:
           echo "$PRODUCTION_SSH_KEY" > deploy_key
           chmod 600 deploy_key
 
-          mv deploy_key ~/baka-gha-deploy
-          DEPLOY_SERVER=main KEY_PATH=/home/runner/baka-gha-deploy bin/bundle exec cap production deploy ${{ github.event.inputs.trace == 'true' && '--trace' || '' }}
+          mv deploy_key ~/vinylsaigon-gha-deploy
+          DEPLOY_SERVER=main KEY_PATH=/home/runner/vinylsaigon-gha-deploy bin/bundle exec cap production deploy ${{ github.event.inputs.trace == 'true' && '--trace' || '' }}

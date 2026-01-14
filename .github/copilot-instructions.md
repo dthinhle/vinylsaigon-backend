@@ -1,4 +1,4 @@
-# AI Coding Agent Instructions for `baka-backend`
+# AI Coding Agent Instructions for `vinylsaigon-backend`
 
 Purpose: Make an agent immediately productive in this Rails 8.1 ecommerce + admin platform with payment, search, promotions, and background processing.
 

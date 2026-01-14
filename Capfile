@@ -37,7 +37,7 @@ require 'bugsnag-capistrano'
 
 set :bugsnag_api_key, ENV.fetch('BUGSNAG_API_KEY', 'your-api-key-here')
 set :app_version, `git rev-parse --abbrev-ref HEAD`.chomp
-set :repo_url, "git@github.com-3k:dthinhle/baka-backend.git"
+set :repo_url, "git@github.com-vsg:dthinhle/vinylsaigon-backend.git"
 
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined
 Dir.glob("lib/capistrano/tasks/*.rake").each { |r| import r }

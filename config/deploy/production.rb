@@ -67,7 +67,7 @@ production_keys = keys ? [keys] : %w[~/.ssh/aliases/thinhld-3towers]
 
 servers = {
   'main' => {
-    ip: '27.71.27.248',
+    ip: '171.244.139.34',
     sidekiq_unit: 'sidekiq',
     puma_unit: 'puma',
     ssh_keys: production_keys
