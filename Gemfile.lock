@@ -158,8 +158,8 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-    devise-jwt (0.12.1)
-      devise (~> 4.0)
+    devise-jwt (0.13.0)
+      devise (>= 4.0.0, < 6.0.0)
       warden-jwt_auth (~> 0.10)
     diff-lcs (1.6.2)
     dotenv (3.2.0)
@@ -403,7 +403,7 @@ GEM
       ffi (~> 1.0)
     rbs (3.10.2)
       logger
-    rdoc (7.0.3)
+    rdoc (7.1.0)
       erb
       psych (>= 4.0.0)
       tsort
@@ -599,7 +599,7 @@ DEPENDENCIES
   database_cleaner-active_record
   debug
   devise (~> 4.9)
-  devise-jwt (~> 0.12.1)
+  devise-jwt (~> 0.13.0)
   dotenv-rails (~> 3.2)
   factory_bot_rails (~> 6.5)
   faker

@@ -46,7 +46,7 @@ gem 'mysql2', '~> 0.5'
 
 # Auth
 gem 'devise', '~> 4.9'
-gem 'devise-jwt', '~> 0.12.1'
+gem 'devise-jwt', '~> 0.13.0'
 gem 'jwt', '~> 3.1'
 
 # Background jobs
