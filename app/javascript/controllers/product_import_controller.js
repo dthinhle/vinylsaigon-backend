@@ -16,13 +16,49 @@ export default class extends Controller {
     "messageContainer"
   ]
 
+  static values = {
+    resumeImport: Boolean
+  }
+
   connect() {
-    this.importId = null
     this.pollInterval = null
+
+    if (this.hasResumeImportValue && this.resumeImportValue) {
+      this.resumeExistingImport()
+    }
   }
 
   disconnect() {
     this.stopPolling()
+  }
+
+  async resumeExistingImport() {
+    try {
+      const response = await fetch(
+        '/admin/product_data_transfer/import_progress',
+        {
+          headers: {
+            'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+          }
+        }
+      )
+
+      if (!response.ok) {
+        return
+      }
+
+      const data = await response.json()
+
+      if (data.status === 'processing') {
+        this.showProgressContainer()
+        this.updateProgress(data)
+        this.startPolling()
+        this.submitBtnTarget.disabled = true
+        this.showMessage('Resuming import in progress...', 'info')
+      }
+    } catch (error) {
+      console.error('Failed to resume import:', error)
+    }
   }
 
   fileSelected(event) {
@@ -57,14 +93,12 @@ export default class extends Controller {
       }
 
       const data = await response.json()
-      this.importId = data.import_id
 
       this.showMessage('Import started successfully!', 'success')
       this.showProgressContainer()
       this.checkProgress()
       this.startPolling()
     } catch (error) {
-      this.showMessage(`Failed to start import: ${error.message}`, 'error')
       this.submitBtnTarget.disabled = false
     }
   }
@@ -83,11 +117,9 @@ export default class extends Controller {
   }
 
   async checkProgress() {
-    if (!this.importId) return
-
     try {
       const response = await fetch(
-        `/admin/product_data_transfer/import_progress?import_id=${this.importId}`,
+        '/admin/product_data_transfer/import_progress',
         {
           headers: {
             'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content

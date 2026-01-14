@@ -66,6 +66,7 @@ class Admin::ProductDataTransferController < Admin::BaseController
       auto_create_categories: false,
       auto_create_brands: false
     }
+    check_existing_import
   end
 
   def process_import
@@ -81,7 +82,8 @@ class Admin::ProductDataTransferController < Admin::BaseController
     }
 
     import_id = SecureRandom.uuid
-    Rails.cache.write("import_progress_#{import_id}", { status: 'processing', progress: 0, total: 0 }, expires_in: 1.hour)
+    Rails.cache.write('product_import_progress', { status: 'processing', progress: 0, total: 0, import_id: import_id }, expires_in: 1.hour)
+    session[:import_in_progress] = true
 
     sanitized_filename = File.basename(params[:file].original_filename)
     tmp_file_path = Rails.root.join('tmp', "import_#{import_id}_#{sanitized_filename}")
@@ -93,31 +95,40 @@ class Admin::ProductDataTransferController < Admin::BaseController
       import_options: import_options
     )
 
-    render json: { import_id: import_id, message: 'Import started' }
+    render json: { message: 'Import started' }
   rescue StandardError => e
     Rails.logger.error "Import error: #{e.message}\n#{e.backtrace.join("\n")}"
     render json: { error: "Import failed: #{e.message}" }, status: :internal_server_error
   end
 
   def import_progress
-    import_id = params[:import_id]
+    progress = Rails.cache.read('product_import_progress')
 
-    unless import_id.present?
-      render json: { error: 'Import ID is required' }, status: :unprocessable_entity
+    if progress.nil?
+      session.delete(:import_in_progress)
+      render json: { error: 'Import not found' }, status: :not_found
       return
     end
 
-    progress = Rails.cache.read("import_progress_#{import_id}")
-
-    if progress.nil?
-      render json: { error: 'Import not found' }, status: :not_found
-      return
+    if progress[:status] == 'completed' || progress[:status] == 'error'
+      session.delete(:import_in_progress)
     end
 
     render json: progress
   end
 
   private
+
+  def check_existing_import
+    return unless session[:import_in_progress]
+
+    progress = Rails.cache.read('product_import_progress')
+    if progress && progress[:status] == 'processing'
+      @import_in_progress = true
+    else
+      session.delete(:import_in_progress)
+    end
+  end
 
   def check_export_lock
     if Rails.cache.read('product_export_in_progress')

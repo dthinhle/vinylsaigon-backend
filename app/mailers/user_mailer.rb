@@ -1,7 +1,7 @@
 class UserMailer < Devise::Mailer
   layout 'mailer'
   default template_path: 'devise/mailer' # to make sure that your mailer uses the devise views
-  default from: email_address_with_name('noreply@vinylsaigon.vn', 'Vinyl Saigon')
+  default from: email_address_with_name(STORE_CONFIG[:noreply_email], STORE_CONFIG[:name])
 
   def reset_password_instructions(record, token, opts = {})
     @token = token

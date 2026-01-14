@@ -225,7 +225,7 @@
                   <tr>
                     <td width="40%" align="left" valign="bottom" style="padding: 0 0 4px 0;">
                       <%= link_to FRONTEND_HOST, target: '_blank' do %>
-                        <%= image_tag "logo.svg", alt: "Vinyl Saigon", class: "header-logo", style: "display: block; max-width: 150px; height: auto;" %>
+                        <%= image_tag "logo.svg", alt: STORE_CONFIG[:name], class: "header-logo", style: "display: block; max-width: 150px; height: auto;" %>
                       <% end %>
                     </td>
                     <td width="60%" align="right" valign="bottom" style="padding: 0;">
@@ -246,7 +246,7 @@
             </tr>
             <tr>
               <td>
-                <%= image_tag "banner-static.png", alt: "Vinyl Saigon banner", style: "display: block; width: 100%; height: auto;" %>
+                <%= image_tag "banner-static.png", alt: "#{STORE_CONFIG[:name]} banner", style: "display: block; width: 100%; height: auto;" %>
               </td>
             </tr>
             <tr>
@@ -309,7 +309,7 @@
                   <tr>
                     <td align="center" style="padding: 5px 0;">
                       <p class="footer-text" style="font-size: 12px; line-height: 1.5; color: #cccccc; margin: 0;">
-                        <span style="font-size: 16px;"><strong>Vinyl Saigon</strong></span><br>
+                        <span style="font-size: 16px;"><strong><%= STORE_CONFIG[:name] %></strong></span><br>
                         <span>
                           <a href="https://goo.gl/maps/ZdxraaA4LawbRose6" target="_blank">
                             14 Nguyễn Văn Giai, P. Đa Kao, Q.1, TP.HCM

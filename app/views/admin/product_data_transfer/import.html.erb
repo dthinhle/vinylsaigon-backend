@@ -1,10 +1,10 @@
-<div class="flex flex-col gap-4" data-controller="product-import">
+<div class="flex flex-col gap-4" data-controller="product-import" <%= 'data-product-import-resume-import-value="true"' if @import_in_progress %>>
   <%= render 'admin/shared/page_header',
     title: 'Import Products',
     button_text: nil %>
 
   <div class="bg-white p-6 border border-gray-200 rounded-lg">
-    <div class="mb-6">
+    <div class=>
       <h2 class="text-lg font-semibold mb-2">Upload Product Data</h2>
       <p class="text-sm text-gray-600 mb-4">Upload a gzipped JSON file (.json.gz) exported from another system.</p>
 
@@ -17,7 +17,7 @@
             accept=".gz,.json.gz"
             data-product-import-target="fileInput"
             data-action="change->product-import#fileSelected"
-            class="file-input file-input-bordered w-full max-w-md"
+            class="file-input file-input-bordered w-72 px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-sky-500"
             required>
           <p class="text-xs text-gray-500 mt-1">Accepts .json.gz files only</p>
         </div>
@@ -57,16 +57,16 @@
         <button
           type="submit"
           data-product-import-target="submitBtn"
-          class="btn btn-primary text-white text-sm px-4 py-2 rounded bg-gray-950 hover:bg-gray-700 flex items-center transition cursor-pointer">
+          class="btn btn-primary text-white text-sm px-4 py-2 rounded bg-gray-950 hover:bg-gray-700 flex items-center transition cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed">
           <span class="material-icons text-white text-base! mr-2 -ml-1">file_download</span>
           Start Import
         </button>
       <% end %>
     </div>
 
-    <div data-product-import-target="messageContainer"></div>
+    <div data-product-import-target="messageContainer" class="not-empty:mt-4"></div>
 
-    <div data-product-import-target="progressContainer" class="hidden">
+    <div data-product-import-target="progressContainer" class="hidden mt-4">
       <h3 class="text-md font-semibold mb-3">Import Progress</h3>
       <div class="border border-gray-200 rounded-lg p-4">
         <div class="mb-4">
@@ -84,16 +84,16 @@
 
         <div class="grid grid-cols-3 gap-4 mb-4">
           <div class="text-center p-3 bg-green-50 rounded">
-            <div class="text-2xl font-bold text-green-600" data-product-import-target="importedCount">0</div>
-            <div class="text-xs text-gray-600">Imported</div>
+            <div class="text-2xl font-bold text-gray-800" data-product-import-target="importedCount">0</div>
+            <div class="text-xs text-gray-800">Imported</div>
           </div>
           <div class="text-center p-3 bg-blue-50 rounded">
-            <div class="text-2xl font-bold text-blue-600" data-product-import-target="updatedCount">0</div>
-            <div class="text-xs text-gray-600">Updated</div>
+            <div class="text-2xl font-bold text-gray-800" data-product-import-target="updatedCount">0</div>
+            <div class="text-xs text-gray-800">Updated</div>
           </div>
           <div class="text-center p-3 bg-yellow-50 rounded">
-            <div class="text-2xl font-bold text-yellow-600" data-product-import-target="skippedCount">0</div>
-            <div class="text-xs text-gray-600">Skipped</div>
+            <div class="text-2xl font-bold text-gray-800" data-product-import-target="skippedCount">0</div>
+            <div class="text-xs text-gray-800">Skipped</div>
           </div>
         </div>
 

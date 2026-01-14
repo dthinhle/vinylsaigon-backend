@@ -6,7 +6,7 @@ module ContentImageProcessorHelper
       content
     end
   rescue JSON::ParserError => e
-    Rails.logger.error("ContentImageProcessorHelper: Failed to parse content: #{e.message}")
+    Rails.logger.error("ContentImageProcessorHelper: Failed to parse content: #{content} #{e.message}")
     nil
   end
 

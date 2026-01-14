@@ -23,6 +23,8 @@ class ContentImageProcessorService
   private
 
   def should_process?
+    return false unless @model.id
+
     fields = content_fields
     return false if fields.empty?
 

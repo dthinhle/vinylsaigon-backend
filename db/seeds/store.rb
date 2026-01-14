@@ -3,12 +3,7 @@ puts 'Seeding store data...'
 stores_created = 0
 addresses_created = 0
 
-store = Store.create!(
-  name: 'Vinyl Saigon',
-  instagram_url: 'https://www.instagram.com/vinylsaigon',
-  youtube_url: 'https://www.youtube.com/@vinylsaigon4576',
-  facebook_url: 'https://www.facebook.com/VinylSaiGon'
-)
+store = Store.create!(STORE_CONFIG.slice(:name, :instagram_url, :youtube_url, :facebook_url))
 stores_created += 1
 puts "  ✓ Created store '#{store.name}'"
 

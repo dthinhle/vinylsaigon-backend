@@ -238,7 +238,9 @@ class ProductImportService
     }
     progress_data[:message] = message if message
 
-    Rails.cache.write("import_progress_#{@import_id}", progress_data, expires_in: 1.hour)
+    progress_data[:import_id] = @import_id
+    Rails.logger.info "Import progress: #{JSON.pretty_generate(progress_data)}"
+    Rails.cache.write('product_import_progress', progress_data, expires_in: 1.hour)
   end
 
   def finalize_import(total)

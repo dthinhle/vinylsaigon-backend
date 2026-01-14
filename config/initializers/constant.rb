@@ -2,6 +2,19 @@
 BACKEND_HOST = ENV.fetch('BACKEND_HOST', 'https://app.vinylsaigon.vn')
 FRONTEND_HOST = ENV.fetch('FRONTEND_HOST', 'https://vinylsaigon.vn')
 
+STORE_CONFIG = {
+  name: 'Vinyl Sài Gòn',
+  domain: 'vinylsaigon.vn',
+  noreply_email: 'noreply@vinylsaigon.vn',
+  support_email: 'support@vinylsaigon.vn',
+  phone_number: '0914 345 357',
+  instagram_url: 'https://www.instagram.com/vinylsaigon',
+  youtube_url: 'https://www.youtube.com/@vinylsaigon4576',
+  facebook_url: 'https://www.facebook.com/VinylSaiGon',
+  tiktok_url: nil,
+  shopee_url: nil
+}.freeze
+
 JWT_SECRET_KEY = ENV.fetch('JWT_SECRET_KEY', 'jwt_secret_key')
 
 MEILISEARCH_HOST = ENV.fetch('MEILISEARCH_HOST', 'http://localhost:7700')

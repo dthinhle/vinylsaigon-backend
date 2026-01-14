@@ -121,6 +121,6 @@ class LexicalContentProcessorService
   end
 
   def self.schedule_external_media_download(product)
-    ContentImageProcessorJob.perform_later('Product', product.id)
+    ContentImageProcessorJob.perform_later('Product', product.id) if product.id
   end
 end
