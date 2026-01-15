@@ -61,7 +61,7 @@ gem 'meilisearch', '~> 0.32.0'
 gem 'ahocorasick'
 
 # Request gem
-gem 'httparty', '~> 0.23.2'
+gem 'httparty', '~> 0.24.2'
 
 # Admin
 gem 'rails_admin', '~> 3.0'
