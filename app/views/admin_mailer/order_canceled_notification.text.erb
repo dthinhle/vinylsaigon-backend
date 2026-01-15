@@ -3,7 +3,7 @@ New Order Notification
 
 Hello <%= @admin.name.presence || @admin.email %>,
 
-A new order has been placed on Vinyl Saigon.
+A new order has been placed on 3kShop.
 
 Order Details:
 --------------
@@ -15,10 +15,10 @@ Total Amount: <%= number_to_currency(@order.total_vnd, unit: "₫", format: "%n 
 Payment Method: <%= @order.payment_method&.titleize || 'N/A' %>
 Payment Status: <%= @order.payment_status.titleize %>
 Shipping Method: <%= @order.shipping_method.titleize.gsub('_', ' ') %>
-Order Date: <%= @order.created_at.strftime('%B %d, %Y at %I:%M %p') %>
+Order Date: <%= @order.created_at.in_time_zone(DEFAULT_TIMEZONE).strftime('%B %d, %Y at %I:%M %p') %>
 
 View Order Details: <%= admin_order_url(@order) %>
 
 Note: This is an automated notification. You are receiving this email because you have enabled order notifications in your admin settings.
 
-© <%= Time.current.year %> Vinyl Saigon. All rights reserved.
+© <%= Time.current.year %> 3kShop. All rights reserved.

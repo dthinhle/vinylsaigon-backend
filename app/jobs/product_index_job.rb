@@ -16,7 +16,7 @@ class ProductIndexJob < ApplicationJob
     )
 
     products_index.add_documents(product_index_object.deep_transform_keys { |k| k.to_s.camelize(:lower) })
-    products_search_index.add_documents(product_index_object.deep_transform_keys { |k| k.to_s.camelize(:lower) })
+    products_search_index.add_documents(simple_index_object.deep_transform_keys { |k| k.to_s.camelize(:lower) })
   end
 
   private

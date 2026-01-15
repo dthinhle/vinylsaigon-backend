@@ -6,7 +6,7 @@ Một đơn hàng mới đã được đặt trên <%= STORE_CONFIG[:name] %>.
 CHI TIẾT ĐƠN HÀNG
 ========================================
 Số đơn hàng: <%= @order.order_number %>
-Ngày đặt: <%= @order.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+Ngày đặt: <%= @order.created_at.in_time_zone(DEFAULT_TIMEZONE).strftime("%B %d, %Y at %I:%M %p") %>
 Trạng thái: <%= @order.status.titleize %>
 Email khách hàng: <%= @customer_email %>
 Phương thức thanh toán: <%= @order.payment_method&.titleize || 'N/A' %>

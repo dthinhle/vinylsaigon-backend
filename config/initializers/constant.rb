@@ -19,6 +19,8 @@ JWT_SECRET_KEY = ENV.fetch('JWT_SECRET_KEY', 'jwt_secret_key')
 
 MEILISEARCH_HOST = ENV.fetch('MEILISEARCH_HOST', 'http://localhost:7700')
 
+DEFAULT_TIMEZONE = 'Hanoi'.freeze
+
 DEFAULT_CATEGORIES = [
   {
     name: 'Tai nghe',

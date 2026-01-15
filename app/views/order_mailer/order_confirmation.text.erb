@@ -8,7 +8,7 @@ Cảm ơn bạn đã đặt hàng! Chúng tôi đã nhận được đơn hàng 
 CHI TIẾT ĐƠN HÀNG
 ========================================
 Số đơn hàng: <%= @order.order_number %>
-Ngày đặt: <%= @order.created_at.strftime("%d/%m/%Y %H:%M") %>
+Ngày đặt: <%= @order.created_at.in_time_zone(DEFAULT_TIMEZONE).strftime("%d/%m/%Y %H:%M") %>
 Trạng thái: <%= @order.status.titleize %>
 
 ========================================
@@ -75,7 +75,7 @@ Số điện thoại: <%= @shipping_address['phone'] %>
 CẦN HỖ TRỢ?
 ========================================
 Nếu bạn có thắc mắc về đơn hàng, vui lòng liên hệ đội hỗ trợ của chúng tôi:
-Email: vinylsaigon@gmail.com
+Email: support@3kshop.vn
 Điện thoại: 0914 345 357
 Số đơn hàng: <%= @order.order_number %>
 

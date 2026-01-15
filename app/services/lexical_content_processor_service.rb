@@ -6,6 +6,7 @@ class LexicalContentProcessorService
     return content unless parsed.is_a?(Hash) && parsed['root']
 
     mark_relative_links(parsed['root'])
+    replace_urls_recursive(parsed, FRONTEND_HOST, 'frontend-site')
     parsed.to_json
   end
 
@@ -15,6 +16,7 @@ class LexicalContentProcessorService
     parsed = JSON.parse(content) rescue content
     return content unless parsed.is_a?(Hash) && parsed['root']
 
+    replace_urls_recursive(parsed, 'frontend-site', FRONTEND_HOST)
     clean_relative_links(parsed['root'])
     schedule_external_media_download(product) if has_external_media?(parsed['root'])
 
@@ -122,5 +124,17 @@ class LexicalContentProcessorService
 
   def self.schedule_external_media_download(product)
     ContentImageProcessorJob.perform_later('Product', product.id) if product.id
+  end
+
+  def self.replace_urls_recursive(node, from_pattern, to_pattern)
+    case node
+    when Hash
+      if node['type'] == 'link' && node['url'].present?
+        node['url'] = node['url'].gsub(from_pattern, to_pattern)
+      end
+      node.each_value { |value| replace_urls_recursive(value, from_pattern, to_pattern) }
+    when Array
+      node.each { |item| replace_urls_recursive(item, from_pattern, to_pattern) }
+    end
   end
 end

@@ -7,7 +7,7 @@
 <div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin: 20px 0; background-color: #f8f9fa;">
   <h2>Chi tiết đơn hàng</h2>
   <p><strong>Số đơn hàng:</strong> <%= @order.order_number %></p>
-  <p><strong>Ngày đặt:</strong> <%= @order.created_at.strftime("%d/%m/%Y %H:%M") %></p>
+  <p><strong>Ngày đặt:</strong> <%= @order.created_at.in_time_zone(DEFAULT_TIMEZONE).strftime("%d/%m/%Y %H:%M") %></p>
   <p><strong>Trạng thái:</strong> <span style="background-color: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;"><%= @order.status.titleize %></span></p>
 </div>
 
@@ -108,7 +108,7 @@
 
 <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #666;">
   <p><strong>Cần hỗ trợ?</strong></p>
-  <p>Nếu bạn có bất kỳ câu hỏi nào về đơn hàng, vui lòng liên hệ với đội ngũ hỗ trợ của chúng tôi tại vinylsaigon@gmail.com hoặc gọi cho chúng tôi theo số <a target="_blank" rel="noopener noreferrer" href="https://zalo.me/0914345357">0914 345 357</a>.</p>
+  <p>Nếu bạn có bất kỳ câu hỏi nào về đơn hàng, vui lòng liên hệ với đội ngũ hỗ trợ của chúng tôi tại 3kshop1@gmail.com hoặc gọi cho chúng tôi theo số <a target="_blank" rel="noopener noreferrer" href="https://zalo.me/0914345357">0914 345 357</a>.</p>
   <p>Số đơn hàng: <%= @order.order_number %></p>
 </div>
 
