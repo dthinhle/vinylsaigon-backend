@@ -2,6 +2,8 @@ require 'zlib'
 require 'open-uri'
 
 class ProductImportService
+  REDIS_KEY = 'product_import_progress'.freeze
+
   def self.call(file_path:, import_id:, import_options:)
     new(file_path: file_path, import_id: import_id, import_options: import_options).call
   end
@@ -139,6 +141,7 @@ class ProductImportService
     sku = product_attrs['sku']
     product = Product.find_or_initialize_by(sku: sku)
 
+    content_keys = product_attrs.delete('content_keys')
     processed_attrs = product_attrs.except('sku', 'category_slug').merge(category: category)
 
     Product::LEXICAL_COLUMNS.each do |column|
@@ -152,7 +155,29 @@ class ProductImportService
 
     product.assign_attributes(processed_attrs)
     product.save!
+
+    cleanup_orphaned_content_attachments(product, content_keys) if content_keys.present?
+
     product
+  end
+
+  def cleanup_orphaned_content_attachments(product, content_keys)
+    return unless product.persisted?
+
+    expected_image_checksums = (content_keys['content_images'] || []).to_set
+    expected_video_checksums = (content_keys['content_videos'] || []).to_set
+
+    if product.content_images.attached?
+      product.content_images.each do |attachment|
+        attachment.purge if attachment.blob.present? && !expected_image_checksums.include?(attachment.blob.checksum)
+      end
+    end
+
+    if product.content_videos.attached?
+      product.content_videos.each do |attachment|
+        attachment.purge if attachment.blob.present? && !expected_video_checksums.include?(attachment.blob.checksum)
+      end
+    end
   end
 
   def upsert_variant(product, variant_data)
@@ -239,8 +264,7 @@ class ProductImportService
     progress_data[:message] = message if message
 
     progress_data[:import_id] = @import_id
-    Rails.logger.info "Import progress: #{JSON.pretty_generate(progress_data)}"
-    Rails.cache.write('product_import_progress', progress_data, expires_in: 1.hour)
+    Rails.cache.write(REDIS_KEY, progress_data, expires_in: 1.hour)
   end
 
   def finalize_import(total)

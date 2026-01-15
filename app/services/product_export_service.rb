@@ -100,7 +100,26 @@ class ProductExportService
       end
     end
 
+    attrs[:content_keys] = export_content_keys(product)
+
     attrs
+  end
+
+  def export_content_keys(product)
+    content_keys = {
+      content_images: [],
+      content_videos: []
+    }
+
+    if product.content_images.attached?
+      content_keys[:content_images] = product.content_images.map { |attachment| attachment.blob.checksum }
+    end
+
+    if product.content_videos.attached?
+      content_keys[:content_videos] = product.content_videos.map { |attachment| attachment.blob.checksum }
+    end
+
+    content_keys
   end
 
   def category_attributes(category)
