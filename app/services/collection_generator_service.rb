@@ -21,6 +21,7 @@ class CollectionGeneratorService
     current_product_ids = collection.products.pluck(:id)
 
     latest_products = Product.active
+                             .where.not('flags @> ARRAY[?]::varchar[]', Product::FLAGS[:arrive_soon])
                              .order(created_at: :desc)
                              .limit(NEW_ARRIVALS_LIMIT)
 
