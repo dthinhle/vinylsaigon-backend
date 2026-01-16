@@ -68,7 +68,7 @@ gem 'rails_admin', '~> 3.0'
 gem 'sassc-rails'
 gem 'tailwindcss-rails'
 gem 'jsbundling-rails'
-gem 'pagy', '~> 43.2.0'
+gem 'pagy', '~> 43.2.6'
 
 gem 'slugify', '~> 1.0', '>= 1.0.7'
 gem 'user_agent_parser', '~> 2.20'

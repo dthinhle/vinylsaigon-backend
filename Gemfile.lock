@@ -320,7 +320,7 @@ GEM
     openssl (3.3.2)
     orm_adapter (0.5.0)
     ostruct (0.6.3)
-    pagy (43.2.4)
+    pagy (43.2.6)
       json
       yaml
     paper_trail (17.0.0)
@@ -614,7 +614,7 @@ DEPENDENCIES
   meilisearch (~> 0.32.0)
   mysql2 (~> 0.5)
   openssl (~> 3.3.2)
-  pagy (~> 43.2.0)
+  pagy (~> 43.2.6)
   paper_trail (~> 17.0)
   pg (~> 1.6)
   puma (>= 5.0)
